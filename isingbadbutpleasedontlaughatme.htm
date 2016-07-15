@@ -1,0 +1,37 @@
+<html>
+<head>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <meta charset='utf8'>
+  <title>警告！</title>
+</head>
+<style>
+.框框{border: 1px black solid}
+</style>
+<script>
+function 確定(){
+  if(!document.getElementById('請同意').checked)
+  {
+    alert("你必須要同意才可以聽");
+    return;
+  }
+  var a=location.search;
+  location.href=("http://"+a.substr(1));
+}
+</script>
+
+<body>
+<form>
+<h2>警告！</h2>
+因為我唱歌很爛，我拜託你們要同意以下條件：
+<div class='框框'><ol>
+<li>你不會說我「你的聲音不適合唱歌，不要再唱了」</li>
+<li>你有看完我的畢業文</li>
+<li>你承認 <a href='https://www.facebook.com/hashtag/%E6%88%91%E6%98%AF%E4%BD%8E%E9%A0%BB%E7%8E%87'><b>#我是低頻率</b></a></li>
+<li>你不會排擠我</li>
+<li>你不會嘲笑我</li>
+</ol></div>
+<input type='checkbox' id='請同意'>「我同意以上條件並想要聽你唱歌」
+<button onclick='確定()'>確定</button>
+</form>
+</body>
+</html>
