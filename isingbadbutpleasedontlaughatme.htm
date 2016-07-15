@@ -15,7 +15,11 @@ function 確定(){
     return;
   }
   var a=location.hash;
-  location.href=("http://"+a.substr(1));
+  var b=a.substr(1,16);
+  var c=(~~a.substr(17)+3333333);
+  alert(b+c);
+  //location.href=("http://"+a.substr(1));
+  location.href=("http://"+b+c);
 }
 </script>
 
