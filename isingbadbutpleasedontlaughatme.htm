@@ -14,7 +14,7 @@ function 確定(){
     alert("你必須要同意才可以聽");
     return;
   }
-  var a=location.search;
+  var a=location.hash;
   location.href=("http://"+a.substr(1));
 }
 </script>
