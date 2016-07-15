@@ -18,8 +18,9 @@ function 確定(){
   var b=a.substr(1,16);
   var c=(~~a.substr(17)+3333333);
   //location.href=("http://"+a.substr(1));
-  location.href=("http://"+b+c);
+  setTimeout(function(){document.location.href="http://"+b+c;},500)
 }
+
 </script>
 
 <body>
