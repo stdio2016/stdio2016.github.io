@@ -17,22 +17,34 @@
 function 確定(){
   sessionStorage.setItem("volatile.fbgoodgoodplay","yes");
   var a=encodeURI(document.getElementById('something').value);
-  setTimeout(function(){document.location.href=location.origin+location.pathname+'#'+a;},500);
+  setTimeout(
+    function(){
+      document.location.href=location.origin+location.pathname+'#'+a;
+      location.reload();
+    }
+  ,500);
 }
 function 初始化()
 {
   if(sessionStorage.getItem("volatile.fbgoodgoodplay")=="yes")
+  {
     document.getElementById('something').value=decodeURI(location.hash.substr(1));
+    document.getElementById('share').hidden=false;
+    
+  }
   else if(location.hash)
+  {
     document.getElementById('a').innerText='分享這個網頁的人輸入了'+decodeURI(location.hash.substr(1));
+    document.title='FB不只好玩，還可以傳文字';
+  }
 }
 window.onload=初始化;
 </script>
 <h1>FB好好玩</h1>
 <p id=a></p>
-<p>趕快在下面的框框輸入文字，然後按分享</p>
-<textarea id=something onchange='確定()'></textarea>
-	<div class="fb-share-button" data-layout="button_count" data-size="small" data-mobile-iframe="true">
+<p>趕快在下面的框框輸入文字，離開框框後就可以分享</p>
+<textarea id=something onchange='確定()' onclick='hide()'></textarea>
+	<div class="fb-share-button" id='share' hidden data-layout="button_count" data-size="small" data-mobile-iframe="true">
 		<a class="fb-xfbml-parse-ignore" target="_blank"
 		   href="https://www.facebook.com/sharer/sharer.php?u&amp;src=sdkpreparse">分享</a>
 	</div>
