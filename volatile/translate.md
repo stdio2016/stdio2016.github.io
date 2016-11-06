@@ -2,6 +2,7 @@
 ## 原文：An introduction to Linux filesystems
 作者：[David Both](https://opensource.com/users/dboth)
 網站: <https://opensource.com/life/16/10/introduction-linux-filesystems>
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a>
 
 This article is intended to be a very high-level discussion of Linux filesystem concepts. It is not intended to be a low-level description of how a particular filesystem type, such as EXT4, works, nor is it intended to be a tutorial of filesystem commands.
 
