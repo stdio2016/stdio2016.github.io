@@ -1,0 +1,3 @@
+[submodule "shapeclear-html"]
+	path = shapeclear-html
+	url = https://github.com/stdio2016/shapeclear-html.git
