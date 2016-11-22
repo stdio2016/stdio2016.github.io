@@ -34,7 +34,7 @@ function update(){
 	ctx.translate(viewpoint.x,viewpoint.y);
 	if(viewpoint.moving){
 		var vx=viewpoint.vx,vy=viewpoint.vy;
-		if(vx*vx+vy*vy<1){
+		if(vx*vx+vy*vy<0.3){
 			viewpoint.moving=false;
 		}
 		else{
@@ -68,8 +68,8 @@ function mouseMove(e){
 		var newy=e.clientY;
 		viewpoint.x+=newx-mouse.x;
 		viewpoint.y+=newy-mouse.y;
-		var newpx=mouse.px*0.8+newx*0.2;
-		var newpy=mouse.py*0.8+newy*0.2;
+		var newpx=mouse.px*0.5+newx*0.5;
+		var newpy=mouse.py*0.5+newy*0.5;
 		mouse.vx=newpx-mouse.px;
 		mouse.vy=newpy-mouse.py;
 		mouse.x=newx;
@@ -81,18 +81,6 @@ function mouseMove(e){
 function mouseUp(e){
 	e.preventDefault();
 	if(e.button==0){
-		var newx=e.clientX;
-		var newy=e.clientY;
-		viewpoint.x+=newx-mouse.x;
-		viewpoint.y+=newy-mouse.y;
-		var newpx=mouse.px*0.8+newx*0.2;
-		var newpy=mouse.py*0.8+newy*0.2;
-		mouse.vx=newpx-mouse.px;
-		mouse.vy=newpy-mouse.py;
-		mouse.x=newx;
-		mouse.y=newy;
-		mouse.px=newpx;
-		mouse.py=newpy;
 		viewpoint.vx=mouse.vx;
 		viewpoint.vy=mouse.vy;
 		viewpoint.moving=true;
@@ -102,6 +90,8 @@ canvas.addEventListener('mousedown',mouseDown);
 canvas.addEventListener('mousemove',mouseMove);
 canvas.addEventListener('mouseup',mouseUp);
 var nofire=false;
+function ignore(){
+}
 function touchStart(e){
 	e.preventDefault();
 	var touch = e.touches;
@@ -112,23 +102,24 @@ function touchStart(e){
 	else{
 		nofire=false;
 	}
-	mouseDown({button:0, clientX: touch[0].pageX, clientY: touch[0].pageY});
+	mouseDown({preventDefault: ignore, button:0, clientX: touch[0].clientX, clientY: touch[0].clientY});
 }
 function touchMove(e){
 	e.preventDefault();
 	var touch = e.touches;
 	if(nofire || touch.length!=1) return;
-	mouseMove({buttons:1, clientX: touch[0].pageX, clientY: touch[0].pageY});
+	mouseMove({preventDefault: ignore, buttons:1, clientX: touch[0].clientX, clientY: touch[0].clientY});
 }
 function touchEnd(e){
 	e.preventDefault();
 	var touch = e.touches;
-	if(nofire || touch.length!=1) return;
-	mouseUp({button:0, clientX: touch[0].pageX, clientY: touch[0].pageY});
+	if(nofire || touch.length!=0) return;
+	touch=e.changedTouches;
+	mouseUp({preventDefault: ignore, button:0});
 }
-canvas.addEventListener('touchstart',touchStart);
-canvas.addEventListener('touchmove',touchMove);
-canvas.addEventListener('touchend',touchEnd);
+canvas.addEventListener('touchstart',touchStart,false);
+canvas.addEventListener('touchmove',touchMove,false);
+canvas.addEventListener('touchend',touchEnd,false);
 </script>
 </body>
 </html>
