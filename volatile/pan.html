@@ -1,0 +1,134 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<style>
+body{ margin: 0; }
+canvas{ width: 100vw; height: 100vh; display: block;}
+</style>
+<body>
+<canvas id=canvas>
+;-(
+</canvas>
+<script>
+var canvas=document.getElementById('canvas');
+var ctx=canvas.getContext('2d');
+function resize(){
+	canvas.width=canvas.clientWidth;
+	canvas.height=canvas.clientHeight;
+}
+resize();
+window.addEventListener('resize',resize);
+var viewpoint={x: 0, y: 0, vx: 0, vy: 0, moving: false};
+var mouse={x: 0, y: 0, px: 0, py: 0, vx: 0, vy: 0};
+function update(){
+	ctx.fillStyle='white';
+	ctx.fillRect(0,0,canvas.width,canvas.height);
+	ctx.save();
+	
+	if(viewpoint.x>canvas.width-50) viewpoint.x=canvas.width-50;
+	if(viewpoint.x<0) viewpoint.x=0;
+	if(viewpoint.y>canvas.height-50) viewpoint.y=canvas.height-50;
+	if(viewpoint.y<0) viewpoint.y=0;
+	
+	ctx.translate(viewpoint.x,viewpoint.y);
+	if(viewpoint.moving){
+		var vx=viewpoint.vx,vy=viewpoint.vy;
+		if(vx*vx+vy*vy<1){
+			viewpoint.moving=false;
+		}
+		else{
+			viewpoint.x+=vx;
+			viewpoint.y+=vy;
+			var magn=Math.sqrt(vx*vx+vy*vy);
+			viewpoint.vx-=vx/magn*0.2;
+			viewpoint.vy-=vy/magn*0.2;
+		}
+	}
+	
+	ctx.fillStyle='black';
+	ctx.fillRect(0,0,50,50);
+	ctx.restore();
+	requestAnimationFrame(update);
+}
+update();
+function mouseDown(e){
+	e.preventDefault();
+	if(e.button==0){
+		mouse.x=mouse.px=e.clientX;
+		mouse.y=mouse.py=e.clientY;
+		viewpoint.moving=false;
+	}
+	if(e.button==2){var t=prompt("Debug");alert(JSON.stringify(window[t]));}
+}
+function mouseMove(e){
+	e.preventDefault();
+	if(e.buttons & 1){
+		var newx=e.clientX;
+		var newy=e.clientY;
+		viewpoint.x+=newx-mouse.x;
+		viewpoint.y+=newy-mouse.y;
+		var newpx=mouse.px*0.8+newx*0.2;
+		var newpy=mouse.py*0.8+newy*0.2;
+		mouse.vx=newpx-mouse.px;
+		mouse.vy=newpy-mouse.py;
+		mouse.x=newx;
+		mouse.y=newy;
+		mouse.px=newpx;
+		mouse.py=newpy;
+	}
+}
+function mouseUp(e){
+	e.preventDefault();
+	if(e.button==0){
+		var newx=e.clientX;
+		var newy=e.clientY;
+		viewpoint.x+=newx-mouse.x;
+		viewpoint.y+=newy-mouse.y;
+		var newpx=mouse.px*0.8+newx*0.2;
+		var newpy=mouse.py*0.8+newy*0.2;
+		mouse.vx=newpx-mouse.px;
+		mouse.vy=newpy-mouse.py;
+		mouse.x=newx;
+		mouse.y=newy;
+		mouse.px=newpx;
+		mouse.py=newpy;
+		viewpoint.vx=mouse.vx;
+		viewpoint.vy=mouse.vy;
+		viewpoint.moving=true;
+	}
+}
+canvas.addEventListener('mousedown',mouseDown);
+canvas.addEventListener('mousemove',mouseMove);
+canvas.addEventListener('mouseup',mouseUp);
+var nofire=false;
+function touchStart(e){
+	e.preventDefault();
+	var touch = e.touches;
+	if(touch.length!=1){
+		nofire=true;
+		return;
+	}
+	else{
+		nofire=false;
+	}
+	mouseDown({button:0, clientX: touch[0].pageX, clientY: touch[0].pageY});
+}
+function touchMove(e){
+	e.preventDefault();
+	var touch = e.touches;
+	if(nofire || touch.length!=1) return;
+	mouseMove({buttons:1, clientX: touch[0].pageX, clientY: touch[0].pageY});
+}
+function touchEnd(e){
+	e.preventDefault();
+	var touch = e.touches;
+	if(nofire || touch.length!=1) return;
+	mouseUp({button:0, clientX: touch[0].pageX, clientY: touch[0].pageY});
+}
+canvas.addEventListener('touchstart',touchStart);
+canvas.addEventListener('touchmove',touchMove);
+canvas.addEventListener('touchend',touchEnd);
+</script>
+</body>
+</html>
