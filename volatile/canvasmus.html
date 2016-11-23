@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<style>
+body{
+  margin: 0;
+}
+canvas{
+  height: 100vh; 
+  width: 100vw; 
+  display: block;
+}
+</style>
+<body onresize='resize()'>
+<canvas id='canvas'>
+你的瀏覽器不支援canvas QQ
+</canvas>
+<script>
+var changed=false;
+var canvas=document.getElementById('canvas');
+var ctx=canvas.getContext('2d');
+function resize(){
+	canvas.height=canvas.clientHeight;
+	canvas.width=canvas.clientWidth;
+	makeChange();
+}
+function makeChange(){
+	if(!changed){
+		requestAnimationFrame(draw);
+		change=true;
+	}
+}
+resize();
+
+var viewpoint={x: 0, y: 0, measure: 0, vx: 0, moving: false};
+var mouse={x: 0, y: 0, px: 0, py: 0, vx: 0, vy: 0, cx: 0, cy: 0};
+
+var sheet=[
+ [
+  {"pitch":[{step:5,octave:4}]},
+  {"pitch":[{step:3,octave:4}]},
+  {"pitch":[{step:3,octave:4}],"type":2}
+ ],[
+  {"pitch":[{step:4,octave:4}]},
+  {"pitch":[{step:2,octave:4}]},
+  {"pitch":[{step:2,octave:4}],"type":2}
+ ],[
+  {"pitch":[{step:1,octave:4}]},
+  {"pitch":[{step:2,octave:4}]},
+  {"pitch":[{step:3,octave:4}]},
+  {"pitch":[{step:4,octave:4}]}
+ ],[
+  {"pitch":[{step:5,octave:4}]},
+  {"pitch":[{step:5,octave:4}]},
+  {"pitch":[{step:5,octave:4}],"type":2}
+ ],[
+  {"pitch":[{step:5,octave:4}]},
+  {"pitch":[{step:3,octave:4}]},
+  {"pitch":[{step:3,octave:4}],"type":2}
+ ],[
+  {"pitch":[{step:4,octave:4}]},
+  {"pitch":[{step:2,octave:4}]},
+  {"pitch":[{step:2,octave:4}],"type":2}
+ ],[
+  {"pitch":[{step:1,octave:4}]},
+  {"pitch":[{step:3,octave:4}]},
+  {"pitch":[{step:5,octave:4}]},
+  {"pitch":[{step:5,octave:4}]}
+ ],[
+  {"pitch":[{step:3,octave:4}],"type":1}
+ ],[
+  {"pitch":[{step:2,octave:4}]},
+  {"pitch":[{step:2,octave:4}]},
+  {"pitch":[{step:2,octave:4}]},
+  {"pitch":[{step:2,octave:4}]}
+ ],[
+  {"pitch":[{step:2,octave:4}]},
+  {"pitch":[{step:3,octave:4}]},
+  {"pitch":[{step:4,octave:4}],"type":2}
+ ],[
+  {"pitch":[{step:3,octave:4}]},
+  {"pitch":[{step:3,octave:4}]},
+  {"pitch":[{step:3,octave:4}]},
+  {"pitch":[{step:3,octave:4}]}
+ ],[
+  {"pitch":[{step:3,octave:4}]},
+  {"pitch":[{step:4,octave:4}]},
+  {"pitch":[{step:5,octave:4}],"type":2}
+ ],[
+  {"pitch":[{step:5,octave:4}]},
+  {"pitch":[{step:3,octave:4}]},
+  {"pitch":[{step:3,octave:4}],"type":2}
+ ],[
+  {"pitch":[{step:4,octave:4}]},
+  {"pitch":[{step:2,octave:4}]},
+  {"pitch":[{step:2,octave:4}],"type":2}
+ ],[
+  {"pitch":[{step:1,octave:4}]},
+  {"pitch":[{step:3,octave:4}]},
+  {"pitch":[{step:5,octave:4}]},
+  {"pitch":[{step:5,octave:4}]}
+ ],[
+  {"pitch":[{step:1,octave:4}],"type":1}
+ ]
+];
+var sp=8;
+var lineY=150;
+function draw(){
+	ctx.fillStyle='white';
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
+	moveViewpoint();
+	drawPointer();
+	drawFiveLine();
+	drawSheet();
+	change=false;
+	if(viewpoint.moving)
+		makeChange();
+}
+function drawPointer(){
+	var x=mouse.cx*20-viewpoint.x;
+	var y=mouse.cy*sp+lineY;
+	ctx.fillStyle='lightgreen';
+	ctx.fillRect(x-10, 0, 20, canvas.height);
+	ctx.fillRect(0, y-sp, canvas.width, sp*2);
+}
+function drawFiveLine(){
+	ctx.strokeStyle='black';
+	for(var i=0;i<5;i++){
+		ctx.beginPath();
+		ctx.moveTo(0,lineY-i*sp*2);
+		ctx.lineTo(canvas.width,lineY-i*sp*2);
+		ctx.stroke();
+	}
+}
+function drawSheet(){
+	var x=40-viewpoint.x;
+	for(var m=viewpoint.measure; m<sheet.length; m++){
+		var measure=sheet[m];
+		ctx.fillStyle='black';
+		for(var i=0;i<measure.length;i++){
+			drawNote(measure[i],x);
+			x+=40;
+		}
+		ctx.beginPath();
+		ctx.moveTo(x, lineY);
+		ctx.lineTo(x, lineY-8*sp);
+		ctx.stroke();
+		x+=40;
+	}
+}
+function drawNote(note,x){
+	if(!note.type) note.type=4;
+	var hi=null,lo=null;
+	for(var i=0;i<note.pitch.length;i++){
+		var centerx=x;
+		var high=note.pitch[i].step+(note.pitch[i].octave-4)*7-3;
+		if(hi==null){
+			hi=lo=high;
+		}
+		else{
+			if(high>hi) hi=high;
+			if(high<lo) lo=high;
+		}
+		var centery=lineY-high*sp;
+
+		ctx.beginPath();
+		ctx.arc(centerx, centery, 6, 0, 2 * Math.PI);
+		if(note.type>2)
+			ctx.fill();
+		else
+			ctx.stroke();
+	}
+	if(lo<-1)
+		for(var j=-2;j>=lo;j-=2){
+			ctx.moveTo(x-10, lineY-j*sp);
+			ctx.lineTo(x+10, lineY-j*sp);
+			ctx.stroke();
+		}
+	if(hi>9)
+		for(var j=10;j<=hi;j+=2){
+			ctx.moveTo(x-10, lineY-j*sp);
+			ctx.lineTo(x+10, lineY-j*sp);
+			ctx.stroke();
+		}
+
+	if(note.type>1){
+		ctx.beginPath();
+		ctx.moveTo(x+6, lineY-lo*sp);
+		ctx.lineTo(x+6, lineY-(hi+7)*sp);
+		ctx.stroke();
+	}
+}
+
+draw();
+cc=0;
+
+function mouseDown(e){
+	e.preventDefault();
+	if(e.button==0){
+		mouse.x=mouse.px=e.clientX;
+		mouse.y=mouse.py=e.clientY;
+		mouse.vx=0;
+		mouse.vy=0;
+		viewpoint.moving=false;
+	}
+	if(e.button==2){var t=prompt("Debug");alert(JSON.stringify(window[t]));}
+}
+function mouseMove(e){
+	e.preventDefault();
+	mouse.cx=Math.round((e.clientX+viewpoint.x)/20);
+	mouse.cy=Math.round((e.clientY-lineY)/sp);
+	if(e.buttons & 1){
+		var newx=e.clientX;
+		var newy=e.clientY;
+		viewpoint.x-=newx-mouse.x;
+		viewpoint.y-=newy-mouse.y;
+		var newpx=mouse.px*0.8+newx*0.2;
+		var newpy=mouse.py*0.8+newy*0.2;
+		mouse.vx=newpx-mouse.px;
+		mouse.vy=newpy-mouse.py;
+		mouse.x=newx;
+		mouse.y=newy;
+		mouse.px=newpx;
+		mouse.py=newpy;
+	}
+	makeChange();
+}
+function mouseUp(e){
+	e.preventDefault();
+	if(e.button==0){
+		viewpoint.vx=mouse.vx;
+		viewpoint.vy=mouse.vy;
+		viewpoint.moving=true;
+	}
+}
+canvas.addEventListener('mousedown',mouseDown);
+canvas.addEventListener('mousemove',mouseMove);
+canvas.addEventListener('mouseup',mouseUp);
+var nofire=false;
+function ignore(){
+}
+function touchStart(e){
+	e.preventDefault();
+	var touch = e.touches;
+	if(touch.length!=1){
+		nofire=true;
+		return;
+	}
+	else{
+		nofire=false;
+	}
+	mouseDown({preventDefault: ignore, button:0, clientX: touch[0].clientX, clientY: touch[0].clientY});
+}
+function touchMove(e){
+	e.preventDefault();
+	var touch = e.touches;
+	if(nofire || touch.length!=1) return;
+	mouseMove({preventDefault: ignore, buttons:1, clientX: touch[0].clientX, clientY: touch[0].clientY});
+}
+function touchEnd(e){
+	e.preventDefault();
+	var touch = e.touches;
+	if(nofire || touch.length!=0) return;
+	touch=e.changedTouches;
+	mouseUp({preventDefault: ignore, button:0});
+}
+canvas.addEventListener('touchstart',touchStart,false);
+canvas.addEventListener('touchmove',touchMove,false);
+canvas.addEventListener('touchend',touchEnd,false);
+
+function moveViewpoint(){
+	if(viewpoint.moving){
+		var vx=viewpoint.vx,vy=viewpoint.vy;
+		if(vx*vx+vy*vy<=0.5){
+			viewpoint.moving=false;
+		}
+		else{
+			viewpoint.x-=vx;
+			viewpoint.y-=vy;
+			var magn=Math.sqrt(vx*vx+vy*vy);
+			viewpoint.vx-=vx/magn*0.4;
+			viewpoint.vy-=vy/magn*0.4;
+		}
+	}
+	if(viewpoint.x>2700-canvas.width) viewpoint.x=2700-canvas.width;
+	if(viewpoint.x<0) viewpoint.x=0;
+	if(viewpoint.y>canvas.height-50) viewpoint.y=canvas.height-50;
+	if(viewpoint.y<0) viewpoint.y=0;
+}
+</script>
+
+</body>
+</html>
