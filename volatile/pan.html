@@ -22,8 +22,7 @@ window.addEventListener('resize',resize);
 var viewpoint={x: 0, y: 0, vx: 0, vy: 0, moving: false};
 var mouse={x: 0, y: 0, px: 0, py: 0, vx: 0, vy: 0};
 function update(){
-	ctx.fillStyle='white';
-	ctx.fillRect(0,0,canvas.width,canvas.height);
+	ctx.clearRect(0,0,canvas.width,canvas.height);
 	ctx.save();
 	
 	if(viewpoint.x>canvas.width-50) viewpoint.x=canvas.width-50;
@@ -34,15 +33,15 @@ function update(){
 	ctx.translate(viewpoint.x,viewpoint.y);
 	if(viewpoint.moving){
 		var vx=viewpoint.vx,vy=viewpoint.vy;
-		if(vx*vx+vy*vy<0.3){
+		if(vx*vx+vy*vy<=0.5){
 			viewpoint.moving=false;
 		}
 		else{
 			viewpoint.x+=vx;
 			viewpoint.y+=vy;
 			var magn=Math.sqrt(vx*vx+vy*vy);
-			viewpoint.vx-=vx/magn*0.2;
-			viewpoint.vy-=vy/magn*0.2;
+			viewpoint.vx-=vx/magn*0.4;
+			viewpoint.vy-=vy/magn*0.4;
 		}
 	}
 	
@@ -57,6 +56,8 @@ function mouseDown(e){
 	if(e.button==0){
 		mouse.x=mouse.px=e.clientX;
 		mouse.y=mouse.py=e.clientY;
+		mouse.vx=0;
+		mouse.vy=0;
 		viewpoint.moving=false;
 	}
 	if(e.button==2){var t=prompt("Debug");alert(JSON.stringify(window[t]));}
