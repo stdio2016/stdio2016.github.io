@@ -10,6 +10,8 @@ Conflating 'open source' and 'free software' undermines free software.
 
 網址： <https://opensource.com/business/16/11/open-source-not-free-software>
 
+以下的「我」指的是原作者John Mark Walker
+
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a>
 
 In the open source universe, using terms such as *FLOSS* (Free/Libre and Open Source Software) is common and represents a casual conflation of the terms *[open source][]* and *[free software][]*, which are often used interchangeably. I would be remiss if I didn't also admit that I have been guilty of same. I won't be doing that anymore—or at least I'll try not to—for a simple reason: Using the terms interchangeably is dangerous to the goals of free software and open media advocates (read "anti-DRM"). To continue this practice is to undermine beliefs that are fundamental to free software and associated movement.
@@ -23,7 +25,7 @@ In the open source universe, using terms such as *FLOSS* (Free/Libre and Open So
 
 Free software is a social movement, with nary a hint of business interests—it exists in the realm of religion and philosophy. Free software is a way of life with a strong moral code. Central to the spirit of *free software* is the idea that everyone should be able to use, modify, and share, with a defined limitation that you can't modify without sharing. This is the origin of the "free software is a virus" meme that makes the [GNU GPL][] seem especially scary to some business folks. To embrace free software is also to embrace sharing culture and mandate sharing, which is a step too far for most businesses. The point of free software was to undermine the existing order of proprietary Unix vendors and enforce principles of sharing. And when it comes to espousing that freedom, it's difficult to embrace the free software culture and philosophy without also acknowledging the onging fight for unlocked devices, open media formats, net neutrality, and safety from private as well as government surveillance. For the rest of this post, I'll use "Free Software" as shorthand for all of those movements.
 
-## 自由軟體是關於自由的
+## 自由軟體是為了自由
 
 自由軟體是個社會運動，連一點商業利益都沒有——它存在於宗教和哲學的領域。
 自由軟體是個有強烈道德規範的生活方式。
@@ -34,6 +36,16 @@ Free software is a social movement, with nary a hint of business interests—it 
 而一提到支持自由，就會發現很難擁抱自由軟體的文化和理念，而不承認人們為了解鎖的裝置、開放的媒體格式、網路中立，隱私安全和政府監視而持續爭鬥。
 在這篇文章，我會用「自由軟體」來簡稱以上所有的運動。
 
+## Open source is about something else entirely: Supply chain efficiency
+
+When I wrote [There is no Open Source Community][] a decade ago, I asked the question, "Why do developers release open source code?" As it turns out, there are good reasons for doing so from an operations standpoint.
+
+## 開源軟體完全是另一回事：為了生產效率
+
+在我十年前寫[There is no Open Source Community][](英文)這篇文章時，我問道：「為何開發者要釋放開放原始碼？」
+後來發現，從生產的角度看，有很好的理由。
+
 [open source]: https://opensource.com/resources/what-open-source
 [free software]: https://www.gnu.org/philosophy/free-sw.en.html
 [GNU GPL]: https://www.gnu.org/licenses/gpl-3.0.en.html
+[There is no Open Source Community]: http://www.onlamp.com/pub/a/onlamp/2006/01/12/no_oss_community.html
