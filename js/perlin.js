@@ -61,13 +61,11 @@ function addPerlin(mat, amp)
 }
 
 (function(){
-    var sum = 1/((1-Math.pow(2/3,6))*3);
+    var sum = 1/((1-Math.pow(2/3,4))*3);
     addPerlin(makeRandom(8, 8), sum*1);
     addPerlin(makeRandom(16, 16), sum*2/3);
     addPerlin(makeRandom(32, 32), sum*4/9);
     addPerlin(makeRandom(64, 64), sum*8/27);
-    addPerlin(makeRandom(128, 128), sum*16/81);
-    addPerlin(makeRandom(256, 256), sum*32/243);
 })();
 
 function draw(){
