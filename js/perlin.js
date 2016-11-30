@@ -1,3 +1,4 @@
+(function(){
 function makeMatrix(width,height)
 {
     var arr=[];
@@ -25,8 +26,8 @@ function makeRandom(width,height)
 }
 var perlin=makeMatrix(256,256);
 
-document.write('<canvas hidden height=256 width=256 id=perlin-writer></canvas>');
-var canvas=document.getElementById('perlin-writer');
+var canvas=document.createElement('canvas');
+canvas.width=canvas.height=256;
 var ctx=canvas.getContext('2d');
 
 function interpolate(a, b, ratio)
@@ -60,28 +61,32 @@ function addPerlin(mat, amp)
     }
 }
 
-(function(){
+{
     var sum = 1/((1-Math.pow(2/3,4))*3);
     addPerlin(makeRandom(8, 8), sum*1);
     addPerlin(makeRandom(16, 16), sum*2/3);
     addPerlin(makeRandom(32, 32), sum*4/9);
     addPerlin(makeRandom(64, 64), sum*8/27);
-})();
+}
 
-function draw(){
+function draw(red, green, blue){
     var height = canvas.height;
     var width = canvas.width;
+    var bmp = ctx.getImageData(0, 0, 256, 256);
+    var data = bmp.data;
     for(var i=0;i<height;i++){
         for(var j=0;j<width;j++){
-// 90EE90
-// rgb(144, 238, 144)
-            var r = ~~((perlin[i][j] * 0.2 + 0.8) * 144);
-            var g = ~~((perlin[i][j] * 0.2 + 0.8) * 238);
-            var b = ~~((perlin[i][j] * 0.2 + 0.8) * 144);
-            ctx.fillStyle = 'rgb(' + r + ',' + g + ',' + b +')';
-            ctx.fillRect(i, j, 1, 1);
+            var index = (i * width + j) * 4;
+            data[index + 0] = ~~((perlin[i][j] * 0.2 + 0.8) * red);
+            data[index + 1] = ~~((perlin[i][j] * 0.2 + 0.8) * green);
+            data[index + 2] = ~~((perlin[i][j] * 0.2 + 0.8) * blue);
+            data[index + 3] = 255;
         }
     }
-    document.body.style.backgroundImage='url("' + ctx.canvas.toDataURL() + '")';
+    ctx.putImageData(bmp, 0, 0);
+    document.body.style.backgroundImage='url("' + canvas.toDataURL() + '")';
 }
-draw();
+if(!document.body)
+    document.write("<div style='display:none;'>dummy div to make a body element</div>");
+draw(144, 238, 144);
+})();
