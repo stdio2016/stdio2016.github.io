@@ -88,5 +88,7 @@ function draw(red, green, blue){
 }
 if(!document.body)
     document.write("<div style='display:none;'>dummy div to make a body element</div>");
-draw(144, 238, 144);
+if(!window.backgroundColor)
+    window.backgroundColor = [144, 238, 144];
+draw(backgroundColor[0], backgroundColor[1], backgroundColor[2]);
 })();
