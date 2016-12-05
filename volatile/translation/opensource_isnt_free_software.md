@@ -10,15 +10,14 @@ Conflating 'open source' and 'free software' undermines free software.
 
 網址： <https://opensource.com/business/16/11/open-source-not-free-software>
 
-以下的「我」指的是原作者John Mark Walker
 
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a>
 
 In the open source universe, using terms such as *FLOSS* (Free/Libre and Open Source Software) is common and represents a casual conflation of the terms *[open source][]* and *[free software][]*, which are often used interchangeably. I would be remiss if I didn't also admit that I have been guilty of same. I won't be doing that anymore—or at least I'll try not to—for a simple reason: Using the terms interchangeably is dangerous to the goals of free software and open media advocates (read "anti-DRM"). To continue this practice is to undermine beliefs that are fundamental to free software and associated movement.
 
-在開源世界裡，使用類似*FLOSS*(Free/Libre and Open Source Software，自由和開源軟體)的名詞很常見，代表*[open source][]*(開放原始碼)和*[free software][]*(自由軟體)這兩個名詞的隨意混淆。而這兩個名詞通常可以混用。
+在開源世界裡，使用類似*FLOSS*(Free/Libre and Open Source Software，自由和開源軟體)的術語很常見，代表*[open source][]*(開放原始碼)和*[free software][]*(自由軟體)這兩個術語的隨意混淆。而這兩個術語通常可以混用。
 如果我不承認我也這麼做，那麼我實在是失職了。
-我不會再做這種事，或至少我會嘗試不再做，因為一個簡單的理由：將這些名詞混用，對於自由軟體和開放媒體的倡導者(例如反DRM)的目標很危險。
+我不會再做這種事，或至少我會嘗試不再做，因為一個簡單的理由：將這些術語混用，對於自由軟體和開放媒體的倡導者(例如反DRM)的目標很危險。
 繼續這種做法就是破壞自由軟體和相關運動最基本的信念。
 
 ## Free software is about freedom
@@ -38,12 +37,24 @@ Free software is a social movement, with nary a hint of business interests—it 
 
 ## Open source is about something else entirely: Supply chain efficiency
 
-When I wrote [There is no Open Source Community][] a decade ago, I asked the question, "Why do developers release open source code?" As it turns out, there are good reasons for doing so from an operations standpoint.
+When I wrote *[There is no Open Source Community][]* a decade ago, I asked the question, "Why do developers release open source code?" As it turns out, there are good reasons for doing so from an operations standpoint.
 
 ## 開源軟體完全是另一回事：為了生產效率
 
-在我十年前寫[There is no Open Source Community][](英文)這篇文章時，我問道：「為何開發者要釋放開放原始碼？」
+在我十年前寫*[There is no Open Source Community][]*(英文)這篇文章時，我問道：「為何開發者要釋放開放原始碼？」
 後來發現，從生產的角度看，有很好的理由。
+
+To embrace open source is to embrace a development model that utilizes a decentralized supply chain. Whereas before, proprietary vendors would control the entire software supply chain in-house, the open source model directly refutes that approach. The open source model is about using common components of multiple origins to achieve higher efficiency and agility in creating software-based products and services.
+
+擁抱開放原始碼就是擁抱利用去中心化的供應鏈的發展模型。
+和以往，專有軟體公司在內部控制整個軟體供應鏈，相反的是，開源軟體模型直接駁斥這個做法。
+開源軟體模型就是用多個來源的共同原件來達成更高效率和敏捷度，以製造奠基於軟體的產品和服務。
+
+Initially, open source projects did heavily use GPL'd software, due to the fact that the GNU project was started some 10 years before the first Linux kernel, and at least 15 years before the term *open source* was coined. The effect of this head start was that by the time open source as a business-friendly concept gained steam, there was already a wealth of GPL'd code—not to mention a well-developed culture of sharing.
+
+一開始，開源軟體確實大量使用GPL的軟體，因為GNU專案在第一個Linux核心出現的大約10年前，同時是*開源(open source)*這個術語出現以前至少15年就開始了。
+這個開端的效應就是，在開源軟體作為對商業友善的概念興起前，就已經有許多的GPL程式——更別提良好發展的共享文化。
+
 
 [open source]: https://opensource.com/resources/what-open-source
 [free software]: https://www.gnu.org/philosophy/free-sw.en.html
