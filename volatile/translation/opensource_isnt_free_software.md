@@ -55,7 +55,14 @@ Initially, open source projects did heavily use GPL'd software, due to the fact 
 一開始，開源軟體確實大量使用GPL的軟體，因為GNU專案在第一個Linux核心出現的大約10年前，同時是*開源(open source)*這個術語出現以前至少15年就開始了。
 這個開端的效應就是，在開源軟體作為對商業友善的概念興起前，就已經有許多的GPL程式——更別提良好發展的共享文化。
 
+That there is now a trend of new open source projects migrating away from copyleft GPL-style licenses toward "liberal" Apache-style licenses should come as no surprise. In retrospect, this was inevitable. In a world defined by business interests and not philosophy, enforced sharing doesn't really make sense. Sure, one could argue that it does. After all, lots of companies have formed profitable ecosystems around GPL'd GNU and Linux code. But let's assume that most business types disagree with the whole enforced-sharing bit.
 
+對於現在新的開源軟體專案從copyleft GPL風格的授權條款遷移到「自由」的Apache風格的授權條款的趨勢不應該感到驚訝。
+回想起來，這是無可避免的。
+在一個由商業利益而不是由道義定義的世界裡，強制共享並不真的有意義。
+當然，人們可以說它有意義。
+畢竟，許多公司已經藉著GPL的GNU和Linux代碼建立有利可圖的生態系統。
+但讓我們來假設，大部分的業務類型不同意整個強制分享這一塊。
 [open source]: https://opensource.com/resources/what-open-source
 [free software]: https://www.gnu.org/philosophy/free-sw.en.html
 [GNU GPL]: https://www.gnu.org/licenses/gpl-3.0.en.html
