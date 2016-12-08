@@ -10,7 +10,6 @@ Conflating 'open source' and 'free software' undermines free software.
 
 網址： <https://opensource.com/business/16/11/open-source-not-free-software>
 
-
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a>
 
 In the open source universe, using terms such as *FLOSS* (Free/Libre and Open Source Software) is common and represents a casual conflation of the terms *[open source][]* and *[free software][]*, which are often used interchangeably. I would be remiss if I didn't also admit that I have been guilty of same. I won't be doing that anymore—or at least I'll try not to—for a simple reason: Using the terms interchangeably is dangerous to the goals of free software and open media advocates (read "anti-DRM"). To continue this practice is to undermine beliefs that are fundamental to free software and associated movement.
@@ -63,7 +62,43 @@ That there is now a trend of new open source projects migrating away from copyle
 當然，人們可以說它有意義。
 畢竟，許多公司已經藉著GPL的GNU和Linux代碼建立有利可圖的生態系統。
 但讓我們來假設，大部分的業務類型不同意整個強制分享這一塊。
+
+In the Apache-style open source model, developers can choose whether or not to release their modifications. They often do, simply because they have realized the benefits of participating in open source ecosystems—but there are many who sometimes do not. In an open source world, this simply doesn't matter. If the point of open source development is to optimize your supply chain and economies of scale, who cares about sharing?
+
+在Apache式的開源模型裡，開發者們可以選擇是否釋出他們的修改。
+他們通常這麼做，只因為他們已經意識到參與開源生態的益處——但是有很多人有時不這麼做。
+反正這在開放原始碼的世界裡根本不重要。
+如果開源的開發目的是在優化你的供應鏈和規模經濟，那誰在乎分享？
+
+## Open source victory
+
+It's important to remember that in *[The Cathedral and the Bazaar][]* Eric S Raymond specifically called out the open source model as superior, which was the beginning of the great cultural divide: Open source was all about better software and "given enough eyes, all bugs are shallow"; and free software was about an enlightened existence through sharing. The point of view that open source was a superior model turned out to be mostly correct, as open source has become the preferred model for technology innovation. Open source processes could give vendors a competitive advantage, if used properly, and open source principles could allow projects to function more efficiently.
+
+Ironically, it's this impressive open source victory—or at least our interpretation of it—that presents a real threat to free software. When these terms are used interchangeably, there is no room for nuance or differentiation. Thus, the open source victory becomes a free software victory, without the slightest question of whether that actually is the case.
+
+But has free software actually *won*? Let us consider an alternative, that *victory* for free software looks very different from open source. If an open source victory looks like higher efficiency and more innovation in open source ecosystems, what does a free software victory look like?
+
+## If free software 'won'
+
+If we start with the premise that free software is about a philosophy of sharing and a moral code built around that, then what would it mean if the philosophy of free software was just as successful as open source principles? If I'm correct that they are different, then surely the success of this philosophy and moral code would manifest itself in ways different from what we see now.
+
+In a world in which free software wins, are locked-down cloud architectures dominant? Would most hand-held devices be proprietary and difficult to change? Would it be difficult to use any service on any platform? Would we so easily hand over our privacy to media companies? Why, then, in a world in which open source is hyper-successful, are all of the above true? If we declare that open source has won—and I believe it's safe to do so—how could we possibly declare that free software has also won? This is where the conflation of terms is actively toxic. By using them interchangeably, you are taking the air out of the sails of free software advocates everywhere who want to ensure sharing in the cloud, freedom on the web, equal access to technology, and improved privacy for everyone.
+
+When free software advocates speak up, many open source supporters would rather that they just shut up and went away. I was in a conversation some months ago in which I mentioned that we needed to educate people about open source principles. My mistake. See what conflation of those two things gets us? One technology executive responded, "Do we really need that anymore?" The impression among some open source supporters is that, because open source has won, the "free market" will take care of it, and we needn't worry ourselves with this philosophical stuff. Thus, there's no need to lobby governments on standards, privacy, and free software, because, hey, the invisible hand of the market is guiding us all in the right direction. With the success of open source due to market trends, there is far too much lackadaisical thinking about moving technology-culture forward.
+
+Also, I can't resist pointing out that this type of magical thinking is eerily similar to Francis Fukuyama's theory in 1989 from *[The End of History and the Last Man][]*, that the world's societies and nation states were moving inexorably towards more freedom and democracy. How has that worked out for two-thirds of the world's population?
+
+## Free software is important in its own right
+
+We risk losing an entire generation to a rental culture, not actually owning anything digital or controlling the means by which we can interact with our media and devices. By not embracing free software ideals, we risk undermining the necessary work done by free software advocates. The ideals of free software necessitate a modification and sharing culture to keep our corporate overlords in check, something we're rapidly losing on modern cloud, web, and IoT platforms. If we were able to mandate free software principles, frankly, the world would be a better place. I wouldn't have to use a specific platform just so I could access technology services I paid for. Poor students around the world wouldn't face more obstacles to educational opportunities. Underrepresented communities would have more power to control their own destiny and create successful communities that they could leverage as a counterweight to the rest of the world that would rather institute the status quo.
+
+We should all be working to ensure that we own the technology on our devices, that we own our information, and that we can defend our privacy. Whoever owns the information that governs our lives owns the pathways to our thoughts and mechanisms for future monopolies, which *does* have a real economic impact.
+
+Well, I guess I couldn't get away from the economic argument after all: Ignore free software philosophy and ideals, and risk a terrible future with imposed limits on freedom of expression, thought, and, yes, commerce.
+
 [open source]: https://opensource.com/resources/what-open-source
 [free software]: https://www.gnu.org/philosophy/free-sw.en.html
 [GNU GPL]: https://www.gnu.org/licenses/gpl-3.0.en.html
 [There is no Open Source Community]: http://www.onlamp.com/pub/a/onlamp/2006/01/12/no_oss_community.html
+[The Cathedral and the Bazaar]: https://opensource.com/life/16/5/19-years-later-cathedral-and-bazaar-still-moves-us
+[The End of History and the Last Man]: https://www.amazon.com/End-History-Last-Man/dp/0743284550
