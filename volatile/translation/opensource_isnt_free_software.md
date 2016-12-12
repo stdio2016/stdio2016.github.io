@@ -74,6 +74,12 @@ In the Apache-style open source model, developers can choose whether or not to r
 
 It's important to remember that in *[The Cathedral and the Bazaar][]* Eric S Raymond specifically called out the open source model as superior, which was the beginning of the great cultural divide: Open source was all about better software and "given enough eyes, all bugs are shallow"; and free software was about an enlightened existence through sharing. The point of view that open source was a superior model turned out to be mostly correct, as open source has become the preferred model for technology innovation. Open source processes could give vendors a competitive advantage, if used properly, and open source principles could allow projects to function more efficiently.
 
+## 開源軟體的勝利
+
+重要的是，在*[大教堂與市集][]*這篇文章，Eric S Raymond特別呼籲開放原始碼模型較為優越，而這就是文化大鴻溝的開端：開放原始碼的宗旨是為了更好的軟體以及「只要有足夠的眼睛，所有的臭蟲(bug)都會浮現」；自由軟體則是藉由分享而得到開明的存在。
+「開源是優越的模型」這個觀點大部分都是正確的，因為開源已經成為技術創新的首選模型。
+開放原始碼的流程，如果使用的當，可以讓廠商取得競爭優勢，而開源的原則可以使專案更有效率的運行。
+
 Ironically, it's this impressive open source victory—or at least our interpretation of it—that presents a real threat to free software. When these terms are used interchangeably, there is no room for nuance or differentiation. Thus, the open source victory becomes a free software victory, without the slightest question of whether that actually is the case.
 
 But has free software actually *won*? Let us consider an alternative, that *victory* for free software looks very different from open source. If an open source victory looks like higher efficiency and more innovation in open source ecosystems, what does a free software victory look like?
@@ -102,3 +108,4 @@ Well, I guess I couldn't get away from the economic argument after all: Ignore f
 [There is no Open Source Community]: http://www.onlamp.com/pub/a/onlamp/2006/01/12/no_oss_community.html
 [The Cathedral and the Bazaar]: https://opensource.com/life/16/5/19-years-later-cathedral-and-bazaar-still-moves-us
 [The End of History and the Last Man]: https://www.amazon.com/End-History-Last-Man/dp/0743284550
+[大教堂與市集]: https://opensource.com/life/16/5/19-years-later-cathedral-and-bazaar-still-moves-us
