@@ -82,7 +82,15 @@ It's important to remember that in *[The Cathedral and the Bazaar][]* Eric S Ray
 
 Ironically, it's this impressive open source victory—or at least our interpretation of it—that presents a real threat to free software. When these terms are used interchangeably, there is no room for nuance or differentiation. Thus, the open source victory becomes a free software victory, without the slightest question of whether that actually is the case.
 
+諷刺的是，就是那令人欽佩的開源勝利——或至少是我們對它的解讀——對自由軟體造成真正的威脅。
+當這兩個用詞被混用，這兩個詞就沒有差異的餘地。
+於是，開源勝利就變成了自由軟體的勝利，一點都沒有質疑是否真的是如此。
+
 But has free software actually *won*? Let us consider an alternative, that *victory* for free software looks very different from open source. If an open source victory looks like higher efficiency and more innovation in open source ecosystems, what does a free software victory look like?
+
+然而自由軟體真的*獲勝*了嗎？
+我們考慮另一個情況，那就是自由軟體的*勝利*看起來跟開源非常不一樣。
+如果開源的勝利在開源生態裡是更高的效率和更多創新，那自由軟體的勝利又是如何呢？
 
 ## If free software 'won'
 
