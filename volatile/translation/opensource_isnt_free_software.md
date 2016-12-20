@@ -96,6 +96,11 @@ But has free software actually *won*? Let us consider an alternative, that *vict
 
 If we start with the premise that free software is about a philosophy of sharing and a moral code built around that, then what would it mean if the philosophy of free software was just as successful as open source principles? If I'm correct that they are different, then surely the success of this philosophy and moral code would manifest itself in ways different from what we see now.
 
+## 如果自由軟體獲勝
+
+如果我們將「自由軟體是關於共享的哲學以及圍繞著它的道德規範」當作前提，那麼如果自由軟體的哲理和開源原則一樣成功，又是意味著什麼呢？
+如果我是對的，它們確實不同，那麼很肯定的，這種哲理和道德規範的成功會以不同於我們現在所見的方式表現出來。
+
 In a world in which free software wins, are locked-down cloud architectures dominant? Would most hand-held devices be proprietary and difficult to change? Would it be difficult to use any service on any platform? Would we so easily hand over our privacy to media companies? Why, then, in a world in which open source is hyper-successful, are all of the above true? If we declare that open source has won—and I believe it's safe to do so—how could we possibly declare that free software has also won? This is where the conflation of terms is actively toxic. By using them interchangeably, you are taking the air out of the sails of free software advocates everywhere who want to ensure sharing in the cloud, freedom on the web, equal access to technology, and improved privacy for everyone.
 
 When free software advocates speak up, many open source supporters would rather that they just shut up and went away. I was in a conversation some months ago in which I mentioned that we needed to educate people about open source principles. My mistake. See what conflation of those two things gets us? One technology executive responded, "Do we really need that anymore?" The impression among some open source supporters is that, because open source has won, the "free market" will take care of it, and we needn't worry ourselves with this philosophical stuff. Thus, there's no need to lobby governments on standards, privacy, and free software, because, hey, the invisible hand of the market is guiding us all in the right direction. With the success of open source due to market trends, there is far too much lackadaisical thinking about moving technology-culture forward.
