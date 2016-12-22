@@ -103,6 +103,15 @@ If we start with the premise that free software is about a philosophy of sharing
 
 In a world in which free software wins, are locked-down cloud architectures dominant? Would most hand-held devices be proprietary and difficult to change? Would it be difficult to use any service on any platform? Would we so easily hand over our privacy to media companies? Why, then, in a world in which open source is hyper-successful, are all of the above true? If we declare that open source has won—and I believe it's safe to do so—how could we possibly declare that free software has also won? This is where the conflation of terms is actively toxic. By using them interchangeably, you are taking the air out of the sails of free software advocates everywhere who want to ensure sharing in the cloud, freedom on the web, equal access to technology, and improved privacy for everyone.
 
+在自由軟體獲勝的世界裡，封閉的雲端架構會占主導地位嗎？
+大部分的攜帶型裝置會是專有的而很難更改嗎？
+在任何平台上使用任何服務會很難嗎？
+我們會此輕易的就把隱私交給媒體公司嗎？
+那麼，為什麼在開源超級成功的世界裡，上述都是真的？
+如果我們宣告開源已經獲勝——我相信這麼做是安全的——那我們怎麼可能宣告自由軟體也獲勝了呢？
+這就是混淆術語很危險的由來。
+在你混用這些術語的時候，你也在將空氣從各地自由軟體擁護者的「帆」中抽走，這些擁護者想要確保雲端共享、網路自由、科技使用的平等以及改善每個人的隱私權。
+
 When free software advocates speak up, many open source supporters would rather that they just shut up and went away. I was in a conversation some months ago in which I mentioned that we needed to educate people about open source principles. My mistake. See what conflation of those two things gets us? One technology executive responded, "Do we really need that anymore?" The impression among some open source supporters is that, because open source has won, the "free market" will take care of it, and we needn't worry ourselves with this philosophical stuff. Thus, there's no need to lobby governments on standards, privacy, and free software, because, hey, the invisible hand of the market is guiding us all in the right direction. With the success of open source due to market trends, there is far too much lackadaisical thinking about moving technology-culture forward.
 
 Also, I can't resist pointing out that this type of magical thinking is eerily similar to Francis Fukuyama's theory in 1989 from *[The End of History and the Last Man][]*, that the world's societies and nation states were moving inexorably towards more freedom and democracy. How has that worked out for two-thirds of the world's population?
