@@ -4,7 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <script>
-var audioctx = new AudioContext();
+var support = {audioContext: true, src_start: true};
+if(window.AudioContext)
+  audioctx = new window.AudioContext();
+else{
+  support.audioContext = false;
+  audioctx = new (window.webkitAudioContext)();
+}
 var gainNode = audioctx.createGain();
 gainNode.gain.value = 0.5;
 gainNode.connect(audioctx.destination);
@@ -45,11 +51,22 @@ function note(pitch,start,duration){
   src.playbackRate.value = Math.pow(2, (pitch - 69) / 12);
   src.connect(env);
   env.connect(gainNode);
-  src.start(currentTime + start * (60 / bpm));
+  var startTime = currentTime + start * (60 / bpm);
+  if(src.start)
+    src.start(startTime);
+  else {
+    support.src_start = 'false';
+    src.noteOn(startTime);
+  }
+
   var endtime = currentTime + (start + duration) * (60 / bpm);
   env.gain.setValueAtTime(1, endtime - 0.05);
   env.gain.linearRampToValueAtTime(0, endtime);
-  src.stop(endtime);
+  if(src.stop)
+    src.stop(endtime);
+  else {
+    src.noteOff(endTime);
+  }
   runningNotes.add(src);
   src.onended = function(){ runningNotes.delete(src); env.disconnect(); };
 }
@@ -116,6 +133,7 @@ function play(){
   note(G, 29, 0.5);
   note(G, 29.5, 0.5);
   note(C, 30, 2);
+  document.getElementById('warn').innerText = JSON.stringify(support);
 }
 
 function stop(){
@@ -129,5 +147,6 @@ function stop(){
 <body>
 <input type='button' value='Play' onclick='play()'>
 <input type='button' value='Stop' onclick='stop()'>
+<p id='warn'></p>
 </body>
 </html>
