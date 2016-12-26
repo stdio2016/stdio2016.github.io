@@ -142,11 +142,26 @@ function stop(){
   }
   runningNotes.clear();
 }
+
+// for iOS only
+var audioUnlocked = false;
+window.addEventListener('touchend', function(){
+  if(audioUnlocked) return;
+  audioUnlocked = true;
+  var buf = audioctx.createBuffer(1, 1, 22050);
+  var src = audioctx.createBufferSource();
+
+  src.buffer = buf;  
+
+  src.connect(audioctx.destination);
+  src.start(0);
+  document.getElementById('warn').innerHTML = '';
+}, false);
 </script>
 </head>
 <body>
 <input type='button' value='Play' onclick='play()'>
 <input type='button' value='Stop' onclick='stop()'>
-<p id='warn'></p>
+<p id='warn'>Click anywhere on this page to unlock the AudioContext</p>
 </body>
 </html>
