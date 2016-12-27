@@ -68,7 +68,7 @@ function note(pitch,start,duration){
     src.noteOff(endTime);
   }
   runningNotes.add(src);
-  src.onended = function(){ runningNotes.delete(src); env.disconnect(); };
+  src.onended = function(){ runningNotes.delete(src); };
 }
 
 function play(){
@@ -81,7 +81,7 @@ function play(){
   note(F, 2, 0.5);
   note(D, 2.5, 0.5);
   note(D, 3, 1);
-  
+
   note(C, 4, 0.5);
   note(D, 4.5, 0.5);
   note(E, 5, 0.5);
@@ -145,18 +145,18 @@ function stop(){
 
 // for iOS only
 var audioUnlocked = false;
-window.addEventListener('touchend', function(){
+window.addEventListener('touchend', unlock, false);
+function unlock(){
   if(audioUnlocked) return;
-  audioUnlocked = true;
-  var buf = audioctx.createBuffer(1, 1, 22050);
   var src = audioctx.createBufferSource();
 
-  src.buffer = buf;  
+  src.buffer = fakePno;
 
-  src.connect(audioctx.destination);
+  src.connect(gainNode);
   src.start(0);
   document.getElementById('warn').innerHTML = '';
-}, false);
+  window.removeEventListener('touchend', unlock);
+}
 </script>
 </head>
 <body>
