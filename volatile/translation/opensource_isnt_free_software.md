@@ -114,6 +114,11 @@ In a world in which free software wins, are locked-down cloud architectures domi
 
 When free software advocates speak up, many open source supporters would rather that they just shut up and went away. I was in a conversation some months ago in which I mentioned that we needed to educate people about open source principles. My mistake. See what conflation of those two things gets us? One technology executive responded, "Do we really need that anymore?" The impression among some open source supporters is that, because open source has won, the "free market" will take care of it, and we needn't worry ourselves with this philosophical stuff. Thus, there's no need to lobby governments on standards, privacy, and free software, because, hey, the invisible hand of the market is guiding us all in the right direction. With the success of open source due to market trends, there is far too much lackadaisical thinking about moving technology-culture forward.
 
+當自由軟體倡導者大聲的說出來，許多開源擁護者寧可閉嘴而離開。
+在幾個月前的一次對話中，我提到我們需要教導人們開放原始碼的準則。
+我說錯了。
+看看把這兩個概念混用帶給了我們什麼影響？
+
 Also, I can't resist pointing out that this type of magical thinking is eerily similar to Francis Fukuyama's theory in 1989 from *[The End of History and the Last Man][]*, that the world's societies and nation states were moving inexorably towards more freedom and democracy. How has that worked out for two-thirds of the world's population?
 
 ## Free software is important in its own right
