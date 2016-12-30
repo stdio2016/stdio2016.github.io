@@ -118,6 +118,9 @@ When free software advocates speak up, many open source supporters would rather 
 在幾個月前的一次對話中，我提到我們需要教導人們開放原始碼的準則。
 我說錯了。
 看看把這兩個概念混用帶給了我們什麼影響？
+一些開源支持者的感想是，因為開源已經勝利，所以「自由市場」會處理一切，我們不需要為這種哲理的事而擔心。
+因此，不需要遊說政府關於標準、隱私和自由軟體的事，因為，嘿，市場無形的手會帶領我們走對的路。
+由於市場趨勢，隨著開源的成功，太缺乏推進技術文化的思考。
 
 Also, I can't resist pointing out that this type of magical thinking is eerily similar to Francis Fukuyama's theory in 1989 from *[The End of History and the Last Man][]*, that the world's societies and nation states were moving inexorably towards more freedom and democracy. How has that worked out for two-thirds of the world's population?
 
