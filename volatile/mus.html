@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
@@ -27,13 +27,16 @@ function genFakePiano(){
     for(var n = 1; n < 20; n++){
       sum += Math.sin(k * n * t) * Math.exp(-(n - 1) * 0.25);
     }
-    dat[t] = sum * Math.exp(-t / (44100 * 0.5)) * 0.5;
+    dat[t] = sum * Math.exp(-t / (44100 * 0.5)) * 0.25;
   }
   return buff;
 }
 
-var fakePno = genFakePiano();
-
+var soundBank = 
+  {fakePno: 
+    {sample: genFakePiano(), center: 69}
+  };
+var fakePno = soundBank.fakePno;
 function note(pitch,start,duration){
 /*
   var osc = audioctx.createOscillator();
@@ -47,8 +50,11 @@ function note(pitch,start,duration){
 */
   var src = audioctx.createBufferSource();
   var env = audioctx.createGain();
-  src.buffer = fakePno;
-  src.playbackRate.value = Math.pow(2, (pitch - 69) / 12);
+  src.buffer = fakePno.sample;
+  src.playbackRate.value = Math.pow(2, (pitch - fakePno.center) / 12);
+  src.loop = true;
+  src.loopStart = 0;
+  src.loopEnd = 123;
   src.connect(env);
   env.connect(gainNode);
   var startTime = currentTime + start * (60 / bpm);
@@ -157,11 +163,44 @@ function unlock(){
   document.getElementById('warn').innerHTML = '';
   window.removeEventListener('touchend', unlock);
 }
+if(/iP[ao]d|iPhone/.test(navigator.userAgent)){
+  document.getElementById('warn').innerHTML = 'Click anywhere on this page to unlock the AudioContext';
+}
+
+// scream!
+function changeInstr(name){
+  var instrument = soundBank[name];
+  if(instrument){
+    fakePno = instrument;
+  }
+}
+
+function loadSmp(where, instr, prop){
+  var req = new XMLHttpRequest();
+
+  req.open('GET', where, true);
+  req.responseType = 'arraybuffer';
+
+  req.onload = function(){
+    var dat = req.response;
+    audioctx.decodeAudioData(dat, function(buffer){
+      prop.sample = buffer;
+      soundBank[instr] = prop;
+    });
+  };
+  req.send();
+}
+
+loadSmp('sound/scream.wav', 'scream', {center: 72});
 </script>
 </head>
 <body>
 <input type='button' value='Play' onclick='play()'>
 <input type='button' value='Stop' onclick='stop()'>
-<p id='warn'>Click anywhere on this page to unlock the AudioContext</p>
+<p>
+  <button onclick='changeInstr("fakePno")'>fakePno</button>
+  <button onclick='changeInstr("scream")'>scream</button>
+</p>
+<p id='warn'></p>
 </body>
 </html>
