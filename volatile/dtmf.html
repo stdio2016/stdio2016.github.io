@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
@@ -21,6 +21,7 @@ var dtmf2 = [697, 770, 852, 941];
 
 function playBtn(a, b){
   return function(){
+    if(osc1) return;
     osc1 = audioctx.createOscillator();
     osc1.type = 'sine';
     osc1.frequency.value = dtmf1[a];
@@ -37,6 +38,7 @@ function playBtn(a, b){
 function stop(){
   osc1.stop();
   osc2.stop();
+  osc1 = osc2 = null;
 }
 
 // for iOS only
@@ -44,12 +46,11 @@ var audioUnlocked = false;
 window.addEventListener('touchend', unlock, false);
 function unlock(){
   if(audioUnlocked) return;
-  var src = audioctx.createBufferSource();
-
-  src.buffer = fakePno;
+  var src = audioctx.createOscillator();
 
   src.connect(gainNode);
   src.start(0);
+  src.stop(audioctx.currentTime + 0.2);
   document.getElementById('warn').innerHTML = '';
   window.removeEventListener('touchend', unlock);
 }
