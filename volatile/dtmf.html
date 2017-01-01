@@ -60,7 +60,9 @@ function dialHandle(){
     var tr = table.children[0].children[i];
     for(var j=0; j<3; j++){
       var td = tr.children[j];
+      td.addEventListener('touchstart', playBtn(j, i));
       td.addEventListener('mousedown', playBtn(j, i));
+      td.addEventListener('touchend', stop);
     }
   }
 }
