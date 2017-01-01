@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<script>
+if(window.AudioContext)
+  audioctx = new window.AudioContext();
+else{
+  audioctx = new (window.webkitAudioContext)();
+}
+var gainNode = audioctx.createGain();
+gainNode.gain.value = 0.5;
+gainNode.connect(audioctx.destination);
+var currentTime = 0.0;
+var bpm = 100;
+var osc1, osc2;
+
+var dtmf1 = [1209, 1336, 1477, 1633];
+var dtmf2 = [697, 770, 852, 941];
+
+function playBtn(a, b){
+  return function(){
+    osc1 = audioctx.createOscillator();
+    osc1.type = 'sine';
+    osc1.frequency.value = dtmf1[a];
+    osc1.connect(gainNode);
+    osc2 = audioctx.createOscillator();
+    osc2.type = 'sine';
+    osc2.frequency.value = dtmf2[b];
+    osc2.connect(gainNode);
+    osc1.start();
+    osc2.start();
+  };
+}
+
+function stop(){
+  osc1.stop();
+  osc2.stop();
+}
+
+// for iOS only
+var audioUnlocked = false;
+window.addEventListener('touchend', unlock, false);
+function unlock(){
+  if(audioUnlocked) return;
+  var src = audioctx.createBufferSource();
+
+  src.buffer = fakePno;
+
+  src.connect(gainNode);
+  src.start(0);
+  document.getElementById('warn').innerHTML = '';
+  window.removeEventListener('touchend', unlock);
+}
+
+function dialHandle(){
+  var table = document.getElementById('dial');
+  for(var i=0; i<4; i++){
+    var tr = table.children[0].children[i];
+    for(var j=0; j<3; j++){
+      var td = tr.children[j];
+      td.addEventListener('mousedown', playBtn(j, i));
+    }
+  }
+}
+window.addEventListener('mouseup', stop);
+window.addEventListener('load', dialHandle);
+</script>
+<style>
+table,td{
+  border: 1px black solid;
+  border-collapse: collapse;
+}
+td{
+  width: 100px;
+  height: 100px;
+  font-size: 50px;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+<table id='dial'>
+  <tr>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>5</td>
+    <td>6</td>
+  </tr>
+  <tr>
+    <td>7</td>
+    <td>8</td>
+    <td>9</td>
+  </tr>
+  <tr>
+    <td>*</td>
+    <td>0</td>
+    <td>#</td>
+  </tr>
+</table>
+<p id='warn'>Click anywhere on this page to unlock the AudioContext</p>
+</body>
+</html>
