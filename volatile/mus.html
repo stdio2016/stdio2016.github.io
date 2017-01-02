@@ -78,9 +78,10 @@ function note(pitch,start,duration){
 }
 
 function play(){
-  var C=60,D=62,E=64,F=65,G=67,A=69;
+  var C=60,D=62,E=64,F=65,G=67,A=69,B=71;
+  var q=0.25,h=0.5;
   currentTime = audioctx.currentTime;
-  note(G, 0, 0.5);
+  /*note(G, 0, 0.5);
   note(E, 0.5, 0.5);
   note(E, 1, 1);
 
@@ -138,7 +139,45 @@ function play(){
   note(E, 28.5, 0.5);
   note(G, 29, 0.5);
   note(G, 29.5, 0.5);
-  note(C, 30, 2);
+  note(C, 30, 2);*/
+
+  // twinkle twinkle little star
+  bpm = 100;
+  var pitch = [
+    C,h,C,h,G,h,G,h,A,h,A,h,G,1,
+    F,h,F,h,E,h,E,h,D,h,D,h,C,1,
+    G,h,G,h,F,h,F,h,E,h,E,h,D,1,
+    G,h,G,h,F,h,F,h,E,h,E,h,D,1,
+    C,h,C,h,G,h,G,h,A,h,A,h,G,1,
+    F,h,F,h,E,h,E,h,D,h,D,h,C,1,
+  ];
+
+  // Yee
+  bpm = 120;
+  var pitch = [
+    C,1/3,D,2/3,C,1/3,
+    E,1,E,1,D,2/3,C,1,D,4/3,G,2/3,G,1,D,1/3,E,2/3,D,1/3,
+    F,1,F,1,G,2/3,A,2/3,0,1/3,
+    B,1
+  ];
+
+  // little bee
+  /*bpm = 100;
+  var pitch = [
+    G,h,E,h,E,1,F,h,D,h,D,1,
+    C,h,D,h,E,h,F,h,G,h,G,h,G,1,
+    G,h,E,h,E,1,F,h,D,h,D,1,
+    C,h,E,h,G,h,G,h,E,2,
+    D,h,D,h,D,h,D,h,D,h,E,h,F,1,
+    E,h,E,h,E,h,E,h,E,h,F,h,G,1,
+    G,h,E,h,E,1,F,h,D,h,D,1,
+    C,h,E,h,G,h,G,h,C,2,
+  ];*/
+  var ff = 0;
+  for(var i=0; i<pitch.length; i+=2){
+    note(pitch[i], ff, pitch[i+1]);
+    ff += pitch[i+1];
+  }
   document.getElementById('warn').innerText = JSON.stringify(support);
 }
 
