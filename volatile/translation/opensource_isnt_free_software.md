@@ -2,7 +2,7 @@
 ## 將「開源軟體」和「自由軟體」混淆是對自由軟體糟蹋
 
 原標題: 'Open source' is not 'free software'  
-Conflating 'open source' and 'free software' undermines free software. 
+Conflating 'open source' and 'free software' undermines free software.
 
 !['Open source' is not 'free software'](https://opensource.com/sites/default/files/styles/image-full-size/public/images/business/BUSINESS_opensourceorg.png?itok=CSINUD_V)
 
@@ -120,13 +120,26 @@ When free software advocates speak up, many open source supporters would rather 
 看看把這兩個概念混用帶給了我們什麼影響？
 一些開源支持者的感想是，因為開源已經勝利，所以「自由市場」會處理一切，我們不需要為這種哲理的事而擔心。
 因此，不需要遊說政府關於標準、隱私和自由軟體的事，因為，嘿，市場無形的手會帶領我們走對的路。
-由於市場趨勢，隨著開源的成功，太缺乏推進技術文化的思考。
+隨著開源在市場趨勢下的成功，現在實在太缺乏推進技術文化的思想了。
 
 Also, I can't resist pointing out that this type of magical thinking is eerily similar to Francis Fukuyama's theory in 1989 from *[The End of History and the Last Man][]*, that the world's societies and nation states were moving inexorably towards more freedom and democracy. How has that worked out for two-thirds of the world's population?
+
+此外，我不能不指出，這種魔法般的思維和法蘭西斯·福山在1989年的[《歷史之終結與最後一人》][]中提出的理論十分相似，那就是世界上的社會和民族國家都不可抗拒的走向更自由、民主。
+這對世界上三分之二的人口有何影響？
 
 ## Free software is important in its own right
 
 We risk losing an entire generation to a rental culture, not actually owning anything digital or controlling the means by which we can interact with our media and devices. By not embracing free software ideals, we risk undermining the necessary work done by free software advocates. The ideals of free software necessitate a modification and sharing culture to keep our corporate overlords in check, something we're rapidly losing on modern cloud, web, and IoT platforms. If we were able to mandate free software principles, frankly, the world would be a better place. I wouldn't have to use a specific platform just so I could access technology services I paid for. Poor students around the world wouldn't face more obstacles to educational opportunities. Underrepresented communities would have more power to control their own destiny and create successful communities that they could leverage as a counterweight to the rest of the world that would rather institute the status quo.
+
+## 自由軟體本身就很重要
+
+我們可能把整個世代輸給租賃文化，無法真的擁有數位的產物，也無法控制我們和自己的媒體與裝置的互動方式。
+如果不擁抱自由軟體的理念，我們就有可能破壞自由軟體推動者已達成的必要工作。
+自由軟體的理念需要有修改並分享的文化，以抑制企業霸主。而我們卻在現代雲服務、網路以及IoT平台這些地方快速的落敗給它們。
+如果我們有辦法強制執行自由軟體的原則，那麼坦率地說，世界應該會更美好。
+我就不用使用特定平台，只為了能使用我花錢取得的服務。
+世界上的窮學生也不會在教育機會上遇到這麼多的障礙。
+代表性不足的社群會有更大的權力來控制自己的目標，並創造出成功的社群，可以和寧可維持現狀的其他地方抗衡。
 
 We should all be working to ensure that we own the technology on our devices, that we own our information, and that we can defend our privacy. Whoever owns the information that governs our lives owns the pathways to our thoughts and mechanisms for future monopolies, which *does* have a real economic impact.
 
@@ -139,3 +152,4 @@ Well, I guess I couldn't get away from the economic argument after all: Ignore f
 [The Cathedral and the Bazaar]: https://opensource.com/life/16/5/19-years-later-cathedral-and-bazaar-still-moves-us
 [The End of History and the Last Man]: https://www.amazon.com/End-History-Last-Man/dp/0743284550
 [大教堂與市集]: https://opensource.com/life/16/5/19-years-later-cathedral-and-bazaar-still-moves-us
+[《歷史之終結與最後一人》]: https://www.amazon.com/End-History-Last-Man/dp/0743284550
