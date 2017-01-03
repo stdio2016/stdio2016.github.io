@@ -20,7 +20,8 @@ var dtmf1 = [1209, 1336, 1477, 1633];
 var dtmf2 = [697, 770, 852, 941];
 
 function playBtn(a, b){
-  return function(){
+  return function(e){
+    if(e && e.preventDefault) e.preventDefault();
     if(osc1) return;
     osc1 = audioctx.createOscillator();
     osc1.type = 'sine';
