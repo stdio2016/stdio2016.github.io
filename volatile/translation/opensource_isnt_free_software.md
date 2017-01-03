@@ -148,6 +148,9 @@ We should all be working to ensure that we own the technology on our devices, th
 
 Well, I guess I couldn't get away from the economic argument after all: Ignore free software philosophy and ideals, and risk a terrible future with imposed limits on freedom of expression, thought, and, yes, commerce.
 
+那麼，我想，我還是無法避開經濟上的爭議：要是忽視自由軟體的哲理和理念，未來將會很可怕，言論自由、思想和商業可能會被強行限制。
+是的，商業也會被限制。
+
 [open source]: https://opensource.com/resources/what-open-source
 [free software]: https://www.gnu.org/philosophy/free-sw.en.html
 [GNU GPL]: https://www.gnu.org/licenses/gpl-3.0.en.html
