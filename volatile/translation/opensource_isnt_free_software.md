@@ -143,6 +143,9 @@ We risk losing an entire generation to a rental culture, not actually owning any
 
 We should all be working to ensure that we own the technology on our devices, that we own our information, and that we can defend our privacy. Whoever owns the information that governs our lives owns the pathways to our thoughts and mechanisms for future monopolies, which *does* have a real economic impact.
 
+我們都應該努力，確保我們擁有我們裝置的技術，擁有自己的資訊，並可以保護自己的隱私。
+擁有能支配我們生活的資訊的人，就擁有我們的思想和機制的途徑，能夠給未來的壟斷者，而這可就 *真的* 會有經濟衝擊了。
+
 Well, I guess I couldn't get away from the economic argument after all: Ignore free software philosophy and ideals, and risk a terrible future with imposed limits on freedom of expression, thought, and, yes, commerce.
 
 [open source]: https://opensource.com/resources/what-open-source
