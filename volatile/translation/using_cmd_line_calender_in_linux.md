@@ -40,3 +40,40 @@ Display current calendar month: `$ cal`
     13 14 15 16 17 18 19  
     20 21 22 23 24 25 26  
     27 28 29 30   
+
+Display a calendar for a specific month: `$ cal -m February`
+
+顯示特定月份的月曆： `$ cal -m February`
+
+       February 2016      
+    Su Mo Tu We Th Fr Sa  
+        1  2  3  4  5  6  
+     7  8  9 10 11 12 13  
+    14 15 16 17 18 19 20  
+    21 22 23 24 25 26 27  
+    28 29     
+
+Display a calendar with the Julian days: `$ cal -j`
+
+讓月曆顯示今年的第幾天：`$ cal -j`
+
+           November 2016         
+     Su  Mo  Tu  We  Th  Fr  Sa  
+            306 307 308 309 310  
+    311 312 313 314 315 316 317  
+    318 319 320 321 322 323 324  
+    325 326 327 328 329 330 331  
+    332 333 334 335
+
+Display the current month, previous month, and next month: `$ cal -3`
+
+顯示這個月、上個月、以及下個月： `$ cal -3`
+
+     October               November              December        
+    Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  
+                       1         1  2  3  4  5               1  2  3  
+     2  3  4  5  6  7  8   6  7  8  9 10 11 12   4  5  6  7  8  9 10  
+     9 10 11 12 13 14 15  13 14 15 16 17 18 19  11 12 13 14 15 16 17  
+    16 17 18 19 20 21 22  20 21 22 23 24 25 26  18 19 20 21 22 23 24  
+    23 24 25 26 27 28 29  27 28 29 30           25 26 27 28 29 30 31  
+    30 31
