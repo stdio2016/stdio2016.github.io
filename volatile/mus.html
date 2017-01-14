@@ -1,8 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<link rel="stylesheet" type="text/css" href="../css/alertbox.css">
 <script>
 var support = {audioContext: true, src_start: true};
 if(window.AudioContext)
@@ -225,12 +226,12 @@ function loadSmp(where, instr, prop){
     audioctx.decodeAudioData(dat, function(buffer){
       prop.sample = buffer;
       soundBank[instr] = prop;
+    }, function(){
+      throw new Error('Cannot decode audio');
     });
   };
   req.send();
 }
-
-loadSmp('sound/scream.wav', 'scream', {center: 72});
 </script>
 </head>
 <body>
@@ -241,5 +242,21 @@ loadSmp('sound/scream.wav', 'scream', {center: 72});
   <button onclick='changeInstr("scream")'>scream</button>
 </p>
 <p id='warn'></p>
+
+<!-- alert box -->
+  <div id='alert' class='alert-box' style='visibility: hidden;'>
+    <div class='title'>
+      <span>Error</span>
+      <input id='close' class='x' value='X' type='button'>
+    </div>
+    <pre class='description' id='description'>
+錯誤訊息會顯示在這裡
+    </pre>
+  </div>
+  <script src='../js/alertbox.js'></script>
+<!-- end of alert box -->
+<script>
+  loadSmp('sound/scream.wav', 'scream', {center: 72});
+</script>
 </body>
 </html>
