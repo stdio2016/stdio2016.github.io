@@ -77,3 +77,44 @@ Display the current month, previous month, and next month: `$ cal -3`
     16 17 18 19 20 21 22  20 21 22 23 24 25 26  18 19 20 21 22 23 24  
     23 24 25 26 27 28 29  27 28 29 30           25 26 27 28 29 30 31  
     30 31
+
+You can show the whole year with `$ cal -y`, or use `$ cal -jy` to display Julian dates beginning with 1 on January 1 and ending on December 31 with 365 or 366 if it's a leap year. You can also figure out slightly more complicated dates with the related ncal command. For example, `$ ncal -e` displays the date of Easter in the current year.
+
+你可以用 `$ cal -y` 秀出年曆，或者用 `$ cal -jy` 顯示儒略日期 (Julian date)，在1月1日時從1開始計，在12月31日時以365結束，如果是閏年的話就是以366結束。
+你也可以類似的 ncal 指令處理稍微複雜的日期。
+例如，`$ ncal -e`可以查詢今年的復活節。
+
+Like most command-line tools, the calendar tool is composable with pipes or other functions. If you would like a print out of
+the entire year then pipe the calendar command to a text file, you can simply run `$ cal 2016 > YearlyCalendar.txt`. The text file can be opened in any text editor and edited or saved to a PDF and shared.
+
+就像大部分的命令列工具，月曆工具可以和管線 (pipes) 以及其他功能一起使用。
+如果你要印出一整年的日曆並用管線輸出到文字檔，你可以執行`$ cal 2016 > YearlyCalendar.txt`。
+這個文字檔可以用任何文字編輯器開啟和編輯，還可以轉成PDF檔後分享。
+
+The date command in Linux can display the date in several formats, or to set the date on your computer's Linux operating system. The date command can be combined in shell scripts to, for example, easily append a date to file you are editing. Along with the calendar date, the time can also be specified. Here are a few examples.
+
+Linux的date指令可以用各種格式顯示，或者是更改你的電腦上的Linux作業系統時間。
+date指令可以在shell腳本裡使用，來輕易的做到像是將你編輯的檔案附上日期。
+除了日曆上的日期之外，也可以指定時間。
+以下有一些例子：
+
+You can display today's date with: `$ date`
+
+你可以用 `$ date` 顯示今天的日期
+
+    Wed Nov 2 21:20:22 EDT 2016
+
+You can also convert from one date format to another. For example, to convert to the date standard format, use: `$date --date="11/30/16"`
+
+你也可以把日期時間格式轉成另一種。
+例如，要轉成日期標準格式，可以用： `$date --date="11/30/16"`
+
+    Wed Nov 30 00:00:00 EST 2016
+
+The time can also be specified: `$ date --date="December 1 2017 12:00:00"`
+
+也可以指定時間： `$ date --date="December 1 2017 12:00:00"`
+
+    Fri Dec 1 12:00:00 EST 2017
+
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" title="This work is licensed under a Creative Commons Attribution-Share Alike 4.0 International License."></a>
