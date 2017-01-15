@@ -33,8 +33,8 @@ function genFakePiano(){
   return buff;
 }
 
-var soundBank = 
-  {fakePno: 
+var soundBank =
+  {fakePno:
     {sample: genFakePiano(), center: 69}
   };
 var fakePno = soundBank.fakePno;
@@ -232,6 +232,67 @@ function loadSmp(where, instr, prop){
   };
   req.send();
 }
+
+function Reader(str){
+  this.data = str;
+  this.pos = 0;
+}
+
+Reader.prototype.next = function(){
+  return this.data.charAt(this.pos++);
+};
+
+Reader.prototype.atEnd = function(){
+  return this.pos >= this.data.length;
+};
+
+Reader.prototype.peek = function(){
+  return this.data.charAt(this.pos);
+};
+
+Reader.prototype.rewind = function(){
+  --this.pos;
+};
+
+Reader.prototype.nextInt = function(){
+  var result = null;
+  while (!this.atEnd()){
+    var char = this.next();
+    if (char >= '0' && char <= '9'){
+      result = result*10 + parseInt(char);
+    }
+    else {
+      this.rewind();
+      break;
+    }
+  }
+  return result;
+};
+
+Reader.prototype.nextFloat = function(){
+  var integ = this.nextInt();
+  if(integ === null){
+    return null;
+  }
+  if(this.next() !== '.'){
+    this.rewind();
+    return integ;
+  }
+  var frac = 0;
+  var base = 0.1;
+  while (!this.atEnd()){
+    var char = this.next();
+    if (char >= '0' && char <= '9'){
+      frac += parseInt(char) * base;
+      base *= 0.1;
+    }
+    else {
+      this.rewind();
+      break;
+    }
+  }
+  return integ + frac;
+};
 </script>
 </head>
 <body>
