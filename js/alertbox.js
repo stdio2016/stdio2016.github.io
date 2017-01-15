@@ -2,7 +2,7 @@ function errorHandler(msg, source, lineno, colno, err) {
     window.onerror = null;
     document.getElementById('alert').style.visibility = 'visible';
     var des =
-      'Shape Clear has encountered an error' + '\n' +
+      'The program has encountered an error' + '\n' +
       msg + '\n';
     if (msg.match(/script error/i)) {
         des += 'see Browser Console for more information';
