@@ -179,7 +179,13 @@ function play(){
     note(pitch[i], ff, pitch[i+1]);
     ff += pitch[i+1];
   }
-  document.getElementById('warn').innerText = JSON.stringify(support);
+  var code = document.getElementById('code').value;
+  var read = new Reader(code);
+  var result = [];
+  while(!read.atEnd()){
+    result.push(read.nextInstr());
+  }
+  document.getElementById('warn').innerText = JSON.stringify(result);
 }
 
 function stop(){
@@ -236,6 +242,11 @@ function loadSmp(where, instr, prop){
 function Reader(str){
   this.data = str;
   this.pos = 0;
+  this.keyAccidental = [ 0, 0, 0, 0, 0, 0, 0];
+  this.keyPitch = [10, 12, 1, 3, 5, 6, 8];
+  this.octave = 4;
+  this.duration = 4;
+  this.volume = 80;
 }
 
 Reader.prototype.next = function(){
@@ -293,9 +304,126 @@ Reader.prototype.nextFloat = function(){
   }
   return integ + frac;
 };
+
+Reader.prototype.skipSpace = function(){
+  var ch;
+  do {
+    ch = this.next();
+  } while(/^\s$/.test(ch)) ;
+  this.rewind();
+};
+
+Reader.prototype.nextInstr = function(){
+  var ch;
+  this.skipSpace();
+  ch = this.next();
+  switch(ch.toUpperCase()){
+    case 'C': case 'D': case 'E': case 'F': case 'G':
+    case 'A': case 'B':
+      return this.readNote(ch.toUpperCase());
+    case 'K':
+      return this.readKey();
+    default:
+      return null;
+  }
+};
+
+Reader.prototype.readNote = function(pitch){
+  var ptc = pitch.charCodeAt(0) - 65;
+  var acci;
+  var ch = this.next();
+  switch(ch){
+    case '+': case '#':
+      ch = this.next();
+      if(ch == '+' || ch == '#'){
+        acci = 2;
+      }
+      else{
+        this.rewind();
+        acci = 1;
+      }
+      break;
+    case '-':
+      ch = this.next();
+      if(ch == '-'){
+        acci = -2;
+      }
+      else{
+        this.rewind();
+        acci = -1;
+      }
+      break;
+    case '@':
+      acci = 0;
+      break;
+    default:
+      acci = this.keyAccidental[ptc];
+      this.rewind();
+  }
+  pitch = this.octave * 12 + this.keyPitch[ptc] + acci;
+
+  var duration = this.nextInt();
+  if(duration == null){
+    duration = this.duration;
+  }
+
+  var dots = 0;
+  ch = this.next();
+  while (ch == '.'){
+    dots++;
+    ch = this.next();
+  }
+  this.rewind();
+
+  return {type: 'note', duration: duration, dots: dots, pitch: pitch};
+};
+
+Reader.prototype.readKey = function(){
+  var ch = this.next().toUpperCase();
+  if(!/[A-G]/.test(ch)){
+    return null;
+  }
+  var key = ch.charCodeAt(0) - 64;
+  key = key > 2 ? key - 2 : key + 5;
+  var acci = 0;
+  ch = this.next();
+  switch(ch){
+    case '+': case '#':
+      acci = 1;
+      break;
+    case '-':
+      acci = -1;
+      break;
+    default:
+      acci = 0;
+      this.rewind();
+  }
+  var keyTable = [
+    //       pitch
+    //A  B  C  D  E  F  G     key
+    [ 0, 0, 0, 0, 0, 0, 0], // C
+    [ 0, 0,+1, 0, 0,+1, 0], // D
+    [ 0, 0,+1,+1, 0,+1,+1], // E
+    [ 0,-1, 0, 0, 0, 0, 0], // F
+    [ 0, 0, 0, 0, 0,+1, 0], // G
+    [ 0, 0,+1, 0, 0,+1,+1], // A
+    [+1, 0,+1,+1, 0,+1,+1]  // B
+  ];
+  var legal = ["ooo","oox","oox","xoo","oox","oox","oox"];
+  if(legal[key-1].charAt(acci+1) == 'x'){
+    acci = 0;
+    this.rewind();
+  }
+  for(var i=0;i<7;i++){
+    this.keyAccidental[i] = keyTable[key-1][i] + acci;
+  }
+  return {type: 'key', key: key, accidential: acci};
+};
+
 </script>
 </head>
 <body>
+<p><textarea id='code'></textarea></p>
 <input type='button' value='Play' onclick='play()'>
 <input type='button' value='Stop' onclick='stop()'>
 <p>
