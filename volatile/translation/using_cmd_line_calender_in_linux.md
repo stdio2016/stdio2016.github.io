@@ -117,4 +117,23 @@ The time can also be specified: `$ date --date="December 1 2017 12:00:00"`
 
     Fri Dec 1 12:00:00 EST 2017
 
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" title="This work is licensed under a Creative Commons Attribution-Share Alike 4.0 International License."></a>
+You can also specify the date format. For example, for a YYYY-Mo-Day format, use `$ date +%F`, or given even more precision by specifying exact details to display, for example `$ date +"%y-%m-%d"`. You can direct time format as well: `$ date +%H` displays the current hour in 24-hour format, while `$ date +%I` will give it to you in 12-hour format.
+
+你還可以指定日期格式。
+例如，要使用「YYYY-Mo-Day」格式，可以用 `$ date +%F`。
+也可以精確的指定要顯示的東西，例如： `$ date +"%y-%m-%d"`。
+也可以指定時間格式： `$ date +%H` 會以24小時制顯示現在時數，而 `$ date +%I` 會以12小時制顯示。
+
+The date has a few shortcuts as well, for example, `$ date --date "next monday"` or `$ date --date "yesterday"`, which can be useful in a scripting context. Working with the date can be particularly helpful when writing Bash scripts, for example, `$ echo "Today is $(date)"` will output `Today is Tue Dec 6 2016 15:53:41 2016`. Or easily create backups of files by appending the date, for example, `$ cp foo.txt "foo.txt.$(date +%F)"` to add today's date.
+
+date也有一些快捷方法，例如 `$ date --date "next monday"` 和 `$ date --date "yesterday"` ，在寫腳本時會很有用。
+date指令在寫Bash腳本時很好用，例如 `$ echo "Today is $(date)"` 會輸出 `Today is Tue Dec 6 2016 15:53:41 2016`。
+還可以在檔案後面附加日期，輕鬆備份檔案，像是用 `$ cp foo.txt "foo.txt.$(date +%F)"` 新增今天的日期。
+
+To learn more or to see further examples of the date command, check out the [Gnu Coreutils][] documentation.
+
+如果想知道更多關於 date 指令的用法和例子，可以到 [Gnu Coreutils][] 查看。
+
+[Gnu Coreutils]: http://www.gnu.org/software/coreutils/manual/html_node/Examples-of-date.html#Examples-of-date
+
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" title="本著作係採用創用 CC 姓名標示-相同方式分享 4.0 國際 授權條款授權."></a>
