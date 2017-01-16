@@ -174,11 +174,11 @@ function play(){
     G,h,E,h,E,1,F,h,D,h,D,1,
     C,h,E,h,G,h,G,h,C,2,
   ];*/
-  var ff = 0;
+  /*var ff = 0;
   for(var i=0; i<pitch.length; i+=2){
     note(pitch[i], ff, pitch[i+1]);
     ff += pitch[i+1];
-  }
+  }*/
   var code = document.getElementById('code').value;
   var read = new Reader(code);
   var result = [];
@@ -323,6 +323,16 @@ Reader.prototype.nextInstr = function(){
       return this.readNote(ch.toUpperCase());
     case 'K':
       return this.readKey();
+    case ',': case '<':
+      return {type: 'octave', octave: --this.octave};
+    case "'": case '>':
+      return {type: 'octave', octave: ++this.octave};
+    case 'O':
+      this.octave = this.nextInt();
+      return {type: 'octave', octave: this.octave};
+    case 'L':
+      this.duration = this.nextInt();
+      return {type: 'duration', duration: this.duration};
     default:
       return null;
   }
