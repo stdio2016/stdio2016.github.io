@@ -185,6 +185,7 @@ function play(){
   while(!read.atEnd()){
     result.push(read.nextInstr());
   }
+  result = readMusic(code);
   document.getElementById('warn').innerText = JSON.stringify(result);
 }
 
@@ -548,6 +549,68 @@ Reader.prototype.readPart = function(){
   return {type: 'part', part: num};
 };
 
+function readMusic(code){
+  var read = new Reader(code);
+  var part = {id: 0, notes: []};
+  var parts = {0: part};
+  var note;
+  var pitch;
+  var pos = 0;
+  var tempoChange = [{pos: 0, bpm: 120}];
+  while(!read.atEnd()){
+    var instr = read.nextInstr();
+    if(instr == null){
+      continue; // invalid character or instruction
+    }
+    if(instr.type == 'note'){
+      pitch = {pitch: instr.pitch, tied: instr.tied, volume: instr.volume};
+      if(instr.chord){
+        note = part.notes[part.notes.length - 1];
+        note.chord.push(pitch);
+      }
+      else{
+        var len = 4 / instr.duration;
+        if(instr.dots == 1) len *= 1.5;
+        if(instr.dots >= 2) len *= 1.75;
+        note = {chord: [pitch], len: len, pos: pos};
+        pos += len;
+        part.notes.push(note);
+      }
+    }
+    else if(instr.type == 'rest'){
+      if(!instr.chord){
+        var len = 4 / instr.duration;
+        if(instr.dots == 1) len *= 1.5;
+        if(instr.dots >= 2) len *= 1.75;
+        note = {chord: [], len: len, pos: pos};
+        pos += len;
+        part.notes.push(note);
+      }
+    }
+    else if(instr.type == 'part'){
+      var newPart = parts[instr.part];
+      if(newPart){
+        part = newPart;
+        if(part.notes.length > 0){
+          note = part.notes[part.notes.length-1];
+          pos = note.pos + note.len;
+        }
+        else {
+          pos = 0;
+        }
+      }
+      else{
+        part = {id: instr.part, notes: []};
+        pos = 0;
+        parts[instr.part] = part;
+      }
+    }
+    else if(instr.type == 'tempo'){
+      tempoChange.push({pos: pos, bpm: instr.bpm});
+    }
+  }
+  return {parts: parts, tempo: tempoChange};
+}
 </script>
 </head>
 <body>
