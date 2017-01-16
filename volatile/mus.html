@@ -247,6 +247,8 @@ function Reader(str){
   this.octave = 4;
   this.duration = 4;
   this.volume = 80;
+  this.part = 0;
+  this.partStates = {};
 }
 
 Reader.prototype.next = function(){
@@ -333,6 +335,8 @@ Reader.prototype.nextInstr = function(){
     case 'L':
       this.duration = this.nextInt();
       return {type: 'duration', duration: this.duration};
+    case '!':
+      return this.readPart();
     default:
       return null;
   }
@@ -428,6 +432,32 @@ Reader.prototype.readKey = function(){
     this.keyAccidental[i] = keyTable[key-1][i] + acci;
   }
   return {type: 'key', key: key, accidential: acci};
+};
+
+Reader.prototype.readPart = function(){
+  var num = this.nextInt();
+  if(!num) num = 0;
+  this.partStates[this.part] = {
+    keyAccidental: this.keyAccidental,
+    octave: this.octave,
+    duration: this.duration,
+    volume: this.volume
+  };
+  var state = this.partStates[num];
+  if (state){
+    this.keyAccidental = state.keyAccidental;
+    this.octave = state.octave;
+    this.duration = state.duration;
+    this.volume = state.volume;
+  }
+  else{
+    this.keyAccidental = [0, 0, 0, 0, 0, 0, 0];
+    this.octave = 4;
+    this.duration = 4;
+    this.volume = 80;
+  }
+  this.part = num;
+  return {type: 'part', part: num};
 };
 
 </script>
