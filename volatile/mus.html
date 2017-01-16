@@ -349,6 +349,13 @@ Reader.prototype.nextInstr = function(){
       return {type: 'chord'};
     case 'P':
       return this.readRest();
+    case 'V':
+      this.volume = this.nextInt();
+      return {type:'volume', volume: this.volume};
+    case 'T':
+      num = this.nextFloat();
+      if (this.chord) return null;
+      return {type: 'tempo', bpm: num};
     default:
       return null;
   }
@@ -401,6 +408,7 @@ Reader.prototype.readNote = function(pitch){
   }
   this.rewind();
 
+  var volume = this.volume;
   var chord = this.chord;
   if(chord){
     this.switchChord(false);
@@ -418,7 +426,8 @@ Reader.prototype.readNote = function(pitch){
   else{
     this.rewind();
   }
-  return {type: 'note', duration: duration, dots: dots, pitch: pitch, chord: chord, tied: tied};
+  return {type: 'note', duration: duration, dots: dots, pitch: pitch,
+  chord: chord, tied: tied, volume: volume};
 };
 
 Reader.prototype.readRest = function(){
