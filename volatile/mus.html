@@ -249,6 +249,9 @@ function Reader(str){
   this.volume = 80;
   this.part = 0;
   this.partStates = {};
+  this.chord = false;
+  this.storedOctave = this.octave;
+  this.storedVolume = this.volume;
 }
 
 Reader.prototype.next = function(){
@@ -319,6 +322,7 @@ Reader.prototype.nextInstr = function(){
   var ch;
   this.skipSpace();
   ch = this.next();
+  var num;
   switch(ch.toUpperCase()){
     case 'C': case 'D': case 'E': case 'F': case 'G':
     case 'A': case 'B':
@@ -333,10 +337,16 @@ Reader.prototype.nextInstr = function(){
       this.octave = this.nextInt();
       return {type: 'octave', octave: this.octave};
     case 'L':
-      this.duration = this.nextInt();
+      num = this.nextInt();
+      if(this.chord) return null;
+      this.duration = num;
       return {type: 'duration', duration: this.duration};
     case '!':
       return this.readPart();
+    case '/':
+      if(!this.chord)
+        this.switchChord(true);
+      return {type: 'chord'};
     default:
       return null;
   }
@@ -389,8 +399,38 @@ Reader.prototype.readNote = function(pitch){
   }
   this.rewind();
 
-  return {type: 'note', duration: duration, dots: dots, pitch: pitch};
+  var chord = this.chord;
+  if(chord){
+    this.switchChord(false);
+  }
+  else{
+    this.storedOctave = this.octave;
+    this.storedVolume = this.volume;
+  }
+  return {type: 'note', duration: duration, dots: dots, pitch: pitch, chord: chord};
 };
+
+Reader.prototype.switchChord = function(){
+  this.chord = !this.chord;
+  var num = this.octave;
+  this.octave = this.storedOctave;
+  this.storedOctave = num;
+  num = this.volume;
+  this.volume = this.storedVolume;
+  this.storedVolume = num;
+};
+
+Reader.prototype.endChord = function(){
+  if(this.chord){
+    this.octave = this.storedOctave;
+    this.volume = this.storedVolume;
+    this.chord = false;
+  }
+  else{
+    this.storedOctave = this.octave;
+    this.storedVolume = this.volume;
+  }
+}
 
 Reader.prototype.readKey = function(){
   var ch = this.next().toUpperCase();
@@ -428,6 +468,7 @@ Reader.prototype.readKey = function(){
     acci = 0;
     this.rewind();
   }
+  if(this.chord) return null;
   for(var i=0;i<7;i++){
     this.keyAccidental[i] = keyTable[key-1][i] + acci;
   }
@@ -435,6 +476,7 @@ Reader.prototype.readKey = function(){
 };
 
 Reader.prototype.readPart = function(){
+  this.endChord();
   var num = this.nextInt();
   if(!num) num = 0;
   this.partStates[this.part] = {
