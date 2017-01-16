@@ -38,7 +38,7 @@ var soundBank =
     {sample: genFakePiano(), center: 69}
   };
 var fakePno = soundBank.fakePno;
-function note(pitch,start,duration){
+function note(pitch,start,end){
 /*
   var osc = audioctx.createOscillator();
   osc.type = 'sine';
@@ -58,7 +58,7 @@ function note(pitch,start,duration){
   src.loopEnd = 123;
   src.connect(env);
   env.connect(gainNode);
-  var startTime = currentTime + start * (60 / bpm);
+  var startTime = currentTime + start;
   if(src.start)
     src.start(startTime);
   else {
@@ -66,7 +66,7 @@ function note(pitch,start,duration){
     src.noteOn(startTime);
   }
 
-  var endtime = currentTime + (start + duration) * (60 / bpm);
+  var endtime = currentTime + end;
   env.gain.setValueAtTime(1, endtime - 0.05);
   env.gain.linearRampToValueAtTime(0, endtime);
   if(src.stop)
@@ -186,8 +186,21 @@ function play(){
     result.push(read.nextInstr());
   }
   result = readMusic(code);
-  result = combineTies(result.parts, result.tempo);
-  document.getElementById('warn').innerText = JSON.stringify(result);
+  combineTies(result.parts);
+  combineTime(result.parts, result.tempo);
+  result = result.parts;
+  for(var id in result){
+    var part = result[id];
+    var time = part.time;
+    var notes = part.notes;
+    for(var i=0; i<notes.length; i++){
+      var chord = notes[i].chord;
+      for(var j=0; j<chord.length; j++){
+        note(chord[j].pitch, time[i], time[chord[j].end]);
+      }
+    }
+  }
+  document.getElementById('warn').innerText = JSON.stringify(support);
 }
 
 function stop(){
@@ -658,6 +671,29 @@ function combineTies(parts){
     }
   }
   return parts;
+}
+
+function combineTime(parts, tempo){
+  var tempoTime = [0];
+  var time = 0;
+  for(var i=1; i<tempo.length; i++){
+    time += (tempo[i].pos - tempo[i-1].pos) * (60/tempo[i-1].bpm);
+    tempoTime.push(time);
+  }
+  for(var id in parts){
+    var part = parts[id];
+    part.time = [0];
+    var i = 0;
+    var notes = part.notes;
+    for(var j=0; j<notes.length; j++){
+      var endPos = notes[j].pos + notes[j].len;
+      do {
+        i++;
+      } while(i < tempo.length && tempo[i].pos < endPos);
+      i--;
+      part.time.push(tempoTime[i] + (endPos - tempo[i].pos) * (60/tempo[i].bpm));
+    }
+  }
 }
 </script>
 </head>
