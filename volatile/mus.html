@@ -186,6 +186,7 @@ function play(){
     result.push(read.nextInstr());
   }
   result = readMusic(code);
+  result = combineTies(result.parts, result.tempo);
   document.getElementById('warn').innerText = JSON.stringify(result);
 }
 
@@ -609,7 +610,54 @@ function readMusic(code){
       tempoChange.push({pos: pos, bpm: instr.bpm});
     }
   }
+  tempoChange.sort(function(a,b){
+    a = a.pos;
+    b = b.pos;
+    return a<b ? -1 : (a>b ? 1 : 0);
+  });
   return {parts: parts, tempo: tempoChange};
+}
+
+function combineTies(parts){
+  for(var id in parts){
+    var part = parts[id];
+    var notes = part.notes;
+    for(var i=0; i<notes.length; i++){
+      var chord = notes[i].chord;
+      for(var j=0; j<chord.length; j++){
+        if(chord[j].tied){
+          var k, m;
+          for(k=i+1; k<notes.length; k++){
+            var next = notes[k].chord;
+            for(m=0; m<next.length; m++){
+              if(next[m].pitch == chord[j].pitch){
+                break;
+              }
+            }
+            var again = false;
+            if (m < next.length){
+              if(next[m].tied){
+                again = true;
+              }
+              next[m] = next[next.length-1];
+              next.length -= 1;
+            }
+            else{
+              k--;
+            }
+            if(!again)
+              break;
+          }
+          if(k >= notes.length) k = notes.length-1;
+          chord[j].end = k+1;
+        }
+        else{
+          chord[j].end = i+1;
+        }
+      }
+    }
+  }
+  return parts;
 }
 </script>
 </head>
