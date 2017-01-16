@@ -347,6 +347,8 @@ Reader.prototype.nextInstr = function(){
       if(!this.chord)
         this.switchChord(true);
       return {type: 'chord'};
+    case 'P':
+      return this.readRest();
     default:
       return null;
   }
@@ -407,7 +409,42 @@ Reader.prototype.readNote = function(pitch){
     this.storedOctave = this.octave;
     this.storedVolume = this.volume;
   }
-  return {type: 'note', duration: duration, dots: dots, pitch: pitch, chord: chord};
+
+  ch = this.next();
+  var tied = false;
+  if(ch == '~'){
+    tied = true;
+  }
+  else{
+    this.rewind();
+  }
+  return {type: 'note', duration: duration, dots: dots, pitch: pitch, chord: chord, tied: tied};
+};
+
+Reader.prototype.readRest = function(){
+  var duration = this.nextInt();
+  if(duration == null){
+    duration = this.duration;
+  }
+
+  var dots = 0;
+  ch = this.next();
+  while (ch == '.'){
+    dots++;
+    ch = this.next();
+  }
+  this.rewind();
+
+  var chord = this.chord;
+  if(chord){
+    this.switchChord(false);
+  }
+  else{
+    this.storedOctave = this.octave;
+    this.storedVolume = this.volume;
+  }
+
+  return {type:'rest', duration: duration, dots: dots, chord: chord};
 };
 
 Reader.prototype.switchChord = function(){
@@ -430,7 +467,7 @@ Reader.prototype.endChord = function(){
     this.storedOctave = this.octave;
     this.storedVolume = this.volume;
   }
-}
+};
 
 Reader.prototype.readKey = function(){
   var ch = this.next().toUpperCase();
