@@ -14,7 +14,7 @@ I have always interested in historical dates and determining what actual day of 
 獨立宣言在星期幾簽訂？
 我星期幾出生？
 1876年7月4日是星期幾？
-我知道你們可以利用搜尋引擎來回答這類的問題。
+我知道可以利用搜尋引擎來回答這類的問題。
 但是，你知道Linux的命令列也可以回答這些問題嗎？
 
 July 4, 1776, was a Thursday. July 4 in 1876 was a Tuesday. My mom is celebrating her birthday soon and I know that she was born on Saturday, November 6. (I can't tell you what year because she would not like to know that I'm telling people her age.)
@@ -22,11 +22,11 @@ July 4, 1776, was a Thursday. July 4 in 1876 was a Tuesday. My mom is celebratin
 1776年7月4日是星期四。
 1876年的7月4日是星期二。
 我媽媽的生日快到了，而我知道她出生於11月6日星期六。
-(我不能告訴你是哪一年，因為她大概不希望我告訴各位她的年紀。)
+(我不能告訴你是哪一年，因為她大概不希望我洩漏她的年紀。)
 
 The Linux date and calendar commands can do far more than just providing these fun factoids, though. Here are some easy examples of cal commands you can issue on the command line:
 
-Linux的日期和萬年曆指令能做的可不只是得到這些有趣的訊息。
+Linux的日期和萬年曆指令能做的不只是得到這些有趣的訊息。
 以下是在命令列中使用cal指令的簡單的例子：
 
 Display current calendar month: `$ cal`
@@ -80,7 +80,7 @@ Display the current month, previous month, and next month: `$ cal -3`
 
 You can show the whole year with `$ cal -y`, or use `$ cal -jy` to display Julian dates beginning with 1 on January 1 and ending on December 31 with 365 or 366 if it's a leap year. You can also figure out slightly more complicated dates with the related ncal command. For example, `$ ncal -e` displays the date of Easter in the current year.
 
-你可以用 `$ cal -y` 秀出年曆，或者用 `$ cal -jy` 顯示儒略日期 (Julian date)，在1月1日時從1開始計，在12月31日時以365結束，如果是閏年的話就是以366結束。
+你可以用 `$ cal -y` 秀出年曆，或者用 `$ cal -jy` 顯示儒略日期 (Julian date)，在1月1日時，從1開始計，在12月31日時，以365結束，如果是閏年的話就是以366結束。
 你也可以類似的 ncal 指令處理稍微複雜的日期。
 例如，`$ ncal -e`可以查詢今年的復活節。
 
@@ -94,7 +94,7 @@ the entire year then pipe the calendar command to a text file, you can simply ru
 The date command in Linux can display the date in several formats, or to set the date on your computer's Linux operating system. The date command can be combined in shell scripts to, for example, easily append a date to file you are editing. Along with the calendar date, the time can also be specified. Here are a few examples.
 
 Linux的date指令可以用各種格式顯示，或者是更改你的電腦上的Linux作業系統時間。
-date指令可以在shell腳本裡使用，來輕易的做到像是將你編輯的檔案附上日期。
+date指令可以在shell腳本裡使用，例如：將你編輯的檔案附上日期。
 除了日曆上的日期之外，也可以指定時間。
 以下有一些例子：
 
@@ -122,11 +122,11 @@ You can also specify the date format. For example, for a YYYY-Mo-Day format, use
 你還可以指定日期格式。
 例如，要使用「YYYY-Mo-Day」格式，可以用 `$ date +%F`。
 也可以精確的指定要顯示的東西，例如： `$ date +"%y-%m-%d"`。
-也可以指定時間格式： `$ date +%H` 會以24小時制顯示現在時數，而 `$ date +%I` 會以12小時制顯示。
+也可以指定時間格式： `$ date +%H` 會以24小時制顯示現在時間的小時部分，而 `$ date +%I` 會以12小時制顯示。
 
 The date has a few shortcuts as well, for example, `$ date --date "next monday"` or `$ date --date "yesterday"`, which can be useful in a scripting context. Working with the date can be particularly helpful when writing Bash scripts, for example, `$ echo "Today is $(date)"` will output `Today is Tue Dec 6 2016 15:53:41 2016`. Or easily create backups of files by appending the date, for example, `$ cp foo.txt "foo.txt.$(date +%F)"` to add today's date.
 
-date也有一些快捷方法，例如 `$ date --date "next monday"` 和 `$ date --date "yesterday"` ，在寫腳本時會很有用。
+date也有一些快捷指令，例如 `$ date --date "next monday"` 和 `$ date --date "yesterday"` ，在腳本裡很有用。
 date指令在寫Bash腳本時很好用，例如 `$ echo "Today is $(date)"` 會輸出 `Today is Tue Dec 6 2016 15:53:41 2016`。
 還可以在檔案後面附加日期，輕鬆備份檔案，像是用 `$ cp foo.txt "foo.txt.$(date +%F)"` 新增今天的日期。
 
