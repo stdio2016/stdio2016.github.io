@@ -349,11 +349,14 @@ Reader.prototype.nextInstr = function(){
     case "'": case '>':
       return {type: 'octave', octave: ++this.octave};
     case 'O':
-      this.octave = this.nextInt();
+      num = this.nextInt();
+      if (num === null) num = 4;
+      this.octave = num;
       return {type: 'octave', octave: this.octave};
     case 'L':
       num = this.nextInt();
       if(this.chord) return null;
+      if (num === null || num < 1) num = 4;
       this.duration = num;
       return {type: 'duration', duration: this.duration};
     case '!':
@@ -365,11 +368,14 @@ Reader.prototype.nextInstr = function(){
     case 'P':
       return this.readRest();
     case 'V':
-      this.volume = this.nextInt();
+      num = this.nextInt();
+      if (num === null) num = 80;
+      this.volume = num;
       return {type:'volume', volume: this.volume};
     case 'T':
       num = this.nextFloat();
       if (this.chord) return null;
+      if (num === null || num < 20) num = 120;
       return {type: 'tempo', bpm: num};
     default:
       return null;
@@ -541,20 +547,17 @@ Reader.prototype.readPart = function(){
   var num = this.nextInt();
   if(!num) num = 0;
   this.partStates[this.part] = {
-    keyAccidental: this.keyAccidental,
     octave: this.octave,
     duration: this.duration,
     volume: this.volume
   };
   var state = this.partStates[num];
   if (state){
-    this.keyAccidental = state.keyAccidental;
     this.octave = state.octave;
     this.duration = state.duration;
     this.volume = state.volume;
   }
   else{
-    this.keyAccidental = [0, 0, 0, 0, 0, 0, 0];
     this.octave = 4;
     this.duration = 4;
     this.volume = 80;
@@ -570,7 +573,7 @@ function readMusic(code){
   var note;
   var pitch;
   var pos = 0;
-  var tempoChange = [{pos: 0, bpm: 120}];
+  var tempoChange = [];
   while(!read.atEnd()){
     var instr = read.nextInstr();
     if(instr == null){
@@ -628,6 +631,9 @@ function readMusic(code){
     b = b.pos;
     return a<b ? -1 : (a>b ? 1 : 0);
   });
+  if(tempoChange.length == 0 || tempoChange[0].pos > 0){
+    tempoChange.unshift({pos: 0, bpm: 120});
+  }
   return {parts: parts, tempo: tempoChange};
 }
 
