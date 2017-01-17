@@ -217,7 +217,7 @@ function unlock(){
   if(audioUnlocked) return;
   var src = audioctx.createBufferSource();
 
-  src.buffer = fakePno;
+  src.buffer = fakePno.sample;
 
   src.connect(gainNode);
   src.start(0);
