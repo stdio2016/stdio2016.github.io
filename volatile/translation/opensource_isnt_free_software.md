@@ -1,5 +1,5 @@
 # 「開源軟體」不是「自由軟體」
-## 將「開源軟體」和「自由軟體」混淆是對自由軟體糟蹋
+## 將「開源軟體」和「自由軟體」混淆就是糟蹋自由軟體
 
 原標題: 'Open source' is not 'free software'  
 Conflating 'open source' and 'free software' undermines free software.
@@ -14,9 +14,9 @@ Conflating 'open source' and 'free software' undermines free software.
 
 In the open source universe, using terms such as *FLOSS* (Free/Libre and Open Source Software) is common and represents a casual conflation of the terms *[open source][]* and *[free software][]*, which are often used interchangeably. I would be remiss if I didn't also admit that I have been guilty of same. I won't be doing that anymore—or at least I'll try not to—for a simple reason: Using the terms interchangeably is dangerous to the goals of free software and open media advocates (read "anti-DRM"). To continue this practice is to undermine beliefs that are fundamental to free software and associated movement.
 
-在開源世界裡，使用類似*FLOSS*(Free/Libre and Open Source Software，自由和開源軟體)的術語很常見，代表*[open source][]*(開放原始碼)和*[free software][]*(自由軟體)這兩個術語的隨意混淆。而這兩個術語通常可以混用。
-如果我不承認我也這麼做，那麼我實在是失職了。
-我不會再做這種事，或至少我會嘗試不再做，因為一個簡單的理由：將這些術語混用，對於自由軟體和開放媒體的倡導者(例如反DRM)的目標很危險。
+在開源世界裡，使用類似 *FLOSS* (Free/Libre and Open Source Software，自由和開源軟體) 的術語很常見，代表 *[open source][]* (開放原始碼/開源)和 *[free software][]* (自由軟體)這兩個術語經常被混用。
+如果我不承認我也犯了這種錯，那麼我實在是失職了。
+我不會再犯這種錯，或至少會嘗試不再犯，只因為將這些術語混用，會危害到自由軟體的本意和開放媒體倡導者的努力(參見「反DRM」)。
 繼續這種做法就是破壞自由軟體和相關運動最基本的信念。
 
 ## Free software is about freedom
@@ -25,13 +25,13 @@ Free software is a social movement, with nary a hint of business interests—it 
 
 ## 自由軟體是為了自由
 
-自由軟體是個社會運動，連一點商業利益都沒有——它存在於宗教和哲學的領域。
-自由軟體是個有強烈道德規範的生活方式。
-*自由軟體*的中心精神就是「每個人都應該有辦法使用、修改和分享」的想法，再加上明確的限制：「你不能只修改而不分享」。
-這就是「自由軟體是病毒」這個模因(meme)的來源。這句話使得[GNU GPL][]成為商業人士似乎很害怕的東西。
-擁抱自由軟體也是擁抱分享文化和任務共享，而這對大多數的企業而言都太超過了。
-自由軟體當時發起的目的就是要破壞專有的Unix廠商的秩序，並實施共享的原則。
-而一提到支持自由，就會發現很難擁抱自由軟體的文化和理念，而不承認人們為了解鎖的裝置、開放的媒體格式、網路中立，隱私安全和政府監視而持續爭鬥。
+自由軟體是個社會運動，不以商業為目的——它存在於宗教和哲學的領域。
+它是個有強烈道德規範的生活方式。
+*自由軟體* 的中心精神就是「每個人都應該有辦法使用、修改和分享」的想法，再加上明確的限制：「你不能只修改而不分享」。
+這就是「自由軟體是病毒」這個模因(meme)的來源。也是這句話使得[GNU GPL][]成為商人害怕的東西。
+接受自由軟體，就是接納分享文化和任務共享，而這對大多數的企業而言都不切實際。
+自由軟體當時發起的目的就是要破壞Unix的不自由局面，並實施共享的原則。
+而一提到支持自由，就會發現很難接受自由軟體的文化和理念，而不承認人們為了解鎖的裝置、開放的媒體格式、網路中立、隱私權和政府監視而持續爭鬥。
 在這篇文章，我會用「自由軟體」來簡稱以上所有的運動。
 
 ## Open source is about something else entirely: Supply chain efficiency
@@ -40,28 +40,28 @@ When I wrote *[There is no Open Source Community][]* a decade ago, I asked the q
 
 ## 開源軟體完全是另一回事：為了生產效率
 
-在我十年前寫*[There is no Open Source Community][]*(英文)這篇文章時，我問道：「為何開發者要釋放開放原始碼？」
+在我十年前寫 *[There is no Open Source Community][]* (英文)這篇文章時，我問道：「為何開發者要釋放開放原始碼？」
 後來發現，從生產的角度看，有很好的理由。
 
 To embrace open source is to embrace a development model that utilizes a decentralized supply chain. Whereas before, proprietary vendors would control the entire software supply chain in-house, the open source model directly refutes that approach. The open source model is about using common components of multiple origins to achieve higher efficiency and agility in creating software-based products and services.
 
-擁抱開放原始碼就是擁抱利用去中心化的供應鏈的發展模型。
+接納開放原始碼就是接受利用去中心化的供應鏈的發展模型。
 和以往，專有軟體公司在內部控制整個軟體供應鏈，相反的是，開源軟體模型直接駁斥這個做法。
-開源軟體模型就是用多個來源的共同原件來達成更高效率和敏捷度，以製造奠基於軟體的產品和服務。
+開源軟體模型就是利用多個來源的共同元件來達成更高效率和敏捷度，以製造奠基於軟體的產品和服務。
 
 Initially, open source projects did heavily use GPL'd software, due to the fact that the GNU project was started some 10 years before the first Linux kernel, and at least 15 years before the term *open source* was coined. The effect of this head start was that by the time open source as a business-friendly concept gained steam, there was already a wealth of GPL'd code—not to mention a well-developed culture of sharing.
 
-一開始，開源軟體確實大量使用GPL的軟體，因為GNU專案在第一個Linux核心出現的大約10年前，同時是*開源(open source)*這個術語出現以前至少15年就開始了。
+一開始，開源軟體確實大量使用GPL的軟體，因為GNU專案在第一個Linux核心出現的大約10年前，同時是 *開源(open source)* 這個術語出現以前至少15年就開始了。
 這個開端的效應就是，在開源軟體作為對商業友善的概念興起前，就已經有許多的GPL程式——更別提良好發展的共享文化。
 
 That there is now a trend of new open source projects migrating away from copyleft GPL-style licenses toward "liberal" Apache-style licenses should come as no surprise. In retrospect, this was inevitable. In a world defined by business interests and not philosophy, enforced sharing doesn't really make sense. Sure, one could argue that it does. After all, lots of companies have formed profitable ecosystems around GPL'd GNU and Linux code. But let's assume that most business types disagree with the whole enforced-sharing bit.
 
 對於現在新的開源軟體專案從copyleft GPL風格的授權條款遷移到「自由」的Apache風格的授權條款的趨勢不應該感到驚訝。
 回想起來，這是無可避免的。
-在一個由商業利益而不是由道義定義的世界裡，強制共享並不真的有意義。
-當然，人們可以說它有意義。
-畢竟，許多公司已經藉著GPL的GNU和Linux代碼建立有利可圖的生態系統。
-但讓我們來假設，大部分的業務類型不同意整個強制分享這一塊。
+在一個由商業利益定義，而不是由道德定義的世界裡，強制分享並不切實際。
+當然也會有人來反駁這句話。
+畢竟，許多公司已經藉著GNU的GPL和Linux代碼建立有利可圖的生態系統。
+但讓我們來假設，大部分的商業型態不接受強制分享的想法。
 
 In the Apache-style open source model, developers can choose whether or not to release their modifications. They often do, simply because they have realized the benefits of participating in open source ecosystems—but there are many who sometimes do not. In an open source world, this simply doesn't matter. If the point of open source development is to optimize your supply chain and economies of scale, who cares about sharing?
 
@@ -76,27 +76,27 @@ It's important to remember that in *[The Cathedral and the Bazaar][]* Eric S Ray
 
 ## 開源軟體的勝利
 
-重要的是，在*[大教堂與市集][]*這篇文章，Eric S Raymond特別呼籲開放原始碼模型較為優越，而這就是文化大鴻溝的開端：開放原始碼的宗旨是為了更好的軟體以及「只要有足夠的眼睛，所有的臭蟲(bug)都會浮現」；自由軟體則是藉由分享而得到開明的存在。
+重要的是，在 *[大教堂與市集][]* 這篇文章，Eric S Raymond特別呼籲開放原始碼模型較為優越，而這就是文化大鴻溝的開端：開放原始碼的宗旨是為了更好的軟體以及「只要有足夠的眼睛，所有的臭蟲(bug)都會浮現」；自由軟體則是藉由分享而得到開明的存在。
 「開源是優越的模型」這個觀點大部分都是正確的，因為開源已經成為技術創新的首選模型。
 開放原始碼的流程，如果使用的當，可以讓廠商取得競爭優勢，而開源的原則可以使專案更有效率的運行。
 
 Ironically, it's this impressive open source victory—or at least our interpretation of it—that presents a real threat to free software. When these terms are used interchangeably, there is no room for nuance or differentiation. Thus, the open source victory becomes a free software victory, without the slightest question of whether that actually is the case.
 
 諷刺的是，就是那令人欽佩的開源勝利——或至少是我們對它的解讀——對自由軟體造成真正的威脅。
-當這兩個用詞被混用，這兩個詞就沒有差異的餘地。
-於是，開源勝利就變成了自由軟體的勝利，一點都沒有質疑是否真的是如此。
+當這兩個用詞被混用，這兩個詞就不再有任何差異。
+於是，開源勝利就變成了自由軟體的勝利，而不質疑是否真的如此。
 
 But has free software actually *won*? Let us consider an alternative, that *victory* for free software looks very different from open source. If an open source victory looks like higher efficiency and more innovation in open source ecosystems, what does a free software victory look like?
 
-然而自由軟體真的*獲勝*了嗎？
-我們考慮另一個情況，那就是自由軟體的*勝利*看起來跟開源非常不一樣。
+然而自由軟體真的 *獲勝* 了嗎？
+我們考慮另一個情況，那就是自由軟體的 *勝利* 看起來跟開源非常不一樣。
 如果開源的勝利在開源生態裡是更高的效率和更多創新，那自由軟體的勝利又是如何呢？
 
 ## If free software 'won'
 
 If we start with the premise that free software is about a philosophy of sharing and a moral code built around that, then what would it mean if the philosophy of free software was just as successful as open source principles? If I'm correct that they are different, then surely the success of this philosophy and moral code would manifest itself in ways different from what we see now.
 
-## 如果自由軟體獲勝
+## 如果自由軟體「獲勝」
 
 如果我們將「自由軟體是關於共享的哲學以及圍繞著它的道德規範」當作前提，那麼如果自由軟體的哲理和開源原則一樣成功，又是意味著什麼呢？
 如果我是對的，它們確實不同，那麼很肯定的，這種哲理和道德規範的成功會以不同於我們現在所見的方式表現出來。
@@ -109,8 +109,8 @@ In a world in which free software wins, are locked-down cloud architectures domi
 我們會此輕易的就把隱私交給媒體公司嗎？
 那麼，為什麼在開源超級成功的世界裡，上述都是真的？
 如果我們宣告開源已經獲勝——我相信這麼做是安全的——那我們怎麼可能宣告自由軟體也獲勝了呢？
-這就是混淆術語很危險的由來。
-在你混用這些術語的時候，你也在將空氣從各地自由軟體擁護者的「帆」中抽走，這些擁護者想要確保雲端共享、網路自由、科技使用的平等以及改善每個人的隱私權。
+這就是混淆術語很危險的理由。
+在你混用這些術語的時候，你也在掏空世界各地自由軟體擁護者的努力，這些擁護者想要確保雲端共享、網路自由、科技使用的平等以及改善每個人的隱私權。
 
 When free software advocates speak up, many open source supporters would rather that they just shut up and went away. I was in a conversation some months ago in which I mentioned that we needed to educate people about open source principles. My mistake. See what conflation of those two things gets us? One technology executive responded, "Do we really need that anymore?" The impression among some open source supporters is that, because open source has won, the "free market" will take care of it, and we needn't worry ourselves with this philosophical stuff. Thus, there's no need to lobby governments on standards, privacy, and free software, because, hey, the invisible hand of the market is guiding us all in the right direction. With the success of open source due to market trends, there is far too much lackadaisical thinking about moving technology-culture forward.
 
