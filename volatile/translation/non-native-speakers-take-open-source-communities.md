@@ -61,3 +61,23 @@ Speaking: Speaking is more difficult than listening because the participant's vo
 
 說： 「說」比「聽」更困難，因為參與者能使用的字彙可能有限。
 此外，英文的發音和語法常常跟說話者的母語非常不同，導致互動變得更難被理解。
+
+## Cultural differences
+
+## 文化差異
+
+Each culture has different norms when interacting with other people in the open source community. For example, the Japanese tend not to say yes or no clearly as a way to respect others and to avoid fighting each other. This is often very different from other cultures and may cause misunderstanding of what was expressed.
+
+在開源社群裡，每個文化和其他人互動時都有不同的規範。
+例如，日本人傾向於不明確表達是與否，作為尊敬其他人以及避免紛爭的方法。
+通常這和其他文化很不一樣，可能會導致誤解對方的意思。
+
+In Chinese culture, people prefer to just say yes, instead of saying no or trying to negotiate. In a globally distributed community as OpenStack, this often leads to the lack of confidence when expressing opinions. Furthermore, Chinese people like to list the facts first and give the thesis at the end, and this can cause confusion for people from other cultures because it is not what they expect.
+
+在中國文化，人們寧願只是說「是」，而不說「不」或試圖協商。
+在全球分布的社群，像是OpenStack裡，這常常會導致在表達意見時缺乏自信。
+此外，中國人喜歡先列出事實，最後再給出論點，而這造成和來自不同文化的人產生誤解，因為這不是其他文化的人所期待的。
+
+A Brazilian, for instance, may find that discussions are driven in a similar way; however, some cultures are very short and direct in responses, which may sound a bit rude.
+
+例如巴西人可能會發現討論總是以類似的方式驅動著；然而，有些文化的反應會非常短而直接，聽起來有點粗魯。
