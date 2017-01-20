@@ -62,9 +62,9 @@ Speaking: Speaking is more difficult than listening because the participant's vo
 說： 「說」比「聽」更困難，因為參與者能使用的字彙可能有限。
 此外，英文的發音和語法常常跟說話者的母語非常不同，導致互動變得更難被理解。
 
-## Cultural differences
+### Cultural differences
 
-## 文化差異
+### 文化差異
 
 Each culture has different norms when interacting with other people in the open source community. For example, the Japanese tend not to say yes or no clearly as a way to respect others and to avoid fighting each other. This is often very different from other cultures and may cause misunderstanding of what was expressed.
 
@@ -107,3 +107,33 @@ Talking to others or yourself helps you become comfortable speaking out more fre
 
 和其他人或自己交談可以讓你更舒服的講出話來。
 用一對一的方式表達自己的意見，比在大群體裡討論還容易。
+
+## Onboarding newcomers
+
+## 正在入職的新手
+
+A few initiatives from both newcomers and native speakers may positively affect the onboarding process.
+
+以下幾個意見是由新手和英文母語者提供的，也許有助於入職的過程。
+
+### Newcomers
+
+### 新手
+
+Speak and write your opinion, and ask your questions; this participation is always a good opportunity to exercise your English. Do not be afraid.
+
+把你的意見講出來和寫出來，並問你的問題；
+這是訓練自己英文能力的好機會。
+不要害怕。
+
+For meetings, make sure you prepare yourself in advance so you will be comfortable with the subject and more confident about the opinions you are expressing.
+
+在會議前，確保自己已經準備好了，如此才會在會議主題下感到舒服，也能更有自信的表達自己的意見。
+
+Make friends who are English speakers and talk more to practice your English skills.
+
+和說英文的人做朋友，多和他們聊天，以練習自己的英文能力。
+
+Writing blogs and technical articles in English are also great ideas.
+
+用英文寫部落格和技術文章也是個好主意。
