@@ -1,6 +1,8 @@
-﻿# Tips for non-native English speakers working on open source projects
+# Tips for non-native English speakers working on open source projects
 
 # 給非英語母語者在開源專案上的提示
+
+![給非英語母語者在開源專案上的提示](https://opensource.com/sites/default/files/styles/image-full-size/public/images/life/world_hands_diversity.png?itok=LMT5xbxJ)
 
 原文網址： https://opensource.com/article/17/1/non-native-speakers-take-open-source-communities
 
@@ -93,7 +95,7 @@ Challenges related to language skills are easier to overcome than cultural ones.
 
 In order to brush up on your language skills, be in contact with the language as much as you can. Do not think about your limitations. Just do your best and you will improve eventually.
 
-要加強語言能力，就要盡量多跟那個語言接觸。
+要磨練語言能力，就要盡量多跟那個語言接觸。
 不要覺得你有極限。
 盡自己的能力，總有一天你會變強的。
 
@@ -137,3 +139,25 @@ Make friends who are English speakers and talk more to practice your English ski
 Writing blogs and technical articles in English are also great ideas.
 
 用英文寫部落格和技術文章也是個好主意。
+
+### Tips for native English speakers
+
+### 給英文母語者的提示
+
+> 這是給使用英文的人看的，需要翻譯嗎？
+
+Please speak slowly and use simple words and sentences. Don't make fun of non-native English speakers if you find something wrong about the English they used. Try to encourage newcomers to express their opinions, and make them comfortable enough to do so.
+
+請說的慢一點，並使用簡單的單字和句子。
+如果發現非英文母語的人用的英文有問題，也請不要開他們玩笑。
+試著鼓勵新手表達自己的意見，並讓他們夠舒服到這麼做。
+
+*This article was co-written by Masayuki Igawa, Dong Ma, and Samuel de Medeiros Queiroz. Learn more in their talk at linux.conf.au 2017 ([#lca2017][]) in Hobart: [Non-native English speakers in Open Source communities: A True Story][].*
+
+*這篇文章是由 Masayuki Igawa 、 Dong Ma 和 Samuel de Medeiros Queiroz 共同撰寫。
+在霍巴特的 linux.conf.au 2017 ([#lca2017][]) 裡從他們的談話裡可以了解更多： [Non-native English speakers in Open Source communities: A True Story][]。*
+
+[#lca2017]: https://twitter.com/search?q=%23lca2017&src=typd
+[Non-native English speakers in Open Source communities: A True Story]: https://linux.conf.au/schedule/presentation/70/
+
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" title="本著作係採用創用 CC 姓名標示-相同方式分享 4.0 國際 授權條款授權."></a>
