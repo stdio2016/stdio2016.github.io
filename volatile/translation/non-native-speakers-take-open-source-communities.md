@@ -1,4 +1,4 @@
-# Tips for non-native English speakers working on open source projects
+﻿# Tips for non-native English speakers working on open source projects
 
 # 給非英語母語者在開源專案上的提示
 
@@ -81,3 +81,29 @@ In Chinese culture, people prefer to just say yes, instead of saying no or tryin
 A Brazilian, for instance, may find that discussions are driven in a similar way; however, some cultures are very short and direct in responses, which may sound a bit rude.
 
 例如巴西人可能會發現討論總是以類似的方式驅動著；然而，有些文化的反應會非常短而直接，聽起來有點粗魯。
+
+## Overcoming obstacles
+
+## 克服阻礙
+
+Challenges related to language skills are easier to overcome than cultural ones. Cultural differences need to be respected, while English skills can always be improved.
+
+語言能力之類的阻礙比文化的阻礙還要好克服。
+文化差異需要的是尊重，而英文能力隨時可以提升。
+
+In order to brush up on your language skills, be in contact with the language as much as you can. Do not think about your limitations. Just do your best and you will improve eventually.
+
+要加強語言能力，就要盡量多跟那個語言接觸。
+不要覺得你有極限。
+盡自己的能力，總有一天你會變強的。
+
+Read as much as you can, because this will help you gather vocabulary. Communicating through chat and mailing lists daily helps, too. Some tools, such as real-time dictionaries and translators, are very useful with these platforms.
+
+盡量多讀外文，因為這樣可以增加字彙量。
+每天到聊天室和郵件列表上交流也有幫助。
+有些工具，像是即時字典和翻譯，在使用以上平台時很有用。
+
+Talking to others or yourself helps you become comfortable speaking out more frequently. Having one-on-one conversations to express your ideas is easier than discussing in larger groups.
+
+和其他人或自己交談可以讓你更舒服的講出話來。
+用一對一的方式表達自己的意見，比在大群體裡討論還容易。
