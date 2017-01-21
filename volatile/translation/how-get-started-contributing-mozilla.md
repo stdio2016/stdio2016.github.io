@@ -117,7 +117,38 @@ Apart from languages and code, you can also contribute with your QA and testing 
 除了語言和程式碼之外，你也可以貢獻你的 QA 和測試能力。
 你可以積極的測試Firefox瀏覽器、Android版Firefox和許多Mozilla的網路資源，例如Firefox插件……等。
 
+### Nontechnical contribution
+
+### 非技術貢獻
+
+You can also make nontechnical contributions to Mozilla, focusing on areas like QA testing, document translation, UX/UI design, web literacy, open source advocacy, and providing user support to Mozilla Firefox and Thunderbird users.
+
+你也可以為 Mozilla 做出非技術性的貢獻，特別指QA測試、翻譯文件、使用者介面(UI)/使用者體驗(UX)、網路自由、倡導開源以及提供協助給Mozilla Firefox和Thunderbird使用者。
+
+**QA testing:** The Mozilla QA team has a large and vibrant community around the world that is deeply involved in the workings of Firefox and other Mozilla projects. The QA contributors take an early look at various products, explore new features, file bugs, triage existing bugs, write and execute test cases, automate tests, and provide valuable feedback from a usability perspective. To get started or to learn more about the Mozilla QA community resources, visit the [Mozilla QA community][] website.
+
+**QA測試：** Mozilla QA測試團隊有著很大而且充滿活力的社群。
+他們致力於Firefox和其他Mozilla產品的工作。
+QA貢獻者會先了解各個產品，探索新功能，回報臭蟲，撰寫並執行測試程式，進行自動化測試，然後再提供有用的回饋。
+要成為QA測試員，或是想更了解關於Mozilla QA社群的事，可以到[Mozilla QA community][]網站來看。
+
+**UX design:** If you're a creative designer or a passionate geek who loves to play with colors and graphics, Mozilla has a lot of space for you in its community where you can design usable, accessible, delightful Mozilla projects. Check out this [Open Design repository][] on Mozilla's GitHub page.
+
+**使用者體驗(UX)設計：** 如果你是個有創意的設計師，或是喜歡玩顏色和圖形的極客 (geek)，那麼Mozilla有很大的自由讓你設計出能用、容易使用、好用的Mozilla專案。
+快到Mozilla的Github頁面[Open Design repository][]上瞧瞧。
+
+**User support (forum and social support):** This is where hundreds of thousands of Firefox and Thunderbird users like you and me come and post questions about Firefox and Thunderbird, and this is where they get answers from Mozilla contributors like us. This requires no coding genius, no design skills, and no testing abilities, only handful of Firefox knowledge to get started as a Firefox User Support contributor. Check out this [Get Involved][] section to join User Support at [SUMO][]. Support is probably the easiest yet most important areas to commence your Mozilla journey. (Note: Three years ago, I began my Mozilla journey at the Social Support forums.)
+
+**使用者支援 (論壇和社交支援)：** 這裡就是像你我一樣，數以萬計的Firefox和Thunderbird使用者張貼關於Firefox和Thunderbird的問題的地方，也是他們從像我們一樣的Mozilla貢獻者得到答案的地方。
+這不需要寫程式的天分、設計的技能，也不需要測試的能力，只需要一些Firefox的知識就能起步，成為Firefox使用者支援貢獻者。
+
+提供支援大概是最簡單，但也是開始你的Mozilla旅途時最重要的地方了。
+
 [Getting　Started]: https://developer.mozilla.org/en-US/docs/Mozilla/Developer_guide/Introduction#Find_a_bug_we%27ve_identified_as_a_good_fit_for_new_contributors.
 [入門篇]: https://developer.mozilla.org/zh-TW/docs/%E4%BB%8B%E7%B4%B9#%E6%89%BE%E5%88%B0%E4%B8%80%E5%80%8B%E6%88%91%E5%80%91%E8%AA%8D%E7%82%BA%E9%81%A9%E5%90%88%E5%88%9D%E5%AD%B8%E8%80%85%E7%9A%84_Bug
+[Mozilla QA community]: https://quality.mozilla.org/get-involved/
+[Open Design repository]: https://github.com/mozilla/OpenDesign
+[Get Involved]: https://support.mozilla.org/en-US/get-involved/questions
+[Mozilla 技術支援]: https://support.mozilla.org/zh-TW/get-involved/questions
 
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" title="本著作係採用創用 CC 姓名標示-相同方式分享 4.0 國際 授權條款授權."></a>
