@@ -123,7 +123,7 @@ Apart from languages and code, you can also contribute with your QA and testing 
 
 You can also make nontechnical contributions to Mozilla, focusing on areas like QA testing, document translation, UX/UI design, web literacy, open source advocacy, and providing user support to Mozilla Firefox and Thunderbird users.
 
-你也可以為 Mozilla 做出非技術性的貢獻，特別指QA測試、翻譯文件、使用者介面(UI)/使用者體驗(UX)、網路自由、倡導開源以及提供協助給Mozilla Firefox和Thunderbird使用者。
+你也可以為 Mozilla 做出非技術性的貢獻，特別指QA測試、翻譯文件、使用者介面(UI)/使用者體驗(UX)、網路素養、倡導開源以及提供協助給Mozilla Firefox和Thunderbird使用者。
 
 **QA testing:** The Mozilla QA team has a large and vibrant community around the world that is deeply involved in the workings of Firefox and other Mozilla projects. The QA contributors take an early look at various products, explore new features, file bugs, triage existing bugs, write and execute test cases, automate tests, and provide valuable feedback from a usability perspective. To get started or to learn more about the Mozilla QA community resources, visit the [Mozilla QA community][] website.
 
@@ -175,7 +175,33 @@ You can visit [Mozilla's l10n][] site to get involved.
 
 你可以到 [Mozilla 的 l10n][] 網站以參與其中。
 
-[Getting　Started]: https://developer.mozilla.org/en-US/docs/Mozilla/Developer_guide/Introduction#Find_a_bug_we%27ve_identified_as_a_good_fit_for_new_contributors.
+**Teaching and web literacy:** One of the fundamental mission objectives of Mozilla is to keep the web accessible to all. To achieve this mission objective, Mozilla strives hard to educate and enable web users by providing them with the tools and technologies of web literacy. This is where you can help with your teaching skills. If you are a passionate teacher who loves to share knowledge and show the masses all about the Internet, take a look at [Teach the Web][] initiative by Mozilla. Teach your local community, school kids, your friends, and others about the Internet and web literacy.
+
+**教學及網路素養：** Mozilla的基本任務之一就是讓任何人都能使用網路。
+為了達成這個使命，Mozilla致力於提供工具和網路素養的技術給網路使用者，來教導並啟發他們。
+這裡就是可以利用教學能力來幫忙的地方。
+如果你是個有熱情的老師，喜歡分享知識，告訴大眾網路的事，那麼就來看一下由Mozilla所倡導的 [Teach the Web][]。
+教你所在地的社區、學校裡的孩子、你的朋友、以及其他人關於網路和網路素養的事。
+
+**Advocacy:** If you are passionate about Mozilla's mission, you can spread the word by advocating for the Mozilla mission. While advocating for Mozilla's mission, you can contribute by:
+
+**倡導理念：** 如果你對於Mozilla的使命很有熱情，你可以藉由擁護Mozilla的使命來散播全世界。
+在倡導Mozilla的使命時，你可以貢獻：
+
+- Tackling public policy and fight for an open internet and user privacy
++ 處理公共政策，為開放網路及使用者隱私而戰
+- Helping the web be more interoperable by working with site owners on compatibility
++ 透過和網站主的合作，讓網路更能相容
+- Helping web authors improve how they write about the open web
++ 幫助網頁作者改進他們撰寫的開放網路
+- Showing your Mozilla and Firefox pride as [Firefox Friends][]
++ 展示你成為[Firefox 朋友][]而感到「Mozilla」和「Firefox」自豪
+
+To begin promoting Mozilla's mission, take a look at the [Mozilla Advocacy][] page.
+
+要開始推廣Mozilla的使命，請查看[Mozilla Advocacy][]網頁。
+
+[Getting Started]: https://developer.mozilla.org/en-US/docs/Mozilla/Developer_guide/Introduction#Find_a_bug_we%27ve_identified_as_a_good_fit_for_new_contributors.
 [入門篇]: https://developer.mozilla.org/zh-TW/docs/%E4%BB%8B%E7%B4%B9#%E6%89%BE%E5%88%B0%E4%B8%80%E5%80%8B%E6%88%91%E5%80%91%E8%AA%8D%E7%82%BA%E9%81%A9%E5%90%88%E5%88%9D%E5%AD%B8%E8%80%85%E7%9A%84_Bug
 [Mozilla QA community]: https://quality.mozilla.org/get-involved/
 [Open Design repository]: https://github.com/mozilla/OpenDesign
@@ -187,5 +213,9 @@ You can visit [Mozilla's l10n][] site to get involved.
 [Mozilla 知識庫]: https://support.mozilla.org/zh-TW/get-involved/kb
 [Mozilla's l10n]: https://l10n.mozilla.org/
 [Mozilla 的 l10n]: https://l10n.mozilla.org/
+[Teach the Web]: https://learning.mozilla.org/en-US/
+[Firefox Friends]: https://www.mozilla.org/en-US/contribute/friends/
+[Mozilla Advocacy]: https://advocacy.mozilla.org/en-US
+[Firefox 朋友]: https://www.mozilla.org/en-US/contribute/friends/
 
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" title="本著作係採用創用 CC 姓名標示-相同方式分享 4.0 國際 授權條款授權."></a>
