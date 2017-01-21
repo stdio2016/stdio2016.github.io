@@ -141,14 +141,51 @@ QA貢獻者會先了解各個產品，探索新功能，回報臭蟲，撰寫並
 
 **使用者支援 (論壇和社交支援)：** 這裡就是像你我一樣，數以萬計的Firefox和Thunderbird使用者張貼關於Firefox和Thunderbird的問題的地方，也是他們從像我們一樣的Mozilla貢獻者得到答案的地方。
 這不需要寫程式的天分、設計的技能，也不需要測試的能力，只需要一些Firefox的知識就能起步，成為Firefox使用者支援貢獻者。
-
+要加入「使用者支援」，請查看[Mozilla 技術支援][]的[幫助其他使用者][]部分。
 提供支援大概是最簡單，但也是開始你的Mozilla旅途時最重要的地方了。
+(註： 三年前，我以參與使用者論壇開始我的Mozilla旅程。)
+
+**Writing knowledgebase and help articles:** If you like writing and teaching, then the Knowledge Base is the place for you. Mozilla is always looking for contributors who can write, edit, or proofread articles in English for Firefox and other products. Thousands of users surf these knowledgebase articles every week, and you can make a robust impact by sharing your wisdom and writing help articles for them. Visit the [Mozilla Knowledge Base][] site to get involved.
+
+**寫知識庫並幫忙編輯文章：** 如果你喜歡寫作和教學，那麼知識庫 (Knowledge Base) 最適合你了。
+Mozilla不斷地在尋求可以為Firefox和其他產品撰寫、編輯或校對文章的志工。
+上千個用戶每個禮拜都會瀏覽這些知識庫的文章。
+你可以藉由分享你的才智，和寫說明文章，產生強大的影響。
+拜訪 [Mozilla 知識庫][] 以參與其中。
+
+**Localization, aka l10n:** Mozilla's products, like Firefox, are used by millions around the globe and by those speaking many different languages. People need these products in their own language. Language localization is an area that is very much in need of contributors. Projects requiring your translation and localization skills include:
+
+**在地化 (Localization)，也就是l10n：** 世界上數百萬個使用不同語言的人都在使用Mozilla的產品，例如Firefox。
+人們需要有自己語言的這些產品。
+語言在地化是很需要貢獻者的領域。
+以下專案需要你的翻譯以及在地化的能力：
+
+- Mozilla products, such as Firefox
++ Mozilla 產品，例如 Firefox
+- Mozilla websites and services
++ Mozilla 網站和服務
+- Mozilla marketing campaigns
++ Mozilla 的營銷活動
+- SUMO product support documentation
++ 產品支援文件
+- MDN developer documentation
++ MDN 開發者文件
+
+You can visit [Mozilla's l10n][] site to get involved.
+
+你可以到 [Mozilla 的 l10n][] 網站以參與其中。
 
 [Getting　Started]: https://developer.mozilla.org/en-US/docs/Mozilla/Developer_guide/Introduction#Find_a_bug_we%27ve_identified_as_a_good_fit_for_new_contributors.
 [入門篇]: https://developer.mozilla.org/zh-TW/docs/%E4%BB%8B%E7%B4%B9#%E6%89%BE%E5%88%B0%E4%B8%80%E5%80%8B%E6%88%91%E5%80%91%E8%AA%8D%E7%82%BA%E9%81%A9%E5%90%88%E5%88%9D%E5%AD%B8%E8%80%85%E7%9A%84_Bug
 [Mozilla QA community]: https://quality.mozilla.org/get-involved/
 [Open Design repository]: https://github.com/mozilla/OpenDesign
 [Get Involved]: https://support.mozilla.org/en-US/get-involved/questions
-[Mozilla 技術支援]: https://support.mozilla.org/zh-TW/get-involved/questions
+[SUMO]: http://support.mozilla.org/
+[幫助其他使用者]: https://support.mozilla.org/zh-TW/get-involved/questions
+[Mozilla 技術支援]: https://support.mozilla.org/zh-TW/
+[Mozilla Knowledge Base]: https://support.mozilla.org/en-US/get-involved/kb
+[Mozilla 知識庫]: https://support.mozilla.org/zh-TW/get-involved/kb
+[Mozilla's l10n]: https://l10n.mozilla.org/
+[Mozilla 的 l10n]: https://l10n.mozilla.org/
 
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" title="本著作係採用創用 CC 姓名標示-相同方式分享 4.0 國際 授權條款授權."></a>
