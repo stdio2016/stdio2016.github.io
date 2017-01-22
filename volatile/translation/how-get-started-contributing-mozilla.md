@@ -52,20 +52,18 @@ Also, you'll have a chance to build your own identity in the Mozilla community a
 
 ### Events and swag
 
-### 事件與「swag」
-
-> swag 是贓物嗎？
+### 事件與個性商品
 
 No community is complete without a few fun-filled events and bags of swag. Mozilla is no exception.
 
-沒有一個社群可以缺少充滿歡樂的事件和袋袋的「swag」。
+沒有一個社群可以缺少充滿歡樂的事件和袋袋的個性產品。
 Mozilla 也不例外。
 
 Contributing to Mozilla will give you a chance to take part in exclusive Mozilla events. And once you've become a seasoned Mozilla contributor, you'll be able to host your own local Mozilla community events (and Mozilla may assist with funding). Plus, of course, some cool swag—stickers, T-shirts, mugs, and more.
 
 貢獻到 Mozilla 讓你有機會參加 Mozilla 的獨家活動。
 只要你成為經驗豐富的貢獻者，你就能舉辦自己的 Mozilla 社群活動 (而且Mozilla可能會資助你)。
-另外，當然有一些很酷的「swag」——貼紙、T恤、杯子等。
+另外，當然有一些很酷的個性化商品——貼紙、T恤、杯子等。
 
 ![India Mozilla meetup 2016](https://opensource.com/sites/default/files/mozilla-india-meetup-2016.jpg)  
 CC BY-SA 4.0 Mozilla India Meetup 2016 由 Moin Shaikh 製作
