@@ -67,7 +67,7 @@ Contributing to Mozilla will give you a chance to take part in exclusive Mozilla
 只要你成為經驗豐富的貢獻者，你就能舉辦自己的 Mozilla 社群活動 (而且Mozilla可能會資助你)。
 另外，當然有一些很酷的「swag」——貼紙、T恤、杯子等。
 
-![India Mozilla meetup 2016](https://opensource.com/sites/default/files/mozilla-india-meetup-2016.jpg)
+![India Mozilla meetup 2016](https://opensource.com/sites/default/files/mozilla-india-meetup-2016.jpg)  
 CC BY-SA 4.0 Mozilla India Meetup 2016 由 Moin Shaikh 製作
 
 ## How to contribute to Mozilla
@@ -79,7 +79,7 @@ Whether you are a programmer, web designer, QA tester, translator, or something 
 無論你是個程式設計師、網頁設計師、QA測試員、翻譯員還是夾在這之間的人，都有很多的方法可以貢獻到 Mozilla。
 來看兩個主要部分： 技術貢獻和非技術貢獻。
 
-![貢獻的方法](https://opensource.com/sites/default/files/ways-to-contribute-mozilla_0.jpg)
+![貢獻的方法](https://opensource.com/sites/default/files/ways-to-contribute-mozilla_0.jpg)  
 CC BY-SA 3.0 由 [Mozilla.org](mozilla.org) 製作
 
 ### Technical contribution
@@ -201,6 +201,16 @@ To begin promoting Mozilla's mission, take a look at the [Mozilla Advocacy][] pa
 
 要開始推廣Mozilla的使命，請查看[Mozilla Advocacy][]網頁。
 
+## If you're lost, I'm here to help you get started!
+
+## 如果你迷失了，我會在這裡協助你起步！
+
+I know that as a novice contributor, this article might be an overwhelming amount of information for you. If you need further directions, resources, or references, you can ask me in the comments below or you can [ping me on Twitter][]. I would be very happy to help you get started with your first contribution (of many more!) to Mozilla.
+
+我知道身為一個新手，這篇文章的份量可能多到讓你喘不過氣。
+如果需要更多指示、資源、或是參考，你可以在底下留言問我或是[在Twitter上找我][]。
+我會非常開心的協助你開始你的第一項(以及更多項)對Mozilla的貢獻。
+
 [Getting Started]: https://developer.mozilla.org/en-US/docs/Mozilla/Developer_guide/Introduction#Find_a_bug_we%27ve_identified_as_a_good_fit_for_new_contributors.
 [入門篇]: https://developer.mozilla.org/zh-TW/docs/%E4%BB%8B%E7%B4%B9#%E6%89%BE%E5%88%B0%E4%B8%80%E5%80%8B%E6%88%91%E5%80%91%E8%AA%8D%E7%82%BA%E9%81%A9%E5%90%88%E5%88%9D%E5%AD%B8%E8%80%85%E7%9A%84_Bug
 [Mozilla QA community]: https://quality.mozilla.org/get-involved/
@@ -217,5 +227,7 @@ To begin promoting Mozilla's mission, take a look at the [Mozilla Advocacy][] pa
 [Firefox Friends]: https://www.mozilla.org/en-US/contribute/friends/
 [Mozilla Advocacy]: https://advocacy.mozilla.org/en-US
 [Firefox 朋友]: https://www.mozilla.org/en-US/contribute/friends/
+[ping me on Twitter]: https://twitter.com/moingshaikh
+[在Twitter上找我]: https://twitter.com/moingshaikh
 
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" title="本著作係採用創用 CC 姓名標示-相同方式分享 4.0 國際 授權條款授權."></a>
