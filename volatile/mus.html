@@ -196,7 +196,7 @@ function play(){
     for(var i=0; i<notes.length; i++){
       var chord = notes[i].chord;
       for(var j=0; j<chord.length; j++){
-        note(chord[j].pitch, time[i], time[chord[j].end]);
+        note(chord[j].pitch + 12, time[i], time[chord[j].end]);
       }
     }
   }
@@ -258,7 +258,7 @@ function Reader(str){
   this.data = str;
   this.pos = 0;
   this.keyAccidental = [ 0, 0, 0, 0, 0, 0, 0];
-  this.keyPitch = [10, 12, 1, 3, 5, 6, 8];
+  this.keyPitch = [9, 11, 0, 2, 4, 5, 7];
   this.octave = 4;
   this.duration = 4;
   this.volume = 80;
@@ -377,6 +377,8 @@ Reader.prototype.nextInstr = function(){
       if (this.chord) return null;
       if (num === null || num < 20) num = 120;
       return {type: 'tempo', bpm: num};
+    case 'N':
+      return this.readN();
     default:
       return null;
   }
@@ -449,6 +451,44 @@ Reader.prototype.readNote = function(pitch){
   }
   return {type: 'note', duration: duration, dots: dots, pitch: pitch,
   chord: chord, tied: tied, volume: volume};
+};
+
+Reader.prototype.readN = function(){
+  var pitch = this.nextInt();
+  if(pitch == null){
+    pitch = 0;
+  }
+
+  var dots = 0;
+  ch = this.next();
+  while (ch == '.'){
+    dots++;
+    ch = this.next();
+  }
+  this.rewind();
+
+  var volume = this.volume;
+  var chord = this.chord;
+  if(chord){
+    this.switchChord(false);
+  }
+  else{
+    this.storedOctave = this.octave;
+    this.storedVolume = this.volume;
+  }
+
+  ch = this.next();
+  var tied = false;
+  if(ch == '~'){
+    tied = true;
+  }
+  else{
+    this.rewind();
+  }
+  if(pitch > 0)
+    return {type: 'note', duration: this.duration, dots: dots, pitch: pitch,
+    chord: chord, tied: tied, volume: volume};
+  return {type: 'rest', duration: duration, dots: dots, chord: chord};
 };
 
 Reader.prototype.readRest = function(){
