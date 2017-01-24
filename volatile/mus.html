@@ -20,22 +20,30 @@ var bpm = 100;
 var runningNotes = new Set();
 
 function genFakePiano(){
-  var buff = audioctx.createBuffer(1, 44100 * 2, 44100);
+  var len = 44100 * 2;
+  var buff = audioctx.createBuffer(1, len + 44100 * 110 / 440, 44100);
   var dat = buff.getChannelData(0);
   var k = 440 / 44100 * Math.PI * 2;
-  for(var t = 0; t < 44100 * 2; t++){
+  for(var t = 0; t < len; t++){
     var sum = 0;
     for(var n = 1; n < 20; n++){
       sum += Math.sin(k * n * t) * Math.exp(-(n - 1) * 0.25);
     }
     dat[t] = sum * Math.exp(-t / (44100 * 0.5)) * 0.25;
   }
+  for (var t = 0; t < 44100 * 110 / 440; t++){
+    var sum = 0;
+    for(var n = 1; n < 20; n++){
+      sum += Math.sin(k * n * t) * Math.exp(-(n - 1) * 0.25);
+    }
+    dat[len + t] = sum * Math.exp(-len / (44100 * 0.5)) * 0.25;
+  }
   return buff;
 }
 
 var soundBank =
   {fakePno:
-    {sample: genFakePiano(), center: 69}
+    {sample: genFakePiano(), center: 69, loopStart: 2, loopEnd: 2.25}
   };
 var fakePno = soundBank.fakePno;
 function note(pitch,start,end){
@@ -54,8 +62,8 @@ function note(pitch,start,end){
   src.buffer = fakePno.sample;
   src.playbackRate.value = Math.pow(2, (pitch - fakePno.center) / 12);
   src.loop = true;
-  src.loopStart = 0;
-  src.loopEnd = 123;
+  src.loopStart = fakePno.loopStart;
+  src.loopEnd = fakePno.loopEnd;
   src.connect(env);
   env.connect(gainNode);
   var startTime = currentTime + start;
@@ -485,10 +493,8 @@ Reader.prototype.readN = function(){
   else{
     this.rewind();
   }
-  if(pitch > 0)
-    return {type: 'note', duration: this.duration, dots: dots, pitch: pitch,
+  return {type: 'note', duration: this.duration, dots: dots, pitch: pitch,
     chord: chord, tied: tied, volume: volume};
-  return {type: 'rest', duration: duration, dots: dots, chord: chord};
 };
 
 Reader.prototype.readRest = function(){
@@ -766,7 +772,7 @@ function combineTime(parts, tempo){
   <script src='../js/alertbox.js'></script>
 <!-- end of alert box -->
 <script>
-  loadSmp('sound/scream.wav', 'scream', {center: 72});
+  loadSmp('sound/scream.wav', 'scream', {center: 72, loopStart: 0, loopEnd: 1});
 </script>
 </body>
 </html>
