@@ -1,0 +1,180 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset='utf8'>
+<title>Escher好帥</title>
+</head>
+<body>
+<div>
+<p><input type='file' id='image'></p>
+<p><button onclick='OK()'>OK</button></p>
+<form oninput='draw()'>
+  <input type='range' id='r' min='-8' max='8' step='0.05' value='2'><output id='r_out'></output><br>
+  <input type='range' id='theta' min='-720' max='720' step='5' value='0'><output id='theta_out'></output><br>
+  <input type='range' id='scale' min='-5' max='5' step='0.05' value='0'><output id='scale_out'></output><br>
+</form>
+</div>
+<a href='javascript:fullscreen()'><canvas id=canvas width='300' height="300">
+;-(
+</canvas></a>
+<script>
+// many programs are from MDN
+// https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_textures_in_WebGL
+// With help from this video:
+// https://www.youtube.com/watch?v=kB0ZVUrI4Aw&t=1s
+var canvas=document.getElementById('canvas');
+var gl=canvas.getContext('webgl');
+gl.clearColor(0.3, 0.8, 0.3, 1);
+gl.clear(gl.COLOR_BUFFER_BIT);
+var shader = makeShader([`
+  attribute vec2 vertPosition;
+  varying vec2 good;
+  void main(){
+    gl_Position = vec4(vertPosition, 0.0, 1.0);
+    good = vertPosition;
+  }
+`],[`
+  #define PI 3.141592653589793
+  precision mediump float;
+  varying vec2 good;
+  uniform sampler2D uSampler;
+  uniform float scale;
+  uniform vec2 power;
+  void main(){
+    // This program calculates complex number raised to complex number power
+    float re = good.s;
+    float im = good.t;
+    vec2 lned = vec2(log(distance(good * scale, vec2(0,0))), atan(im, re));
+    float x = power.x * lned.x - power.y * lned.y;
+    float y = power.x * lned.y + power.y * lned.x;
+    // fix range
+    float expo = abs(power.y * 2.0 * PI);
+    float n = ceil(x / expo);
+    y = y + n * power.x * 2.0 * PI * sign(power.y);
+    vec2 ou = exp(x - n * expo) * vec2(cos(y),sin(y));
+    if(abs(ou.x) < 1.0 && abs(ou.y) < 1.0){
+      gl_FragColor = texture2D(uSampler, vec2(
+        (ou.x + 1.0) / 2.0,
+        1.0 - (ou.y + 1.0) / 2.0
+      ));
+    }
+    else{
+      gl_FragColor = vec4(0.5, 0.5, 0.5, 1);
+    }
+  }
+`]);
+var texture = null;
+function OK() {
+  var file = document.getElementById('image').files[0];
+  var fr = new FileReader();
+  fr.onload = function() {
+    texture = gl.createTexture();
+    var image = new Image();
+    image.onload = function() {
+      handleTextureLoaded(image, texture);
+      texture.ok=true;
+    };
+    image.src = fr.result;
+  };
+  fr.readAsDataURL(file);
+}
+
+function handleTextureLoaded(image, texture) {
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+  // Prevents s-coordinate wrapping (repeating).
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  // Prevents t-coordinate wrapping (repeating).
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.bindTexture(gl.TEXTURE_2D, null);
+  beforeDraw();
+  requestAnimationFrame(draw);
+}
+
+function makeShader(vertex, fragment){
+  var vert = gl.createShader(gl.VERTEX_SHADER);
+  gl.shaderSource(vert, vertex.join('\n'));
+  gl.compileShader(vert);
+  if(!gl.getShaderParameter(vert, gl.COMPILE_STATUS)){
+    console.error('Vertex shader error!');
+  }
+  var frag = gl.createShader(gl.FRAGMENT_SHADER);
+  gl.shaderSource(frag, fragment.join('\n'));
+  gl.compileShader(frag);
+  if(!gl.getShaderParameter(frag, gl.COMPILE_STATUS)){
+    console.error('Fragment shader error!');
+  }
+  var prog = gl.createProgram();
+  gl.attachShader(prog, vert);
+  gl.attachShader(prog, frag);
+  gl.linkProgram(prog);
+  return prog;
+}
+
+function beforeDraw(){
+  var vertices = [
+    -1.0, -1.0,
+     1.0, -1.0,
+     1.0,  1.0,
+    -1.0, -1.0,
+    -1.0,  1.0,
+     1.0,  1.0
+  ];
+  var vertBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, vertBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+
+  var attrib = gl.getAttribLocation(shader, 'vertPosition');
+  gl.vertexAttribPointer(
+    attrib,
+    2,
+    gl.FLOAT,
+    gl.FALSE,
+    2 * Float32Array.BYTES_PER_ELEMENT,
+    0
+  );
+  gl.enableVertexAttribArray(attrib);
+
+  gl.activeTexture(gl.TEXTURE0);
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.useProgram(shader);
+  gl.uniform1i(gl.getUniformLocation(shader, 'uSampler'), 0);
+
+}
+ti=document.getElementById('theta');
+ri=document.getElementById('r');
+scalei=document.getElementById('scale');
+tout=document.getElementById('theta_out');
+rout=document.getElementById('r_out');
+scaleout=document.getElementById('scale_out');
+function draw(){
+  tout.value = ti.value;
+  rout.value = Math.exp(ri.value);
+  scaleout.value = Math.exp(scalei.value);
+  var powerU = gl.getUniformLocation(shader, 'power');
+  gl.uniform2f(powerU, ti.value / 360, ri.value / (Math.PI*2));
+  var scaleU = gl.getUniformLocation(shader, 'scale');
+  gl.uniform1f(scaleU, Math.exp(scalei.value));
+
+  gl.drawArrays(gl.TRIANGLES, 0, 6);
+}
+draw();
+function fullscreen(){
+  var d = document.getElementsByTagName('div');
+  if(d[0].style.display == 'none'){
+    d[0].style.display = 'block';
+    canvas.width=canvas.height=300;
+  }
+  else{
+    d[0].style.display = 'none';
+    canvas.width=canvas.height=600;
+  }
+  gl.viewport(0, 0, canvas.width, canvas.height);
+  draw();
+}
+</script>
+</body>
+</html>
