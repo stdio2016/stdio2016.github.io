@@ -9,9 +9,10 @@
 <p><input type='file' id='image'></p>
 <p><button onclick='OK()'>OK</button></p>
 <form oninput='draw()'>
-  <input type='range' id='r' min='-8' max='8' step='0.05' value='2'><output id='r_out'></output><br>
-  <input type='range' id='theta' min='-720' max='720' step='5' value='0'><output id='theta_out'></output><br>
-  <input type='range' id='scale' min='-5' max='5' step='0.05' value='0'><output id='scale_out'></output><br>
+  子母比例<input type='range' id='r' min='-8' max='8' step='0.05' value='2'><output id='r_out'></output><br>
+  角度<input type='range' id='theta' min='-720' max='720' step='5' value='0'><output id='theta_out'></output><br>
+  放大率<input type='range' id='scale' min='-5' max='5' step='0.05' value='0'><output id='scale_out'></output><br>
+  <input type='checkbox' id='inv'>Inverse
 </form>
 </div>
 <a href='javascript:fullscreen()'><canvas id=canvas width='300' height="300">
@@ -52,15 +53,10 @@ var shader = makeShader([`
     float n = ceil(x / expo);
     y = y + n * power.x * 2.0 * PI * sign(power.y);
     vec2 ou = exp(x - n * expo) * vec2(cos(y),sin(y));
-    if(abs(ou.x) < 1.0 && abs(ou.y) < 1.0){
-      gl_FragColor = texture2D(uSampler, vec2(
-        (ou.x + 1.0) / 2.0,
-        1.0 - (ou.y + 1.0) / 2.0
-      ));
-    }
-    else{
-      gl_FragColor = vec4(0.5, 0.5, 0.5, 1);
-    }
+    gl_FragColor = texture2D(uSampler, vec2(
+      (ou.x + 1.0) / 2.0,
+      1.0 - (ou.y + 1.0) / 2.0
+    ));
   }
 `]);
 var texture = null;
@@ -150,12 +146,21 @@ scalei=document.getElementById('scale');
 tout=document.getElementById('theta_out');
 rout=document.getElementById('r_out');
 scaleout=document.getElementById('scale_out');
+inv=document.getElementById('inv');
 function draw(){
   tout.value = ti.value;
-  rout.value = Math.exp(ri.value);
-  scaleout.value = Math.exp(scalei.value);
+  rout.value = prettyNumber(Math.exp(ri.value), 3);
+  scaleout.value = prettyNumber(Math.exp(scalei.value), 3);
   var powerU = gl.getUniformLocation(shader, 'power');
-  gl.uniform2f(powerU, ti.value / 360, ri.value / (Math.PI*2));
+  var re = ti.value / 360;
+  var im = ri.value / (Math.PI*2);
+  if(inv.checked){
+    var d = re*re + im*im;
+    gl.uniform2f(powerU, re/d, -im/d);
+  }
+  else{
+    gl.uniform2f(powerU, re, im);
+  }
   var scaleU = gl.getUniformLocation(shader, 'scale');
   gl.uniform1f(scaleU, Math.exp(scalei.value));
 
@@ -174,6 +179,18 @@ function fullscreen(){
   }
   gl.viewport(0, 0, canvas.width, canvas.height);
   draw();
+}
+
+function prettyNumber(num, precision){
+  var n = Math.floor(Math.log10(num));
+  if(n >= precision-1){
+    return Math.floor(num).toString();
+  }
+  var p = Math.round(num / Math.pow(10, n-precision));
+  if (n >= 0){
+    return (p * Math.pow(10, n-precision)).toString().substring(precision+1,-1);
+  }
+  return num.toString().substring(precision-n+1, -1);
 }
 </script>
 </body>
