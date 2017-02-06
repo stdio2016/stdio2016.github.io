@@ -701,6 +701,27 @@ function save(){
   songs[newName] = document.getElementById('code').value;
   localStorage.setItem('volatileMus_SongList', JSON.stringify(songs));
 }
+
+function del(){
+  var songSelect = document.getElementsByName('song')[0];
+  var name = songSelect.value;
+  if (name.charAt(0) != 'c'){
+    alert('You cannot delete a builtin song');
+    return;
+  }
+  if(!window.confirm('Do you really want to delete this song?')){
+    return;
+  }
+  var so = songSelect.children[1];
+  for(var i=0; i<so.children.length; i++){
+    if(so.children[i].value == name){
+      so.children[i].remove();
+      break;
+    }
+  }
+  delete songs[name.substr(1)];
+  localStorage.setItem('volatileMus_SongList', JSON.stringify(songs));
+}
 </script>
 </head>
 <body>
@@ -718,6 +739,7 @@ Select a song: <select name="song" onchange="changeSong()">
 <input type='button' value='Play' onclick='play()'>
 <input type='button' value='Stop' onclick='stop()'>
 <input type='button' value='Save' onclick='save()'>
+<input type='button' value='Delete' onclick='del()'>
 <p>
   <button onclick='changeInstr("fakePno")'>fakePno</button>
   <button onclick='changeInstr("scream")'>scream</button>
