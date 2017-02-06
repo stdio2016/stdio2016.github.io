@@ -188,11 +188,6 @@ function play(){
     ff += pitch[i+1];
   }*/
   var code = document.getElementById('code').value;
-  var read = new Reader(code);
-  var result = [];
-  while(!read.atEnd()){
-    result.push(read.nextInstr());
-  }
   result = readMusic(code);
   combineTies(result.parts);
   combineTime(result.parts, result.tempo);
@@ -772,7 +767,12 @@ function combineTime(parts, tempo){
   <script src='../js/alertbox.js'></script>
 <!-- end of alert box -->
 <script>
+addEventListener('load',function(){
+  if(!Reader.prototype.atEnd){
+    throw new Error("Reader got replaced by " + Reader.toString());
+  }
   loadSmp('sound/scream.wav', 'scream', {center: 72, loopStart: 0, loopEnd: 1});
+});
 </script>
 </body>
 </html>
