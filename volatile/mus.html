@@ -733,6 +733,14 @@ function encodePermalink(){
   }
   document.getElementById('warn').innerText = "http://stdio2016.github.io/volatile/mus.html#"+code;
 }
+
+function decodePermalink(){
+  var code = location.hash;
+  if(code === '') return;
+  code = decodeURIComponent(code.substr(1));
+  document.getElementById('code').value = code;
+  document.getElementsByName('song')[0].options[3].selected = 'selected';
+}
 </script>
 </head>
 <body>
