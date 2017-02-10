@@ -694,6 +694,7 @@ function save(){
   else {
     newName = prompt('Input the song name');
   }
+  encodePermalink();
   if(!newName) return;
   if(!songs[newName]){
     songSelect.children[1].appendChild(new Option(newName, "c" + newName));
@@ -721,6 +722,16 @@ function del(){
   }
   delete songs[name.substr(1)];
   localStorage.setItem('volatileMus_SongList', JSON.stringify(songs));
+}
+
+function encodePermalink(){
+  var code = document.getElementById('code').value;
+  code = encodeURIComponent(code);
+  code = code.replace(/\(/g, "%28").replace(/\)/g, "%29");
+  if(/[#.,/!*]$/.test(code)){
+    code = code + "%20";
+  }
+  document.getElementById('warn').innerText = "http://stdio2016.github.io/volatile/mus.html#"+code;
 }
 </script>
 </head>
@@ -766,6 +777,7 @@ addEventListener('load',function(){
   loadSmp('sound/scream.wav', 'scream', {center: 72, loopStart: 0, loopEnd: 1});
   initSongList();
   changeSong();
+  decodePermalink();
 });
 </script>
 </body>
