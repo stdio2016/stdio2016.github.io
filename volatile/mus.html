@@ -660,7 +660,7 @@ function initSongList(){
     customSongList.appendChild(new Option(name, "c" + name));
   }
   var name = sessionStorage.getItem('volatileMus_ShowPermaLink');
-  if((name !== null && name.charAt(0) != 'c') && location.hash) {
+  if((name === null || name.charAt(0) != 'c') && location.hash) {
     var opt = new Option('Song from link','perma');
     songList.appendChild(opt);
     opt.selected = 'selected';
