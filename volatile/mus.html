@@ -116,21 +116,26 @@ function stop(){
 }
 
 // for iOS only
-var audioUnlocked = false;
 window.addEventListener('touchend', unlock, false);
 function unlock(){
-  if(audioUnlocked) return;
   var src = audioctx.createBufferSource();
 
   src.buffer = fakePno.sample;
 
   src.connect(gainNode);
   src.start(0);
-  document.getElementById('warn').innerHTML = '';
+  if(!sessionStorage.volatileMus_ShowPermaLink){
+    document.getElementById('warn').innerHTML = '';
+  }
   window.removeEventListener('touchend', unlock);
 }
-if(/iP[ao]d|iPhone/.test(navigator.userAgent)){
-  document.getElementById('warn').innerHTML = 'Click anywhere on this page to unlock the AudioContext';
+
+function showUnlockMessage(){
+  if(/iP[ao]d|iPhone/.test(navigator.userAgent)){
+    if(!sessionStorage.volatileMus_ShowPermaLink){
+      document.getElementById('warn').innerHTML = 'Click anywhere on this page to unlock the AudioContext';
+    }
+  }
 }
 
 // scream!
@@ -820,6 +825,7 @@ addEventListener('load',function(){
     throw new Error("Reader got replaced by " + Reader.toString());
   }
   loadSmp('sound/scream.wav', 'scream', {center: 72, loopStart: 0, loopEnd: 1});
+  showUnlockMessage();
   initSongList();
   changeSong();
   decodePermalink();
