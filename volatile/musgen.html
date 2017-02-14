@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Random music code generator</title>
+<script>
+var ptcTable = [
+  [2,2,2,1,2,2,1],
+  [2,2,2,1,2,2,1],
+  [2,2,2,1,2,2,1],
+  [2,2,2,1,2,2,1],
+  [2,2,2,1,2,2,1],
+  [2,2,2,1,2,2,1],
+  [2,2,2,1,2,2,1]
+];
+
+var rhythmTable = [
+  [1,2,4,2,2,0,1,0],
+  [0,0,2,1,0,0,0,0],
+  [0,0,0,2,4,0,0,0],
+  [0,0,0,0,4,2,0,0],
+  [2,0,0,0,0,2,4,2],
+  [0,0,0,0,0,0,2,2],
+  [2,0,0,0,0,0,0,2],
+  [2,0,0,0,0,0,0,0]
+];
+
+var abcName = ["c","d","e","f","g","a","b"];
+var lenName = ["1000","8","4","4.","2","2~8","2.","2..","1"];
+function genTable(table){
+  var out = [];
+  for(var i=0; i<table.length; i++){
+    var r = table[i];
+    var sum = 0;
+    for(var j=0; j<r.length; j++){
+      sum += r[j];
+    }
+    var rout = [];
+    var partial = 0;
+    for(var j=0; j<r.length; j++){
+      partial += r[j];
+      rout.push(partial / sum);
+    }
+    out.push(rout);
+  }
+  return out;
+}
+function randomNext(now, table){
+  var r = Math.random();
+  var row = table[now];
+  var next;
+  for(next = 0; next<row.length; next++){
+    if(r <= row[next]){
+      break;
+    }
+  }
+  return next;
+}
+
+var nPtcTable = genTable(ptcTable);
+var nRhythmTable = genTable(rhythmTable);
+var current = {pitch: 0, pos: 0};
+function nextNote(){
+  var out ='';
+  var nextPos = randomNext(current.pos, nRhythmTable);
+  if (nextPos <= current.pos){
+    nextPos += 8;
+  }
+  var diff = nextPos - current.pos;
+  current.pitch = randomNext(current.pitch, nPtcTable);
+  out = abcName[current.pitch] + lenName[diff];
+  if(current.pos == 0){
+    var ptc = randomNext(current.pos, nRhythmTable);
+    out = ' ' + out + '!1' + abcName[ptc] + '1!0';
+  }
+  current.pos = nextPos % 8;
+  if(document.getElementById('out').innerText == ''){
+    out = '!1<!0' + out;
+  }
+  document.getElementById('out').innerText += out;
+}
+</script>
+</head>
+<body>
+  <p>如果你不會寫歌，可以用這個程式來生一下音樂代碼</p>
+  <p id='out'></p>
+  <button onclick="nextNote()">Next</button>
+</body>
+</html>
