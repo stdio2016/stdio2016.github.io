@@ -15,8 +15,6 @@ else{
 var gainNode = audioctx.createGain();
 gainNode.gain.value = 0.5;
 gainNode.connect(audioctx.destination);
-var currentTime = 0.0;
-var bpm = 100;
 var players = new Set();
 
 function genFakePiano(){
@@ -54,6 +52,7 @@ function Player(sequence){
   this.startTime = audioctx.currentTime;
   this.time = 0;
   this.segmentLength = 2;
+  this.nextFire = 0.0;
   for(var id in this.seq){
     this.seq[id].pos = 0;
   }
@@ -87,7 +86,7 @@ Player.prototype.playNote = function(pitch,start,end){
     src.noteOn(startTime);
   }
 
-  var endtime = currentTime + end;
+  var endtime = this.startTime + end;
   env.gain.setValueAtTime(1, endtime - 0.05);
   env.gain.linearRampToValueAtTime(0, endtime);
   if(src.stop)
@@ -139,21 +138,25 @@ Player.prototype.nextSegment = function(){
 };
 
 Player.prototype.start = function () {
+  this.nextFire = audioctx.currentTime;
   this.nextSegment();
   function loop(){
     if(this.stopped){
       if(this.nodes.size == 0)
         players.delete(this);
       else {
-        setTimeout(loop.bind(this), this.segmentLength * 1000);
+        setTimeout(loop.bind(this), 100);
       }
     }
     else{
-      this.nextSegment();
-      setTimeout(loop.bind(this), this.segmentLength * 1000);
+      if(audioctx.currentTime > this.nextFire){
+        this.nextFire += this.segmentLength;
+        this.nextSegment();
+      }
+      setTimeout(loop.bind(this), 100);
     }
   }
-  setTimeout(loop.bind(this), this.segmentLength * 500);
+  setTimeout(loop.bind(this), 100);
 };
 Player.prototype.stop = function () {
   if(support.onended){
@@ -171,10 +174,8 @@ Player.prototype.stop = function () {
 };
 
 function play(){
-  currentTime = audioctx.currentTime;
-
   var code = document.getElementById('code').value;
-  result = readMusic(code);
+  var result = readMusic(code);
   combineTies(result.parts);
   combineTime(result.parts, result.tempo);
   result = result.parts;
