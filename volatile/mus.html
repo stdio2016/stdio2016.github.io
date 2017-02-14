@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <link rel="stylesheet" type="text/css" href="../css/alertbox.css">
 <script>
-var support = {audioContext: true, src_start: true};
+var support = {audioContext: true, onended: false};
 if(window.AudioContext)
   audioctx = new window.AudioContext();
 else{
@@ -17,7 +17,7 @@ gainNode.gain.value = 0.5;
 gainNode.connect(audioctx.destination);
 var currentTime = 0.0;
 var bpm = 100;
-var runningNotes = new Set();
+var players = new Set();
 
 function genFakePiano(){
   var len = 44100 * 2;
@@ -46,7 +46,20 @@ var soundBank =
     {sample: genFakePiano(), center: 69, loopStart: 2, loopEnd: 2.25}
   };
 var fakePno = soundBank.fakePno;
-function note(pitch,start,end){
+
+function Player(sequence){
+  this.seq = sequence;
+  this.nodes = new Set();
+  this.stopped = false;
+  this.startTime = audioctx.currentTime;
+  this.time = 0;
+  this.segmentLength = 2;
+  for(var id in this.seq){
+    this.seq[id].pos = 0;
+  }
+}
+
+Player.prototype.playNote = function(pitch,start,end){
 /*
   var osc = audioctx.createOscillator();
   osc.type = 'sine';
@@ -66,7 +79,7 @@ function note(pitch,start,end){
   src.loopEnd = fakePno.loopEnd;
   src.connect(env);
   env.connect(gainNode);
-  var startTime = currentTime + start;
+  var startTime = this.startTime + start;
   if(src.start)
     src.start(startTime);
   else {
@@ -82,10 +95,80 @@ function note(pitch,start,end){
   else {
     src.noteOff(endTime);
   }
-  runningNotes.add(src);
+  this.nodes.add(src);
   // onended doesn't work on Safari
-  src.onended = function(){ runningNotes.delete(src); };
-}
+  if(typeof src.onended === 'object'){
+    var me = this;
+    src.onended = function(){ me.nodes.delete(src); };
+    support.onended = true;
+  }
+  return {env:env, src:src};
+};
+
+Player.prototype.nextSegment = function(){
+  this.time += this.segmentLength;
+  var more = false;
+  if(!this.stopped){
+    for(var id in this.seq){
+      var part = this.seq[id];
+      var time = part.time;
+      var notes = part.notes;
+      var i;
+      for(i=part.pos; i<notes.length && time[i]<=this.time; i++){
+        var chord = notes[i].chord;
+        for(var j=0; j<chord.length; j++){
+          this.playNote(chord[j].pitch + 12, time[i], time[chord[j].end]);
+        }
+      }
+      part.pos = i;
+      if(part.pos < notes.length){
+        more = true;
+      }
+    }
+  }
+  if (!support.onended) {
+    var nodes = new Set();
+    for(var node of this.nodes){
+      if(node.playbackState != 3){
+        nodes.add(node);
+      }
+    }
+    this.nodes = nodes;
+  }
+  this.stopped = !more;
+};
+
+Player.prototype.start = function () {
+  this.nextSegment();
+  function loop(){
+    if(this.stopped){
+      if(this.nodes.size == 0)
+        players.delete(this);
+      else {
+        setTimeout(loop.bind(this), this.segmentLength * 1000);
+      }
+    }
+    else{
+      this.nextSegment();
+      setTimeout(loop.bind(this), this.segmentLength * 1000);
+    }
+  }
+  setTimeout(loop.bind(this), this.segmentLength * 500);
+};
+Player.prototype.stop = function () {
+  if(support.onended){
+    for(var node of this.nodes){
+      node.stop();
+    }
+  }
+  else{
+    for(var node of this.nodes){
+      node.disconnect();
+    }
+  }
+  this.nodes.clear();
+  this.stopped = true;
+};
 
 function play(){
   currentTime = audioctx.currentTime;
@@ -95,28 +178,17 @@ function play(){
   combineTies(result.parts);
   combineTime(result.parts, result.tempo);
   result = result.parts;
-  for(var id in result){
-    var part = result[id];
-    var time = part.time;
-    var notes = part.notes;
-    for(var i=0; i<notes.length; i++){
-      var chord = notes[i].chord;
-      for(var j=0; j<chord.length; j++){
-        note(chord[j].pitch + 12, time[i], time[chord[j].end]);
-      }
-    }
-  }
+  var player = new Player(result);
+  players.add(player);
+  player.start();
   document.getElementById('warn').innerText = JSON.stringify(support);
 }
 
 function stop(){
-  for(var node of runningNotes){
-    // on Safari onended event doesn't fire, so I have to check the state here
-    if(!node.playbackState || node.playbackState == 2){
-      node.stop();
-    }
+  for(var player of players){
+    player.stop();
   }
-  runningNotes.clear();
+  players.clear();
 }
 
 // for iOS only
