@@ -83,6 +83,7 @@ function note(pitch,start,end){
     src.noteOff(endTime);
   }
   runningNotes.add(src);
+  // onended doesn't work on Safari
   src.onended = function(){ runningNotes.delete(src); };
 }
 
@@ -110,7 +111,10 @@ function play(){
 
 function stop(){
   for(var node of runningNotes){
-    node.stop();
+    // on Safari onended event doesn't fire, so I have to check the state here
+    if(!node.playbackState || node.playbackState == 2){
+      node.stop();
+    }
   }
   runningNotes.clear();
 }
