@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <link rel="stylesheet" type="text/css" href="../css/alertbox.css">
 <script>
-var support = {audioContext: true, onended: false};
+var support = {audioContext: true, onended: false, stopTwice: true};
 if(window.AudioContext)
   audioctx = new window.AudioContext();
 else{
@@ -159,14 +159,13 @@ Player.prototype.start = function () {
   setTimeout(loop.bind(this), 100);
 };
 Player.prototype.stop = function () {
-  if(support.onended){
-    for(var node of this.nodes){
+  for(var node of this.nodes){
+    try{
       node.stop();
     }
-  }
-  else{
-    for(var node of this.nodes){
+    catch(e){
       node.disconnect();
+      support.stopTwice = false;
     }
   }
   this.nodes.clear();
@@ -174,6 +173,7 @@ Player.prototype.stop = function () {
 };
 
 function play(){
+  if(!unlocked) return;
   var code = document.getElementById('code').value;
   var result = readMusic(code);
   combineTies(result.parts);
@@ -193,7 +193,7 @@ function stop(){
 }
 
 // for iOS only
-window.addEventListener('touchend', unlock, false);
+var unlocked = false;
 function unlock(){
   var src = audioctx.createBufferSource();
 
@@ -205,13 +205,18 @@ function unlock(){
     document.getElementById('warn').innerHTML = '';
   }
   window.removeEventListener('touchend', unlock);
+  unlocked = true;
 }
 
 function showUnlockMessage(){
   if(/iP[ao]d|iPhone/.test(navigator.userAgent)){
+    window.addEventListener('touchend', unlock, false);
     if(!sessionStorage.volatileMus_ShowPermaLink){
       document.getElementById('warn').innerHTML = 'Click anywhere on this page to unlock the AudioContext';
     }
+  }
+  else{
+    unlocked = true;
   }
 }
 
