@@ -103,7 +103,7 @@ function Base64Writer() {
   this.trail = 0;
 }
 
-Base64Writer.base64Char = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-$";
+Base64Writer.base64Char = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijk_mnopqrstuvwxyz0123456789+-$";
 
 Base64Writer.prototype.putBit = function (bit) {
   this.pos++;
@@ -132,13 +132,49 @@ Base64Writer.prototype.toString = function () {
   return this.chars.join('');
 };
 
+Base64Writer.prototype.encodeDelta = function (delta) {
+  var len = 1;
+  var tmp = delta;
+  while (tmp > 1) {
+    len++;
+    tmp >>= 1;
+  }
+  tmp = len;
+  var len2 = 0;
+  while (tmp > 1) {
+    this.putBit(0);
+    tmp >>= 1;
+    len2++;
+  }
+  for (var i = len2; i >= 0; i--) {
+    this.putBit(len >> i & 1);
+  }
+  for (var i = len - 2; i >= 0; i--) {
+    this.putBit(delta >> i & 1);
+  }
+};
+
+Base64Writer.prototype.encodeRice = function (num) {
+  for (var i = 0; i < num; i++) {
+    this.putBit(1);
+  }
+  this.putBit(0);
+};
+
 function Huffman() {
   this.enc = new Map();
   this.dec = [];
 }
 
-Huffman.tableFromText = function (str) {
-  if (!str) throw "cannot build table from nothing";
+Huffman.buildTree = function (str) {
+  var header = Huffman.buildHeadInfo(str);
+  var huff = new Huffman();
+  huff.canonicalCoding(header);
+  return huff;
+};
+
+Huffman.buildHeadInfo = function (str) {
+  if (!str) throw "cannot build tree from nothing";
   var freq = getFreq(str);
   var pq = new PriorityQueue();
   for (let [ch, count] of freq) {
@@ -164,10 +200,34 @@ Huffman.tableFromText = function (str) {
     }
   }
   flatten(tree, 0);
-  var huff = new Huffman();
-  huff.canonicalCoding(header);
+  return header;
+};
 
-  return huff;
+Huffman.compress = function (str) {
+  var buf = new Base64Writer();
+  var tree = Huffman.buildTree(str);
+  var head = Huffman.buildHeadInfo(str);
+  buf.putBit(0); buf.putBit(0); buf.putBit(0);
+  Huffman.encodeHeader(head, buf);
+  tree.encodeStream(str, buf);
+  return buf.toString();
+};
+
+Huffman.encodeHeader = function (header, buf) {
+  header.sort((a,b) => a[0] > b[0] ? 1 : -1);
+  buf.encodeDelta(header.length);
+  var maxLen = 0;
+  for (var i = 0; i < header.length; i++) {
+    if (header[i][1] > maxLen){
+      maxLen = header[i][1];
+    }
+  }
+  buf.encodeRice(maxLen - header[0][1]);
+  buf.encodeDelta(header[0][0].charCodeAt(0));
+  for (var i = 1; i < header.length; i++) {
+    buf.encodeRice(maxLen - header[i][1]);
+    buf.encodeDelta(header[i][0].charCodeAt(0) - header[i-1][0].charCodeAt(0));
+  }
 };
 
 Huffman.prototype.canonicalCoding = function (header) {
@@ -209,12 +269,12 @@ Huffman.prototype.canonicalCoding = function (header) {
 
 Huffman.prototype.encode = function (str) {
   var buf = new Base64Writer();
+  buf.putBit(0); buf.putBit(0); buf.putBit(0);
   this.encodeStream(str, buf);
   return buf.toString();
 };
 
 Huffman.prototype.encodeStream = function (str, buf) {
-  buf.putBit(0); buf.putBit(0); buf.putBit(0);
   for (var i = 0; i < str.length; i++) {
     var code = this.enc.get(str.charAt(i));
     for (var j = 0; j < code.length; j++) {
@@ -226,19 +286,19 @@ Huffman.prototype.encodeStream = function (str, buf) {
 
 Huffman.prototype.decode = function (str) {
   var read = new Base64Reader(str);
-  return this.decodeStream(read);
-};
-
-Huffman.prototype.decodeStream = function (read) {
   var frag = read.getBit();
   frag = frag * 2 + read.getBit();
   frag = frag * 2 + read.getBit();
+  return this.decodeStream(read, frag);
+};
+
+Huffman.prototype.decodeStream = function (read, frag) {
   if (frag < 1 || frag > 6) {
     throw "invalid format";
   }
   var len = read.str.length;
   var out = '';
-  while (read.pos < len || read.bitPos < frag) {
+  while (read.pos < len || read.pos == len && read.bitPos < frag) {
     var dec = this.dec;
     do {
       dec = dec[read.getBit()];
