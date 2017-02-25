@@ -13,9 +13,18 @@ else{
   support.audioContext = false;
   audioctx = new (window.webkitAudioContext)();
 }
-var gainNode = audioctx.createGain();
-gainNode.gain.value = 0.5;
-gainNode.connect(audioctx.destination);
+var master = audioctx.createGain();
+var masterGain = audioctx.createGain();
+var echoNode = audioctx.createDelay();
+var feedbackNode = audioctx.createGain();
+master.connect(masterGain);
+master.connect(echoNode);
+masterGain.gain.value = 0.5;
+echoNode.delayTime.value = 0.25;
+echoNode.connect(feedbackNode);
+feedbackNode.gain.value = 0.7;
+feedbackNode.connect(master);
+masterGain.connect(audioctx.destination);
 var players = new Set();
 
 function genFakePiano(){
@@ -78,7 +87,7 @@ Player.prototype.playNote = function(pitch,start,end){
   src.loopStart = fakePno.loopStart;
   src.loopEnd = fakePno.loopEnd;
   src.connect(env);
-  env.connect(gainNode);
+  env.connect(master);
   var startTime = this.startTime + start;
   if(src.start)
     src.start(startTime);
