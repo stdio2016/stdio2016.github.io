@@ -1,0 +1,22 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  height='100' width='72'>
+  <path
+    style='stroke: black; stroke-width: 1px; fill: white;'
+    d='M 2,2 V 98 H 70 V 26 L 46,2 Z'/>
+  <path
+    style='stroke: black; fill: white;'
+    d='M 46,2 V 26 H 70 Z'/>
+  <g>
+    <rect
+      style='stroke: black; fill: white;'
+      x='12' y='40'
+      width='48' height='40'/>
+    <line
+      style='stroke: red; stroke-width: 3px;'
+      x1='24' y1='48' x2='48' y2='72'/>
+    <line
+      style='stroke: red; stroke-width: 3px;'
+      x1='24' y1='72' x2='48' y2='48'/>
+  </g>
+</svg>
