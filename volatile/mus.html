@@ -23,7 +23,7 @@ masterGain.gain.value = 0.5;
 echoNode.delayTime.value = 0.25;
 echoNode.connect(feedbackNode);
 feedbackNode.gain.value = 0.7;
-feedbackNode.connect(master);
+// feedbackNode.connect(master);
 masterGain.connect(audioctx.destination);
 var players = new Set();
 
