@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<meta charset="UTF-8">
+<meta property="og:url" content="https://stdio2016.github.io/volatile/fbmeta.html" />
+<meta property="og:title" content="FB Meta 好好玩" />
+<meta property="og:description" content="測試網址的井字符號會不會保留" />
+<title>FB meta好玩</title>
+<style>
+body{
+  background-color: lightgreen;
+  background-image: url("/image/background.png")
+}
+footer{
+  text-align: center;
+}
+</style>
+<script>
+function 確定(){
+  sessionStorage.setItem("volatile_fbmeta","yes");
+  var a=encodeURI(document.getElementById('something').value);
+  setTimeout(
+    function(){
+      location.replace('#'+a);
+    }
+  ,500);
+}
+function 初始化()
+{
+  if(sessionStorage.getItem("volatile_fbmeta")=="yes")
+  {
+    document.getElementById('something').value=decodeURI(location.hash.substr(1));
+  }
+  else if(location.hash)
+  {
+    document.getElementById('a').innerText='分享這個網頁的人輸入了'+decodeURI(location.hash.substr(1));
+    document.title='FB不只好玩，還可以傳文字';
+  }
+}
+</script>
+</head>
+<body onload='初始化()'>
+  <p>只是個小小測試</p>
+  <p id='a'></p>
+  <textarea id=something onchange='確定()'></textarea>
+</body>
+</html>
