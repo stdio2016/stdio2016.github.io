@@ -84,7 +84,7 @@ function draw(red, green, blue){
         }
     }
     ctx.putImageData(bmp, 0, 0);
-    document.body.style.backgroundImage='url("' + canvas.toDataURL() + '")';
+    document.documentElement.style.backgroundImage='url("' + canvas.toDataURL() + '")';
 }
 if(!document.body)
     document.write("<div style='display:none;'>dummy div to make a body element</div>");

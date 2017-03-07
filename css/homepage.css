@@ -1,0 +1,11 @@
+html {
+  background-color: lightgreen;
+  background-image: url("/image/background.png")
+}
+footer {
+  text-align: center;
+}
+html.volatile-bg {
+  background-color: lightgray;
+  background-image: none;
+}
