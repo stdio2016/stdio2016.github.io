@@ -1,0 +1,350 @@
+<html>
+<head>
+<title>match3 test</title>
+</head>
+<body>
+<canvas height='550' width='550' id=canvas1 onmousedown='dwn(event)'>
+</canvas>
+<p>
+<input type=button value='play' onclick='pause=false;oneFrame()'>
+<input type=button value='pause' onclick='pause=true'>
+<input type=button value='step' onclick='fall()'>
+</p>
+<table>
+<td>
+<textarea id=console>
+</textarea>
+</td>
+<td>
+<input type=button value='red' onclick='setColor(1)'>
+<input type=button value='yellow' onclick='setColor(4)'>
+<input type=button value='green' onclick='setColor(2)'>
+<input type=button value='blue' onclick='setColor(3)'>
+<input type=button value='none' onclick='setColor(0)'>
+<br>
+<input type=button value='^' onclick='setDown(2)'>
+<input type=button value='v' onclick='setDown(1)'>
+<input type=button value='<' onclick='setDown(4)'>
+<input type=button value='>' onclick='setDown(3)'>
+<input type=button value='o' onclick='setDown(0)'>
+</td>
+</table>
+<script>
+var canvas=document.getElementById('canvas1');
+var ctx=canvas.getContext('2d');
+var console=document.getElementById('console');
+var Oj;
+var Down;
+var Up;
+function drawLine(x1,y1,x2,y2)
+{
+	ctx.beginPath();
+	ctx.moveTo(x1,y1);
+	ctx.lineTo(x2,y2);
+	ctx.stroke();
+}
+
+function background()
+{
+	ctx.fillStyle='white';
+	ctx.fillRect(0,0,550,550);
+	var i;
+	ctx.fillStyle='black';
+	for(i=1;i<=10;i++)
+		drawLine(i*50,50,i*50,500);
+	for(i=1;i<=10;i++)
+		drawLine(50,i*50,500,i*50);
+}
+
+function colorName(b)
+{
+	var color='none';
+	switch(b)
+	{
+		case 1: color='red';break;
+		case 2: color='lime';break;
+		case 3: color='blue';break;
+		case 4: color='yellow';break;
+		case 5: color='orange';break;
+		case 6: color='magenta';break;
+		case 7: color='cyan';break;
+		case 8: color='purple';break;
+	}
+	return color;
+}
+
+function drawCandy()
+{
+	ctx.fillStyle='lightyellow';
+	ctx.fillRect(50*mxB+51,50*myB+51,48,48);
+	var i,j;
+	for(i=0;i<9;i++)
+	{
+		for(j=0;j<9;j++)
+		{
+			var r=Oj[i][j];
+			if(r.color==0) continue;
+			var color='white';
+			var pos=r.pos/500*50;
+			var x=50*i+75;
+			var y=50*j+75;
+			if(r.dir==1) y-=pos;
+			if(r.dir==2) y+=pos;
+			if(r.dir==3) x-=pos;
+			if(r.dir==4) x+=pos;
+			ctx.fillStyle=colorName(r.color);
+			ctx.beginPath();
+			ctx.arc(x, y, 10, 0, Math.PI*2, false);
+			ctx.fill();
+			ctx.fillstyle='black';
+			ctx.beginPath();
+			ctx.arc(x, y, 10, 0, Math.PI*2, false);
+			ctx.stroke();
+		}
+	}
+}
+
+function randomize()
+{
+	Oj=[];
+	Down=[];
+	var i,j;
+	for(i=0;i<9;i++)
+	{
+		Down.push([]);
+		var e=[];
+		for(j=0;j<9;j++)
+		{
+			var r=Math.floor(Math.random()*4)+1;
+			e.push({'color':r,'pos':0,'speed':0,'dir':0});
+			Down[i].push(j<8?1:0);
+		}
+		Oj.push(e);
+	}
+}
+var mx=0,my=0;
+var mxB=0,myB=0;
+function dwn(e)
+{
+	var rect = canvas.getBoundingClientRect();
+	mx=e.clientX-rect.left;
+	my=e.clientY-rect.top;
+	mxB=Math.floor(mx/50)-1;
+	myB=Math.floor(my/50)-1;
+	if(mxB>8)mxB=8;
+	if(mxB<0)mxB=0;
+	if(myB>8)myB=8;
+	if(myB<0)myB=0;
+}
+function setColor(n)
+{
+	Oj[mxB][myB].color=n;
+}
+
+function setDown(n)
+{
+	Down[mxB][myB]=n;
+}
+var pause=true;
+
+function oneFrame()
+{
+	background();
+	if(!pause)
+	{
+		fall();
+		match3();
+	}
+	drawCandy();
+	console.value=mxB+","+myB+",color:"+colorName(Oj[mxB][myB].color)+
+		",dir:"+Oj[mxB][myB].dir;
+	setTimeout(oneFrame,1000/60);
+}
+var Wd;
+function tryFallAt(x,y)
+{
+	var d=false;
+	var o=Oj[x][y];
+	if(o.color==0)
+	{
+		return true;
+	}
+	else
+	{
+		if((o.dir==0 || o.pos<=0) && !Wd[x][y])
+		{
+			Wd[x][y]=true;
+			switch(Down[x][y])
+			{
+				case 1:
+					d=tryFallAt(x,y+1);
+					break;
+				case 2:
+					d=tryFallAt(x,y-1);
+					break;
+				case 3:
+					d=tryFallAt(x+1,y);
+					break;
+				case 4:
+					d=tryFallAt(x-1,y);
+					break;
+				default:
+					d=false;
+					break;
+			}
+			if(d)
+			{
+				if(o.dir==0)
+				{
+					o.speed=2;
+					o.pos=500-o.speed;
+				}
+				else
+				{
+					o.pos+=500;
+				}
+				o.dir=Down[x][y];
+				Oj[x][y]={'pos':0,'speed':0,'dir':0,'color':0};
+				switch(Down[x][y])
+				{
+					case 1:
+						Oj[x][y+1]=o;
+						break;
+					case 2:
+						Oj[x][y-1]=o;
+						break;
+					case 3:
+						Oj[x+1][y]=o;
+						break;
+					case 4:
+						Oj[x-1][y]=o;
+						break;
+					default:
+						break;
+				}
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+function fall()
+{
+	var i,j;
+	Wd=[];
+	for(i=0;i<9;i++)
+	{
+		Wd.push([]);
+		for(j=0;j<9;j++)
+		{
+			if(Oj[i][j].dir!=0)
+			{
+				Oj[i][j].speed+=2;
+				if(Oj[i][j].speed>500) Oj[i][j].speed=500;
+				Oj[i][j].pos-=Oj[i][j].speed;
+			}
+			Wd[i].push(false);
+		}
+	}
+	for(i=0;i<9;i++)
+	{
+		for(j=0;j<9;j++)
+		{
+			tryFallAt(i,j);
+		}
+	}
+	for(i=0;i<9;i++)
+	{
+		for(j=0;j<9;j++)
+		{
+			if(Down[i][j]==1 && Oj[i][j].pos<=0 && (j==8 || Oj[i][j+1].color!=0))
+			{
+				Oj[i][j].dir=0;
+				Oj[i][j].speed=0;
+				Oj[i][j].pos=0;
+			}
+			if(Down[i][j]==2 && Oj[i][j].pos<=0 && (j==0 || Oj[i][j-1].color!=0))
+			{
+				Oj[i][j].dir=0;
+				Oj[i][j].speed=0;
+				Oj[i][j].pos=0;
+			}
+			if(Down[i][j]==3 && Oj[i][j].pos<=0 && (i==8 || Oj[i+1][j].color!=0))
+			{
+				Oj[i][j].dir=0;
+				Oj[i][j].speed=0;
+				Oj[i][j].pos=0;
+			}
+			if(Down[i][j]==4 && Oj[i][j].pos<=0 && (i==0 || Oj[i-1][j].color!=0))
+			{
+				Oj[i][j].dir=0;
+				Oj[i][j].speed=0;
+				Oj[i][j].pos=0;
+			}
+			if(Down[i][j]==0 && Oj[i][j].pos<=0)
+			{
+				Oj[i][j].dir=0;
+				Oj[i][j].speed=0;
+				Oj[i][j].pos=0;
+			}
+		}
+	}
+}
+
+function match3()
+{
+	var i,j;
+	var arr=[];
+	for(i=0;i<9;i++)
+	{
+		for(j=0;j<7;j++)
+		{
+			var c=Oj[i][j].color;
+			if(c>0 && Oj[i][j].dir==0)
+			{
+				if(Oj[i][j+1].color==c && Oj[i][j+2].color==c
+					&& Oj[i][j+1].dir==0 && Oj[i][j+2].dir==0)
+				{
+					arr.push([i,j],[i,j+1],[i,j+2]);
+					j+=3;
+					while(j<9 && Oj[i][j].color==c && Oj[i][j].dir==0)
+					{
+						arr.push([i,j]);
+						j++;
+					}
+				}
+			}
+		}
+	}
+	for(i=0;i<9;i++)
+	{
+		for(j=0;j<7;j++)
+		{
+			var c=Oj[j][i].color;
+			if(c>0)
+			{
+				if(Oj[j+1][i].color==c && Oj[j+2][i].color==c
+				&& Oj[j+1][i].dir==0 && Oj[j+2][i].dir==0)
+				{
+					Oj[j][i].color=0;
+					Oj[j+1][i].color=0;
+					Oj[j+2][i].color=0;
+					j+=3;
+					while(j<9 && Oj[j][i].color==c && Oj[j][i].dir==0)
+					{
+						Oj[j][i].color=0;
+						j++;
+					}
+				}
+			}
+		}
+	}
+	for(i=0;i<arr.length;i++)
+		Oj[arr[i][0]][arr[i][1]].color=0;
+}
+randomize();
+oneFrame();
+</script>
+</body>
+</html>
