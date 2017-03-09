@@ -25,6 +25,7 @@ Array
 Object (just includes plain object)
 properties in prototype does not get duplicated
 */
+(function (outside) {
 var myCopySym = (this.Symbol || String)('stdio2016_CopyFunc');
 
 function simpleCopy(objType) {
@@ -124,7 +125,9 @@ Array.prototype[myCopySym] = function (tryCopy, refs) {
   var cp = [];
   refs.set(this, cp);
   for (var k in this) {
-    cp[k] = tryCopy(this[k]);
+    if (this.hasOwnProperty(k)) {
+      cp[k] = tryCopy(this[k]);
+    }
   }
   return cp;
 };
@@ -159,3 +162,5 @@ function myCopy(obj) {
   }
   return tryCopy(obj);
 }
+outside.myCopy = myCopy;
+})(this);
