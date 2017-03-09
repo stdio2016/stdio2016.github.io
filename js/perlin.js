@@ -86,8 +86,6 @@ function draw(red, green, blue){
     ctx.putImageData(bmp, 0, 0);
     document.documentElement.style.backgroundImage='url("' + canvas.toDataURL() + '")';
 }
-if(!document.body)
-    document.write("<div style='display:none;'>dummy div to make a body element</div>");
 if(!window.backgroundColor)
     window.backgroundColor = [144, 238, 144];
 draw(backgroundColor[0], backgroundColor[1], backgroundColor[2]);
