@@ -61,6 +61,20 @@ function drag(e) {
     dragFun(px, py);
   }
 }
+function ignore() {}
+
+function touchStart(e){
+	e.preventDefault();
+	var touch = e.touches;
+	click({preventDefault: ignore, button:0, clientX: touch[0].clientX, clientY: touch[0].clientY});
+}
+function touchMove(e){
+	e.preventDefault();
+	var touch = e.touches;
+	drag({preventDefault: ignore, buttons:1, clientX: touch[0].clientX, clientY: touch[0].clientY});
+}
 
 canvas.addEventListener('mousedown', click);
 canvas.addEventListener('mousemove', drag);
+canvas.addEventListener('touchstart',touchStart,false);
+canvas.addEventListener('touchmove',touchMove,false);

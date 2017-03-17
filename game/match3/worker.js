@@ -209,6 +209,10 @@ onmessage = function(e){
   if (d == 'next') {
     fall();
     match3();
+    postMessage([Oj, Down]);
+  }
+  else if (d == 'current') {
+    postMessage([Oj, Down]);
   }
   else {
     if (d[0] == 'setColor') {
@@ -222,5 +226,4 @@ onmessage = function(e){
       Down[d[1]][d[2]] = d[3];
     }
   }
-  postMessage([Oj, Down]);
 };

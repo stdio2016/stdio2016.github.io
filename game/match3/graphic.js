@@ -212,8 +212,12 @@ function draw()
 
 function loop()
 {
-  if (worker.digested && !paused) {
-    worker.postMessage('next');
+  if (worker.digested) {
+    if (paused)
+    worker.postMessage('current');
+    else {
+      worker.postMessage('next');
+    }
     worker.digested= false;
   }
   draw();
