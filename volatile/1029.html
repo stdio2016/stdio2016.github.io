@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html class='volatile-bg'>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset='utf8'>
+  <link rel="stylesheet" href="/css/homepage.css">
+  <script>
+  backgroundColor=[220,50,50];
+  </script>
+  <script src='/js/perlin.js'></script>
+</head>
+<body>
+<h1>這程式很可怕！！！</h1>
+<hr>
+<p>
+  請見<a href='http://140.126.196.53/JudgeOnline/problem.php?id=1029'>Sun Moon Judge的錢多多</a>
+</p>
+<textarea id='input'>7
+1 3 6 2 5 7 4
+1 2
+1 3
+2 4
+2 5
+3 6
+3 7
+3
+1 4
+3 2
+2 2</textarea><br>
+<button onclick='calc()'>確定</button>
+<p id='output'></p>
+<a href='/'>回首頁</a>
+<hr>
+<footer id=di>&copy; 2016~2017 stdio2016 版權ㄙㄨㄛˇ 有</footer>
+<script>
+function MoneyManyMany(costs, paths) {
+    var arr = [];
+    var P = costs.length;
+    for (var i = 0; i < P; i++) {
+        arr.push({children: [], cost: costs[i], size: 0, ref: 0, start: 0});
+    }
+    // get topological order
+    for (var i = 0; i < P - 1; i++) {
+        arr[paths[i*2+1] - 1].ref++;
+        arr[paths[i*2] - 1].children.push(paths[i*2+1] - 1);
+    }
+    // find root of the path
+    var root = -1;
+    for (var i = 0; i < P; i++) {
+        if (arr[i].ref == 0) {
+            root = i; break;
+        }
+    }
+    var shops = [];
+    function traverse(shop, totalCost) {
+        arr[shop].cost += totalCost;
+        var cost = arr[shop].cost;
+        var count = arr[shop].children.length;
+        arr[shop].start = shops.length;
+        var size = count == 0 ? 1 : 0;
+        for (var i = 0; i < count; i++) {
+            size += traverse(arr[shop].children[i], cost);
+        }
+        arr[shop].size = size;
+        if (count == 0) {
+            shops.push({shop: shop, cost: cost});
+        }
+        return size;
+    }
+    function traverse2() {
+        var objs = [];
+        var stack = [root];
+        while (stack.length > 0) {
+            var top = stack.pop();
+            objs.push(top);
+            if (arr[top].children.length == 0) {
+                shops.push({shop: top, cost: 0});
+            }
+            var count = arr[top].children.length;
+            for (var i = count - 1; i >= 0; i--) {
+                stack.push(arr[top].children[i]);
+            }
+        }
+        var startId = shops.length - 1;
+        for (var i = objs.length - 1; i >= 0; i--) {
+            var top = objs[i];
+            var count = arr[top].children.length;
+            if (count > 0) {
+                arr[top].start = arr[arr[top].children[0]].start;
+                var size = 0;
+                for (var j = 0; j < count; j++) {
+                    size += arr[arr[top].children[j]].size;
+                }
+                arr[top].size = size;
+            }
+            else {
+                arr[top].start = startId;
+                startId--;
+                arr[top].size = 1;
+            }
+        }
+        for (var i = 0; i < objs.length; i++) {
+            var count = arr[objs[i]].children.length;
+            var cost = arr[objs[i]].cost;
+            for (var j = 0; j < count; j++) {
+                arr[arr[objs[i]].children[j]].cost += cost;
+            }
+        }
+        for (var i = 0; i < shops.length; i++) {
+            shops[i].cost = arr[shops[i].shop].cost;
+        }
+    }
+    traverse2();
+    var pot = 1;
+    while (pot < shops.length) pot <<= 1;
+    var toPot = pot - shops.length;
+    for (var i = 0; i < toPot; i++) {
+        shops.push({shop: -1, cost: 0});
+    }
+    var levelShop = [shops];
+    var step = 1;
+    while (step < shops.length) {
+        levelShop.push(mergeSortLBL(levelShop[levelShop.length - 1], shops.length, step));
+        step <<= 1;
+    }
+    return [arr,levelShop];
+}
+
+function mergeSortLBL(arr, len, step) {
+    var out = [];
+    for (var i = 0; i < len; i += step * 2) {
+        var left = i;
+        var right = i + step;
+        var limit = Math.min(len, i + step * 2);
+        if (right >= len) break;
+        while (left < i + step && right < limit) {
+            if (arr[left].cost >= arr[right].cost) {
+                out.push(arr[left]);
+                left++;
+            }
+            else {
+                out.push(arr[right]);
+                right++;
+            }
+        }
+        if (right == limit) {
+            for (var j = left; j < i + step; j++) {
+                out.push(arr[j]);
+            }
+        }
+        else {
+            for (var j = right; j < limit; j++) {
+                out.push(arr[j]);
+            }
+        }
+    }
+    return out;
+}
+
+function getFirstQ(moneyManyMany, W, Q) {
+    var shop = moneyManyMany[0][W - 1];
+    var levels = moneyManyMany[1];
+    var left = shop.start;
+    var right = shop.start + shop.size;
+    var bit = 0;
+    var refs = [];
+    // from left approach middle
+    while (left + (1 << bit) <= right) {
+        if (left & (1 << bit)) {
+            refs.push(left);
+            left += 1 << bit;
+            refs.push(left);
+            refs.push(bit);
+        }
+        bit++;
+    }
+    // from right approach middle
+    for (bit = bit - 1; bit >= 0; bit--) {
+        if (right & (1 << bit)) {
+            refs.push(left);
+            left += 1 << bit;
+            refs.push(left);
+            refs.push(bit);
+        }
+    }
+    // merge every subarray and sort
+    var out = [];
+    var arrCount = refs.length/3;
+    if (Q > shop.size) Q = shop.size;
+    for (var i = 0; i < Q; i++) {
+        var cost = -1;
+        var shop = -1;
+        var maxj = 0;
+        for (var j = 0; j < arrCount; j++) {
+            if (refs[j*3] == refs[j*3+1]) continue;
+            var subarr = levels[refs[j*3+2]];
+            if (subarr[refs[j*3]].cost > cost) {
+                maxj = j;
+                cost = subarr[refs[j*3]].cost;
+                shop = subarr[refs[j*3]].shop;
+            }
+        }
+        refs[maxj*3]++;
+        out.push(shop + 1);
+    }
+    return out;
+}
+
+function genLineCase(size) {
+    var out = [], cost = [];
+    for (var i = 1; i < size; i += 2) {
+        out.push(i);
+        out.push(i + 1);
+        out.push(i);
+        out.push(i + 2);
+        cost.push(Math.floor(Math.random() * 1));
+        cost.push(Math.floor(Math.random() * 10 * size));
+    }
+    cost.push(Math.floor(Math.random() * 10));
+    return [cost, out];
+}
+
+function calc() {
+    var input = document.getElementById('input').value;
+    var data = input.split(/\s/);
+    var P = parseInt(data[0]);
+    var costs = data.slice(1, P+1);
+    for (var i = 0; i < P; i++) {
+        costs[i] = parseInt(costs[i]);
+    }
+    var paths = data.slice(P+1, P*3-1);
+    for (var i = 0; i < (P-1) * 2; i++) {
+        paths[i] = parseInt(paths[i]);
+    }
+    var T = parseInt(data[P*3-1]);
+    var out = '';
+    var solver = MoneyManyMany(costs, paths);
+    for (var i = 0; i < T; i++) {
+        var W = parseInt(data[P*3 + i*2]);
+        var Q = parseInt(data[P*3 + i*2 + 1]);
+        out += getFirstQ(solver, W, Q).join(' ') + '<br>';
+    }
+    document.getElementById('output').innerHTML = out;
+}
+</script>
+</body>
+</html>
