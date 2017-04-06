@@ -14,19 +14,22 @@
 <hr>
 <p>
   請見<a href='http://140.126.196.53/JudgeOnline/problem.php?id=1029'>Sun Moon Judge的錢多多</a>
+  以得知這程式會做什麼
 </p>
-<textarea id='input'>7
-1 3 6 2 5 7 4
-1 2
-1 3
-2 4
-2 5
-3 6
-3 7
-3
-1 4
+<textarea id='input'>8
+2 3 5 7 11 13 19 17
+6 4
+4 2
+6 3
+3 1
+3 5
+7 8
+6 7
+4
 3 2
-2 2</textarea><br>
+8 1
+6 4
+4 1</textarea><br>
 <button onclick='calc()'>確定</button>
 <p id='output'></p>
 <a href='/'>回首頁</a>
@@ -37,10 +40,22 @@ function MoneyManyMany(costs, paths) {
     var arr = [];
     var P = costs.length;
     for (var i = 0; i < P; i++) {
+        if (isNaN(costs[i]))
+            throw new TypeError('Input cost is not integer');
+        if (costs[i] < 0)
+            throw new RangeError('Cost cannot be negative');
         arr.push({children: [], cost: costs[i], size: 0, ref: 0, start: 0});
     }
     // get topological order
     for (var i = 0; i < P - 1; i++) {
+        if (isNaN(paths[i*2]))
+            throw new TypeError('Input a is not integer');
+        if (isNaN(paths[i*2+1]))
+            throw new TypeError('Input b is not integer');
+        if (paths[i*2] <= 0 || paths[i*2] > P)
+            throw new RangeError('Shop '+paths[i*2]+' does not exist');
+        if (paths[i*2+1] <= 0 || paths[i*2+1] > P)
+            throw new RangeError('Shop '+paths[i*2+1]+' does not exist');
         arr[paths[i*2+1] - 1].ref++;
         arr[paths[i*2] - 1].children.push(paths[i*2+1] - 1);
     }
@@ -48,7 +63,8 @@ function MoneyManyMany(costs, paths) {
     var root = -1;
     for (var i = 0; i < P; i++) {
         if (arr[i].ref == 0) {
-            root = i; break;
+            if (root != -1) throw new RangeError('Multiple start point');
+            root = i;
         }
     }
     var shops = [];
@@ -119,7 +135,7 @@ function MoneyManyMany(costs, paths) {
     }
     var levelShop = [shops];
     var step = 1;
-    while (step < shops.length) {
+    while (step << 1 <= shops.length) {
         levelShop.push(mergeSortLBL(levelShop[levelShop.length - 1], shops.length, step));
         step <<= 1;
     }
@@ -134,7 +150,8 @@ function mergeSortLBL(arr, len, step) {
         var limit = Math.min(len, i + step * 2);
         if (right >= len) break;
         while (left < i + step && right < limit) {
-            if (arr[left].cost >= arr[right].cost) {
+            if (arr[left].cost > arr[right].cost
+            || arr[left].cost == arr[right].cost && arr[left].shop < arr[right].shop) {
                 out.push(arr[left]);
                 left++;
             }
@@ -158,12 +175,24 @@ function mergeSortLBL(arr, len, step) {
 }
 
 function getFirstQ(moneyManyMany, W, Q) {
+    if (W > moneyManyMany[0].length || W <= 0) {
+        return ['Shop',W,'does not exist!'];
+    }
+    if (isNaN(W))
+        return ['Input W is not integer'];
+    if (isNaN(Q))
+        return ['Input Q is not integer'];
     var shop = moneyManyMany[0][W - 1];
     var levels = moneyManyMany[1];
     var left = shop.start;
     var right = shop.start + shop.size;
     var bit = 0;
     var refs = [];
+    if (Q > shop.size) {
+        return ['There are less than',Q,' masters entering shop',W];
+    }
+    if (Q <= 0)
+        return ['Nothing to output'];
     // from left approach middle
     while (left + (1 << bit) <= right) {
         if (left & (1 << bit)) {
@@ -194,10 +223,11 @@ function getFirstQ(moneyManyMany, W, Q) {
         for (var j = 0; j < arrCount; j++) {
             if (refs[j*3] == refs[j*3+1]) continue;
             var subarr = levels[refs[j*3+2]];
-            if (subarr[refs[j*3]].cost > cost) {
+            var master = subarr[refs[j*3]];
+            if (master.cost > cost || master.cost == cost && master.shop < shop) {
                 maxj = j;
-                cost = subarr[refs[j*3]].cost;
-                shop = subarr[refs[j*3]].shop;
+                cost = master.cost;
+                shop = master.shop;
             }
         }
         refs[maxj*3]++;
@@ -222,7 +252,7 @@ function genLineCase(size) {
 
 function calc() {
     var input = document.getElementById('input').value;
-    var data = input.split(/\s/);
+    var data = input.split(/\s+/);
     var P = parseInt(data[0]);
     var costs = data.slice(1, P+1);
     for (var i = 0; i < P; i++) {
@@ -234,11 +264,37 @@ function calc() {
     }
     var T = parseInt(data[P*3-1]);
     var out = '';
-    var solver = MoneyManyMany(costs, paths);
-    for (var i = 0; i < T; i++) {
-        var W = parseInt(data[P*3 + i*2]);
-        var Q = parseInt(data[P*3 + i*2 + 1]);
-        out += getFirstQ(solver, W, Q).join(' ') + '<br>';
+    try {
+        if (data.length < 1) {
+            throw new RangeError('No input');
+        }
+        if (isNaN(P)) {
+            throw new TypeError('Input P is not an integer');
+        }
+        if (P < 0) {
+            throw new RangeError('P cannot be less than 0');
+        }
+        if (data.length < P*3-1) {
+            throw new RangeError('Shop info is incomplete');
+        }
+        if (isNaN(T)) {
+            throw new TypeError('Input T is not an integer');
+        }
+        if (T < 0) {
+          throw new TypeError('T cannot be less than 0');
+        }
+        if (data.length < P*3-1+T*2) {
+            throw new RangeError('Not enough test data');
+        }
+        var solver = MoneyManyMany(costs, paths);
+        for (var i = 0; i < T; i++) {
+            var W = parseInt(data[P*3 + i*2]);
+            var Q = parseInt(data[P*3 + i*2 + 1]);
+            out += getFirstQ(solver, W, Q).join(' ') + '<br>';
+        }
+    }
+    catch (e) {
+        out += e.message;
     }
     document.getElementById('output').innerHTML = out;
 }
