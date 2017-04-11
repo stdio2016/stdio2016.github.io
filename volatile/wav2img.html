@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>sound to image</title>
+<link rel="stylesheet" type="text/css" href="../css/alertbox.css">
+</head>
+<body>
+<input type="file" id='in'><br>
+<button onclick='wav2img()'>wav -> img</button>
+<button onclick='img2wav()'>img -> wav</button>
+<button onclick='play()'>play!</button>
+<br>
+<canvas width='960' height='720'></canvas>
+<script>
+AudioContext = window.AudioContext || window.webkitAudioContext;
+var audioctx = new AudioContext();
+var fileInput = document.getElementById('in');
+var canvas = document.querySelector('canvas');
+var ctx = canvas.getContext('2d');
+var sound = null;
+
+function wav2img() {
+  var fr = new FileReader()
+  fr.onload = function() {
+    var dat = fr.result;
+    audioctx.decodeAudioData(dat, function (buffer){
+      sound = buffer;
+      drawSound();
+    }, function(){
+      alert('This is not a sound file');
+    });
+  };
+  fr.readAsArrayBuffer(fileInput.files[0]);
+}
+
+function img2wav() {
+  var fr = new FileReader()
+  fr.onload = function() {
+    var dat = fr.result;
+    var img = new Image();
+    img.onload = function () {
+      ctx.drawImage(img, 0, 0);
+      play();
+    };
+    img.onerror = function () {
+      alert('This is not an image file');
+    };
+    img.src = dat;
+  };
+  fr.readAsDataURL(fileInput.files[0]);
+}
+
+function drawSound() {
+  ctx.fillStyle = '#ff7f00';
+  ctx.fillRect(0, 0, 960, 720);
+  var img = ctx.getImageData(0, 0, 960, 720);
+  var dat = img.data;
+  var buf = sound.getChannelData(0);
+  var ratio = audioctx.sampleRate / 44100;
+  var realLen = Math.floor(buf.length / ratio);
+  for (var i = 0; i < realLen; i++) {
+    var near = Math.floor(i * ratio);
+    var frac = i * ratio - near;
+    var linear = buf[near] * (1-frac) + buf[near+1] * frac;
+    var amp;
+    if (linear == 0) {
+      amp = 127;
+    }
+    else if (linear > 0) {
+      amp = Math.log2(linear) * 32 + 255;
+      if (amp < 127) amp = 127;
+    }
+    else {
+      amp = -Math.log2(-linear) * 32;
+      if (amp > 127) amp = 127;
+    }
+    // 8bit convertor
+    amp = Math.floor((linear*0.5+0.5)*256);
+    dat[i*4] = amp;
+    dat[i*4+1] = amp;
+    dat[i*4+2] = amp;
+    dat[i*4+3] = 255;
+  }
+  ctx.putImageData(img, 0, 0);
+}
+
+function play() {
+  var img = ctx.getImageData(0, 0, 960, 720);
+  var dat = img.data;
+  var buff = audioctx.createBuffer(1, dat.length / 4, 44100);
+  var snd = buff.getChannelData(0);
+  for (var i = 0; i < dat.length; i+= 4) {
+    var v = dat[i+1];
+    if (v > 127) {
+      snd[i/4] = Math.pow(2, (v-255)/32);
+    }
+    else {
+      snd[i/4] = -Math.pow(2, -v/32);
+    }
+    // 8bit convertor
+    snd[i/4] = v/255*2-1;
+  }
+  var node = audioctx.createBufferSource();
+  node.buffer = buff;
+  node.connect(audioctx.destination);
+  node.start(audioctx.currentTime);
+}
+</script>
+</body>
+</html>
