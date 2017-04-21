@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>data to image</title>
+<link rel="stylesheet" type="text/css" href="../css/alertbox.css">
+</head>
+<body>
+<input type="file" id='in'><br>
+<button onclick='data2img()'>data -> img</button>
+<button onclick='img2data()'>img -> data</button>
+<br>
+<canvas width='960' height='720'></canvas>
+<pre id='out'></pre>
+<script>
+var fileInput = document.getElementById('in');
+var canvas = document.querySelector('canvas');
+var ctx = canvas.getContext('2d');
+var sound = null;
+
+function data2img() {
+  var fr = new FileReader();
+  fr.onload = function() {
+    var dat = fr.result;
+    drawBinary(dat);
+  };
+  fr.readAsArrayBuffer(fileInput.files[0]);
+}
+
+function img2data() {
+  var fr = new FileReader()
+  fr.onload = function() {
+    var dat = fr.result;
+    var img = new Image();
+    img.onload = function () {
+      ctx.drawImage(img, 0, 0);
+      showData(decodeImg());
+    };
+    img.onerror = function () {
+      alert('This is not an image file');
+    };
+    img.src = dat;
+  };
+  fr.readAsDataURL(fileInput.files[0]);
+}
+
+function drawBinary(buf) {
+  var img = ctx.getImageData(0, 0, 960, 720);
+  var dat = img.data;
+  var arr = new Uint8Array(buf);
+  for (var y = 0; y < 720/8; y++) {
+    for (var x = 0; x < 960/8; x++) {
+      var bin = arr[y * (960/8) + x];
+      var red = bin >> 5 & 7;
+      var green = bin >> 2 & 7;
+      var blue = bin & 3;
+      red = red * 32 + 16;
+      green = green * 32 + 16;
+      blue = blue * 64 + 32;
+      for (var i = 0; i < 8; i++) {
+        var index = ((y*8 + i) * 960 + x*8) * 4;
+        for (var j = 0; j < 8; j++) {
+          dat[index + j*4 + 0] = red;
+          dat[index + j*4 + 1] = green;
+          dat[index + j*4 + 2] = blue;
+          dat[index + j*4 + 3] = 255;
+        }
+      }
+    }
+  }
+  ctx.putImageData(img, 0, 0);
+}
+
+function decodeImg() {
+  var img = ctx.getImageData(0, 0, 960, 720);
+  var dat = img.data;
+  var maxSum = 255 * 8 * 8 + 1;
+  var out = new Uint8Array(720/8 * 960/8);
+  for (var y = 0; y < 720/8; y++) {
+    for (var x = 0; x < 960/8; x++) {
+      var sumR = 0, sumG = 0, sumB = 0;
+      for (var i = 0; i < 8; i++) {
+        var index = ((y*8 + i) * 960 + x*8) * 4;
+        for (var j = 0; j < 8; j++) {
+          sumR += dat[index + j*4 + 0];
+          sumG += dat[index + j*4 + 1];
+          sumB += dat[index + j*4 + 2];
+        }
+      }
+      var rp = Math.floor(sumR / maxSum * 8);
+      var gp = Math.floor(sumG / maxSum * 8);
+      var bp = Math.floor(sumB / maxSum * 4);
+      out[y * 960/8 + x] = rp << 5 | gp << 2 | bp;
+    }
+  }
+  return out;
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+}
+
+function showData(buffer) {
+  var sb = [];
+  for (var i = 0; i < buffer.length; i++) {
+    if (buffer[i] == 0) break;
+    sb.push(String.fromCharCode(buffer[i]));
+  }
+  var out = document.getElementById('out');
+  out.innerHTML = escapeHtml(sb.join(''));
+}
+</script>
+</body>
+</html>
