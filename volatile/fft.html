@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset='utf8'>
+  <title>Fast Fourier Transform</title>
+  <script src='/js/fft.js'></script>
+</head>
+<body>
+<script>
+function addFreq(freq, band, amplitude , table) {
+  var min = Math.max(Math.floor(freq - band * 5), 1);
+  var max = Math.min(freq + band * 5, table.length/4);
+  var con = 1 / Math.sqrt(2*Math.PI*band);
+  for (var i=min; i<max; i++) {
+    var norm = con * Math.exp(-(i-freq)*(i-freq)/(2*band*band)) * amplitude;
+    var r = Math.random() * Math.PI * 2;
+    table[i*2+0] += norm * Math.cos(r);
+    table[i*2+1] += norm * Math.sin(r);
+    table[table.length-i*2] += norm * Math.cos(r);
+    table[table.length-i*2+1] -= norm * Math.sin(r);
+  }
+}
+function createSmp(freq, band) {
+  var fftsize = 65536*8;
+  var table = new Float64Array(fftsize);
+  var unit = fftsize/(44100*2);
+  for (var i = 1; i < 45; i++) {
+    addFreq(i * unit * freq, i * unit * band, 0.2 * Math.exp(-i * 0.25), table);
+  }
+  var eternal = stdio2017.FFT.transform(table, false);
+  var buff = actx.createBuffer(1, fftsize/2, 44100);
+  var dat = buff.getChannelData(0);
+  for (var i = 0; i < fftsize/2; i++) {
+    dat[i] = eternal[i*2];
+  }
+  return buff;
+}
+actx = new AudioContext();
+</script>
+</body>
+</html>
