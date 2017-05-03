@@ -14,19 +14,22 @@ function addFreq(freq, band, amplitude , table) {
   var con = 1 / Math.sqrt(2*Math.PI*band);
   for (var i=min; i<max; i++) {
     var norm = con * Math.exp(-(i-freq)*(i-freq)/(2*band*band)) * amplitude;
-    var r = Math.random() * Math.PI * 2;
+    var r = i*(i-min)*(i-max);
     table[i*2+0] += norm * Math.cos(r);
     table[i*2+1] += norm * Math.sin(r);
     table[table.length-i*2] += norm * Math.cos(r);
     table[table.length-i*2+1] -= norm * Math.sin(r);
   }
 }
+var tb = [-31,-12,-19,-38,-55, -48,-48,-44,-67,-57, -41,-40,-42,-44,-51, -52,-55,-54,-53];
 function createSmp(freq, band) {
-  var fftsize = 65536*8;
+  var fftsize = 65536*2;
   var table = new Float64Array(fftsize);
   var unit = fftsize/(44100*2);
+  var t = 0;
   for (var i = 1; i < 45; i++) {
-    addFreq(i * unit * freq, i * unit * band, 0.2 * Math.exp(-i * 0.25), table);
+    t = tb[i-1] ? tb[i-1] : t - 3;
+    addFreq(i * unit * freq, i * unit * band, Math.pow(10, t*0.05), table);
   }
   var eternal = stdio2017.FFT.transform(table, false);
   var buff = actx.createBuffer(1, fftsize/2, 44100);
@@ -37,6 +40,81 @@ function createSmp(freq, band) {
   return buff;
 }
 actx = new AudioContext();
+</script>
+<script>
+var fakePnn = createSmp(440, 1);
+var keyNames=["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
+var globNode = null;
+for (var i=0;i<keyNames.length;i++) {
+  document.write('<button id="btnKey'+i+'">'+keyNames[i]+'</button>');
+  var btn = window["btnKey"+i];
+  (function (i) {
+    var node;
+    var play = function () {
+      if (node) return;
+      node = actx.createBufferSource();
+      node.buffer = fakePnn;
+      node.loop = true;
+      node.playbackRate.value = Math.pow(2, (i-9)/12);
+      var g = actx.createGain();
+      g.gain.setValueAtTime(0.5, actx.currentTime);
+      //g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + 2 / node.playbackRate.value);
+      node.connect(g);
+      g.connect(actx.destination);
+      node.start ? node.start() : node.noteOn();
+    };
+    btn.ontouchstart = play;
+    btn.onmousedown = function () {
+      play();
+      globNode = node; node = null;
+    };
+    btn.ontouchend = function () {
+      node.disconnect(); node.loop = false;
+      node = null;
+    };
+  })(i);
+}
+window.onmouseup = function () {
+  if (globNode) {
+    globNode.disconnect(); globNode.loop = false;
+    globNode = null;
+  }
+};
+
+function onkeydown(e){
+  switch(e.key.toLowerCase()){
+    case "a": btnKey0.ontouchstart(); break;
+    case "s": btnKey2.ontouchstart(); break;
+    case "d": btnKey4.ontouchstart(); break;
+    case "f": btnKey5.ontouchstart(); break;
+    case "g": btnKey7.ontouchstart(); break;
+    case "h": btnKey9.ontouchstart(); break;
+    case "j": btnKey11.ontouchstart(); break;
+    case "w": btnKey1.ontouchstart(); break;
+    case "e": btnKey3.ontouchstart(); break;
+    case "t": btnKey6.ontouchstart(); break;
+    case "y": btnKey8.ontouchstart(); break;
+    case "u": btnKey10.ontouchstart(); break;
+  }
+}
+window.addEventListener('keydown', onkeydown);
+window.addEventListener('keyup', onkeyup);
+function onkeyup(e){
+  switch(e.key.toLowerCase()){
+    case "a": btnKey0.ontouchend(); break;
+    case "s": btnKey2.ontouchend(); break;
+    case "d": btnKey4.ontouchend(); break;
+    case "f": btnKey5.ontouchend(); break;
+    case "g": btnKey7.ontouchend(); break;
+    case "h": btnKey9.ontouchend(); break;
+    case "j": btnKey11.ontouchend(); break;
+    case "w": btnKey1.ontouchend(); break;
+    case "e": btnKey3.ontouchend(); break;
+    case "t": btnKey6.ontouchend(); break;
+    case "y": btnKey8.ontouchend(); break;
+    case "u": btnKey10.ontouchend(); break;
+  }
+}
 </script>
 </body>
 </html>
