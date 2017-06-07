@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
@@ -6,13 +6,22 @@
 <title>Random music code generator</title>
 <script>
 var ptcTable = [
-  [2,2,2,1,2,2,1],
-  [2,2,2,1,2,2,1],
-  [2,2,2,1,2,2,1],
-  [2,2,2,1,2,2,1],
-  [2,2,2,1,2,2,1],
-  [2,2,2,1,2,2,1],
-  [2,2,2,1,2,2,1]
+  [4,4,2,2,2,2,4],
+  [4,4,4,2,2,2,2],
+  [2,4,4,2,2,2,2],
+  [2,2,2,4,4,2,1],
+  [2,2,2,4,4,4,2],
+  [2,2,2,2,4,4,4],
+  [4,2,2,1,2,4,4]
+];
+var ptcTable2 = [
+  [4,1,2,3,3,2,1],
+  [1,4,1,2,3,3,2],
+  [2,1,4,1,2,3,3],
+  [3,2,1,4,1,2,1],
+  [3,3,2,1,4,1,2],
+  [2,3,3,2,1,4,1],
+  [1,2,2,1,2,1,4]
 ];
 
 var rhythmTable = [
@@ -59,22 +68,26 @@ function randomNext(now, table){
 }
 
 var nPtcTable = genTable(ptcTable);
+var nBassTable = genTable(ptcTable2);
 var nRhythmTable = genTable(rhythmTable);
 var current = {pitch: 0, pos: 0};
 function nextNote(){
-  var out ='';
+  var out ='', note;
+  do {
   var nextPos = randomNext(current.pos, nRhythmTable);
   if (nextPos <= current.pos){
     nextPos += 8;
   }
   var diff = nextPos - current.pos;
   current.pitch = randomNext(current.pitch, nPtcTable);
-  out = abcName[current.pitch] + lenName[diff];
+  note = abcName[current.pitch] + lenName[diff];
   if(current.pos == 0){
-    var ptc = randomNext(current.pos, nRhythmTable);
-    out = ' ' + out + '!1' + abcName[ptc] + '1!0';
+    var ptc = randomNext(current.pitch, nBassTable);
+    note = ' ' + note + '!1' + abcName[ptc] + '1!0';
   }
   current.pos = nextPos % 8;
+    out += note;
+  } while (current.pos != 0);
   if(document.getElementById('out').innerText == ''){
     out = '!1<!0' + out;
   }
