@@ -209,8 +209,9 @@ function unlock(){
 
   src.buffer = fakePno.sample;
 
-  src.connect(gainNode);
-  src.start(0);
+  src.connect(master);
+  if (src.noteOn) src.noteOn(0);
+  else if (src.start) src.start(0);
   if(!sessionStorage.volatileMus_ShowPermaLink){
     document.getElementById('warn').innerHTML = '';
   }
