@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html class="fullscreen">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset='utf-8'>
+  <title>麻糬</title>
+  <link rel="stylesheet" type="text/css" href="../../shapeclear-html/css/fullscreen.css">
+</head>
+<body style="overflow:hidden;">
+<div id=做人 class="game-div">
+<canvas id=canvas style="margin:8px;border:1px solid; height:400%; width:400%;">你做人實在太失敗，連瀏覽器都不想理你</canvas>
+</div>
+<script>
+onerror = function () {
+  做人.innerHTML = "你做人實在太失敗，連瀏覽器都不想理你";
+};
+</script>
+<script>
+var canvas = window.canvas || document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+const MAXWIDTH = 400, MAXHEIGHT = 200, GRIDSIZE = 4;
+var precomposed = new Float32Array(MAXWIDTH * MAXHEIGHT);
+var force = new Float32Array(MAXWIDTH * MAXHEIGHT);
+onload = function () {
+  onresize();
+};
+onresize = function () {
+  var rect = document.body.getClientRects()[0];
+  var width = Math.min(Math.floor(rect.width), innerWidth, MAXWIDTH * GRIDSIZE + 25) - 25;
+  var height = Math.min(Math.floor(rect.height), innerHeight, MAXHEIGHT * GRIDSIZE + 25) - 25;
+  canvas.width = width / GRIDSIZE;
+  canvas.height = height / GRIDSIZE;
+  canvas.style.width = width + "px";
+  canvas.style.height = height + "px";
+  drawMochiAt([-Infinity, -Infinity]);
+};
+
+var lastTapTime = -123, lastX = 0, lastY = 0;
+const DOUBLE_TAP_TIME = 0.4, DOUBLE_TAP_RADIUS = 16;
+function getMousePos(e) {
+  return [e.clientX - e.target.offsetLeft, e.clientY - e.target.offsetTop];
+};
+canvas.ontouchstart = function (e) {
+  var pos = getMousePos(e.targetTouches[0]);
+  if (e.timeStamp < lastTapTime + DOUBLE_TAP_TIME * 1000
+  && Math.abs(pos[0]-lastX) + Math.abs(pos[1]-lastY) < DOUBLE_TAP_RADIUS) {
+    console.log("double tap");
+    putMochiAt(pos);
+    lastTapTime = 0;
+  } 
+  else {
+    lastTapTime = e.timeStamp;
+  }
+  lastX = pos[0]; lastY = pos[1];
+};
+canvas.onmousemove = function (e) {
+  var pos = getMousePos(e);
+  drawMochiAt(pos);
+};
+canvas.ontouchmove = function (e) {
+  var pos = getMousePos(e.targetTouches[0]);
+  drawMochiAt(pos);
+};
+canvas.onclick = function (e) {
+  var pos = getMousePos(e);
+  putMochiAt(pos);
+};
+canvas.onmouseleave = function () {
+  drawMochiAt([-Infinity, -Infinity]);
+};
+
+const FORCE_STRENGTH = 200;
+
+function putMochiAt(pos) {
+  let x = pos[0]/GRIDSIZE, y = pos[1]/GRIDSIZE;
+  for (let j = 0; j < MAXHEIGHT; j++) {
+    for (let i = 0; i < MAXWIDTH; i++) {
+      const dist = Math.max((x-i)*(x-i) + (y-j)*(y-j), 0.5);
+       precomposed[j * MAXWIDTH + i] += FORCE_STRENGTH/dist;
+    }
+  }
+  drawMochiAt(pos);
+}
+
+function drawMochiAt(pos) {
+  const x = pos[0]/GRIDSIZE, y = pos[1]/GRIDSIZE;
+  for (let j = 0; j < MAXHEIGHT; j++) {
+    for (let i = 0; i < MAXWIDTH; i++) {
+      const dist = Math.max((x-i)*(x-i) + (y-j)*(y-j), 0.5);
+      force[j * MAXWIDTH + i] = precomposed[j * MAXWIDTH + i] + FORCE_STRENGTH/dist;
+    }
+  }
+  const w = Math.ceil(canvas.width), h = Math.ceil(canvas.height);
+  let img = ctx.getImageData(0,0,w,h), d = img.data;
+  for (let j = 0; j < h ; j++) {
+    for (let i = 0; i < w; i++) {
+      const p = (j * w + i) * 4, f = force[j * MAXWIDTH + i];
+      if (f > 32) {
+        d[p+0] = d[p+1] = d[p+2] = 255;
+      }
+      else if (f > 16) {
+        d[p+0] = 0, d[p+1] = 255, d[p+2] = 0;
+      }
+      else if (f > 6) {
+        d[p+0] = d[p+1] = d[p+2] = 255;
+      }
+      else if (f > 4) {
+        d[p+0] = 255, d[p+1] = d[p+2] = 0;
+      }
+      else if (f > 1.25) {
+        d[p+0] = d[p+1] = d[p+2] = 255;
+      }
+      else if (f > 1) {
+        d[p+0] = d[p+1] = d[p+2] = 0;
+      }
+      else {
+        d[p+0] = d[p+1] = d[p+2] = 255;
+      }
+      d[p+3] = 255;
+    }
+  }
+  ctx.putImageData(img,0,0);
+}
+</script>  
+</body>
+</html>
