@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="fullscreen">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
   <meta charset='utf-8'>
   <title>麻糬</title>
   <link rel="stylesheet" type="text/css" href="../../shapeclear-html/css/fullscreen.css">
@@ -18,7 +18,7 @@ onerror = function () {
 <script>
 var canvas = window.canvas || document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
-const MAXWIDTH = 400, MAXHEIGHT = 200, GRIDSIZE = 4;
+const MAXWIDTH = 400, MAXHEIGHT = 225, GRIDSIZE = 2;
 var precomposed = new Float32Array(MAXWIDTH * MAXHEIGHT);
 var force = new Float32Array(MAXWIDTH * MAXHEIGHT);
 onload = function () {
@@ -40,7 +40,7 @@ const DOUBLE_TAP_TIME = 0.4, DOUBLE_TAP_RADIUS = 16;
 function getMousePos(e) {
   return [e.clientX - e.target.offsetLeft, e.clientY - e.target.offsetTop];
 };
-canvas.ontouchstart = function (e) {
+/*canvas.ontouchstart = function (e) {
   var pos = getMousePos(e.targetTouches[0]);
   if (e.timeStamp < lastTapTime + DOUBLE_TAP_TIME * 1000
   && Math.abs(pos[0]-lastX) + Math.abs(pos[1]-lastY) < DOUBLE_TAP_RADIUS) {
@@ -52,7 +52,7 @@ canvas.ontouchstart = function (e) {
     lastTapTime = e.timeStamp;
   }
   lastX = pos[0]; lastY = pos[1];
-};
+};*/
 canvas.onmousemove = function (e) {
   var pos = getMousePos(e);
   drawMochiAt(pos);
@@ -95,19 +95,19 @@ function drawMochiAt(pos) {
   for (let j = 0; j < h ; j++) {
     for (let i = 0; i < w; i++) {
       const p = (j * w + i) * 4, f = force[j * MAXWIDTH + i];
-      if (f > 32) {
+      if (f > 11) {
         d[p+0] = d[p+1] = d[p+2] = 255;
       }
-      else if (f > 16) {
+      else if (f > 9) {
         d[p+0] = 0, d[p+1] = 255, d[p+2] = 0;
       }
-      else if (f > 6) {
+      else if (f > 2.5) {
         d[p+0] = d[p+1] = d[p+2] = 255;
       }
-      else if (f > 4) {
+      else if (f > 2.25) {
         d[p+0] = 255, d[p+1] = d[p+2] = 0;
       }
-      else if (f > 1.25) {
+      else if (f > 1.1) {
         d[p+0] = d[p+1] = d[p+2] = 255;
       }
       else if (f > 1) {
