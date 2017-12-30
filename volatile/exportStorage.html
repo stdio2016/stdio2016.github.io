@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset='utf8'>
+  <link rel="stylesheet" href="/css/homepage.css">
+  <script src='/js/perlin.js'></script>
+  <script src='https://cdn.rawgit.com/eligrey/FileSaver.js/c3e4a450/FileSaver.js'></script>
+</head>
+<body>
+<script>
+try {
+  var test = localStorage;
+  var good = test.getItem("87");
+}
+catch (e) {
+  alert("Your browserdoes not support local storage, or you are in private browsing mode");
+}
+
+function importStorage() {
+  if (file.files.length == 0) {
+    alert("Please select a file"); return;
+  }
+  var k = key.value;
+  if (k == "") {
+    alert("Please enter key name"); return;
+  }
+  var f = file.files[0];
+  if (f.size > 5000000) {
+    alert("File is too big to fit into local storage"); return;
+  }
+  var reader = new FileReader();
+  reader.onloadend = function () {
+    try {
+      localStorage.setItem(k ,reader.result);
+    } catch (e) {
+      alert("Failed to import storage. Maybe quota exceeded");
+    }
+  };
+  reader.readAsText(f);
+}
+
+function exportStorage() {
+  var k = key.value;
+  if (k == "") {
+    alert("Please enter key name"); return;
+  }
+  var data = localStorage.getItem(k);
+  if (data === null) {
+    alert("key does not exist"); return;
+  }
+  var blob = new Blob([data], {type: "text/plain;charset=utf-8"});
+  saveAs(blob, k.replace(/[^A-Za-z0-9-.]/g, "_") + ".txt");
+}
+
+function cancel() {
+  key.value = '';
+  file.value = '';
+}
+</script>
+<h1>Import and Export localStorage</h1>
+<hr>
+<p>Enter key: <input id=key type=text></p>
+<p>Upload a file: <input id=file type=file></p>
+<p>
+<button onclick="importStorage()">Import</button>
+<button onclick="exportStorage()">Export</button>
+<button onclick="cancel()">Cancel</button>
+</p>
+</body>
+</html>
