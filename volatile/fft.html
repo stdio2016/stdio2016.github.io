@@ -21,7 +21,8 @@ function addFreq(freq, band, amplitude , table) {
     table[table.length-i*2+1] -= norm * Math.sin(r);
   }
 }
-var tb = [-31,-12,-19,-38,-55, -48,-48,-44,-67,-57, -41,-40,-42,-44,-51, -52,-55,-54,-53];
+//var tb = [-31,-12,-19,-38,-55, -48,-48,-44,-67,-57, -41,-40,-42,-44,-51, -52,-55,-54,-53];
+var tb = [-5,-34,-20,-43];
 function createSmp(freq, band) {
   var fftsize = 65536*2;
   var table = new Float64Array(fftsize);
@@ -42,7 +43,7 @@ function createSmp(freq, band) {
 actx = new AudioContext();
 </script>
 <script>
-var fakePnn = createSmp(440, 1);
+var fakePnn = createSmp(440*4, 3);
 var keyNames=["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
 var globNode = null;
 for (var i=0;i<keyNames.length;i++) {
