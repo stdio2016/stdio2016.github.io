@@ -77,9 +77,9 @@ function draw(red, green, blue){
     for(var i=0;i<height;i++){
         for(var j=0;j<width;j++){
             var index = (i * width + j) * 4;
-            data[index + 0] = ~~((perlin[i][j] * 0.2 + 0.8) * red);
-            data[index + 1] = ~~((perlin[i][j] * 0.2 + 0.8) * green);
-            data[index + 2] = ~~((perlin[i][j] * 0.2 + 0.8) * blue);
+            data[index + 0] = ~~(perlin[i][j] * 48 + 0.8125 * red);
+            data[index + 1] = ~~(perlin[i][j] * 48 + 0.8125 * green);
+            data[index + 2] = ~~(perlin[i][j] * 48 + 0.8125 * blue);
             data[index + 3] = 255;
         }
     }
@@ -87,6 +87,6 @@ function draw(red, green, blue){
     document.documentElement.style.backgroundImage='url("' + canvas.toDataURL() + '")';
 }
 if(!window.backgroundColor)
-    window.backgroundColor = [144, 238, 144];
+    window.backgroundColor = [144, 255, 144];
 draw(backgroundColor[0], backgroundColor[1], backgroundColor[2]);
 })();
