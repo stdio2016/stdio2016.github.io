@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<title>A game</title>
+<style>
+#gameTb td {
+    border-radius: 10px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    vertical-align: middle;
+}
+.red {
+    background-color: #faa;
+}
+.yellow {
+    background-color: #dd8;
+}
+.blue {
+    background-color: #aaf;
+}
+.purple {
+    background-color: #c6c;
+    color: white;
+}
+</style>
+</head>
+<body onload='init()'>
+<table id='gameTb'>
+</table>
+<p>You cleared <span id="scoreSpan">0</span> 50's.</p>
+<script>
+let gameTb = document.getElementById('gameTb');
+let board = [];
+let havefun = document.getElementById('scoreSpan');
+let score = 0;
+const BOARD_HEIGHT = 6;
+const BOARD_WIDTH = 6;
+function randColor() {
+    return Math.floor(Math.random() * 3);
+}
+
+function init() {
+    for (var i = 0; i < BOARD_HEIGHT; i++) {
+        let row = gameTb.insertRow();
+        let y = [];
+        for (var j = 0; j < BOARD_WIDTH; j++) {
+            let cell = row.insertCell();
+            let txt = new Text();
+            cell.appendChild(txt);
+            y.push({color: randColor(), size: 1});
+            cell.onclick = clickhandle;
+            cell.pos = [j,i];
+        }
+        board.push(y);
+    }
+    show();
+}
+
+function show() {
+    for (var i = 0; i < BOARD_HEIGHT; i++) {
+        let row = gameTb.rows[i];
+        for (var j = 0; j < BOARD_WIDTH; j++) {
+            let cell = row.cells[j];
+            let m = board[i][j];
+            cell.className = ["red", "yellow", "blue", "purple"][m.color];
+            cell.firstChild.textContent = m.size == 1 ? "" : m.size;
+        }
+    }
+}
+
+function clickhandle(e) {
+    var [x,y] = e.target.pos;
+    var cell = board[y][x];
+    var color = cell.color;
+    cell.size = tr(x,y, color);
+    if (color == 3 && cell.size > 50) {
+        cell.color = -1;
+        score += cell.size / 50;
+        cell.size = 0;
+        havefun.textContent = score;
+    }
+    else if (cell.size >= 50) {
+        cell.color = 3;
+        cell.size = 50;
+    }
+    else {
+        cell.color = color;
+    }
+    fall();
+    show();
+}
+
+function tr(x,y, color){
+    if (x < 0 || x >= BOARD_WIDTH || y < 0 || y >= BOARD_HEIGHT) return 0;
+    var cell = board[y][x];
+    if (cell.color == color) {
+        var sum = cell.size;
+        cell.color = -1;
+        cell.size = 0;
+        sum += tr(x+1,y, color);
+        sum += tr(x-1,y, color);
+        sum += tr(x,y+1, color);
+        sum += tr(x,y-1, color);
+        return sum;
+    }
+    return 0;
+}
+
+function fall() {
+    for (var i = 0; i < BOARD_WIDTH; i++) {
+        var ptr = BOARD_HEIGHT - 1;
+        for (var j = BOARD_HEIGHT-1; j >= 0 ; j--) {
+            board[ptr][i] = board[j][i];
+            if (board[j][i].color != -1) ptr--;
+        }
+        for (ptr = ptr; ptr >= 0; ptr--) {
+            board[ptr][i] = {color: randColor(), size: 1};
+        }
+    }
+}
+</script>
+</body>
+</html>
