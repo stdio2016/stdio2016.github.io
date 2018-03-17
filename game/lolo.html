@@ -7,8 +7,8 @@
 <style>
 #gameTb td {
     border-radius: 10px;
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     text-align: center;
     vertical-align: middle;
 }
@@ -20,6 +20,9 @@
 }
 .blue {
     background-color: #aaf;
+}
+.green {
+    background-color: #8fb;
 }
 .purple {
     background-color: #c6c;
@@ -38,8 +41,9 @@ let havefun = document.getElementById('scoreSpan');
 let score = 0;
 const BOARD_HEIGHT = 6;
 const BOARD_WIDTH = 6;
+const COLOR_COUNT = 3;
 function randColor() {
-    return Math.floor(Math.random() * 3);
+    return Math.floor(Math.random() * COLOR_COUNT);
 }
 
 function init() {
@@ -50,12 +54,13 @@ function init() {
             let cell = row.insertCell();
             let txt = new Text();
             cell.appendChild(txt);
-            y.push({color: randColor(), size: 1});
+            y.push({color: -1, size: 1});
             cell.onclick = clickhandle;
             cell.pos = [j,i];
         }
         board.push(y);
     }
+    fall();
     show();
 }
 
@@ -74,28 +79,34 @@ function show() {
 function clickhandle(e) {
     var [x,y] = e.target.pos;
     var cell = board[y][x];
+    var size = cell.size;
     var color = cell.color;
     cell.size = tr(x,y, color);
-    if (color == 3 && cell.size > 50) {
+    if (color == COLOR_COUNT && cell.size > 50) {
         cell.color = -1;
         score += cell.size / 50;
         cell.size = 0;
         havefun.textContent = score;
     }
     else if (cell.size >= 50) {
-        cell.color = 3;
+        cell.color = COLOR_COUNT;
         cell.size = 50;
     }
     else {
         cell.color = color;
     }
     fall();
-    show();
+    if (size != cell.size) {
+        show();
+        return true;
+    }
+    return false;
 }
 
 function tr(x,y, color){
     if (x < 0 || x >= BOARD_WIDTH || y < 0 || y >= BOARD_HEIGHT) return 0;
     var cell = board[y][x];
+    if (cell.color == -1) return 0;
     if (cell.color == color) {
         var sum = cell.size;
         cell.color = -1;
@@ -117,9 +128,84 @@ function fall() {
             if (board[j][i].color != -1) ptr--;
         }
         for (ptr = ptr; ptr >= 0; ptr--) {
-            board[ptr][i] = {color: randColor(), size: 1};
+            board[ptr][i] = {color: -1, size: 1};
         }
     }
+    var all = [];
+findSol:
+    for (i = 0; i < BOARD_HEIGHT; i++) {
+        for (j = 0; j < BOARD_WIDTH; j++) {
+            let color = board[i][j].color;
+            if (j > 0) {
+                if (color == board[i][j-1].color && color != -1) {
+                    break findSol;
+                }
+                if (color == -1 && board[i][j-1].color != COLOR_COUNT) {
+                    all.push([i, j, i, j-1]);
+                }
+                if (color != COLOR_COUNT && board[i][j-1].color == -1) {
+                    all.push([i, j-1, i, j]);
+                }
+            }
+            if (i > 0) {
+                if (color == board[i-1][j].color && color != -1) {
+                    break findSol;
+                }
+                if (color == -1 && board[i-1][j].color != COLOR_COUNT) {
+                    all.push([i, j, i-1, j]);
+                }
+                if (color != COLOR_COUNT && board[i-1][j].color == -1) {
+                    all.push([i-1, j, i, j]);
+                }
+            }
+        }
+    }
+    var rareCase = false;
+    if (i == BOARD_HEIGHT && j == BOARD_WIDTH) {
+        // no solution
+        if (all.length == 0) rareCase = true;
+        else {
+            var r = Math.random() * all.length | 0;
+            var [y,x,y2,x2] = all[r];
+            if (board[y2][x2].color == -1) {
+                var rc = randColor();
+                board[y2][x2].color = rc;
+                board[y][x].color = rc;
+            }
+            else {
+                board[y][x].color = board[y2][x2].color;
+            }
+        }
+    }
+    // fill board
+    if (rareCase) {
+        console.log("Rare case");
+    }
+    for (i = 0; i < BOARD_HEIGHT; i++) {
+        for (j = 0; j < BOARD_WIDTH; j++) {
+            if (board[i][j].color == -1) {
+                if (rareCase) {
+                    board[i][j].color = COLOR_COUNT;
+                    board[i][j].size = 50;
+                }
+                else {
+                    board[i][j].color = randColor();
+                }
+            }
+        }
+    }
+}
+
+var stupidAIActivated = 0;
+function stupidAI() {
+    do {
+        var x = Math.random()*BOARD_WIDTH|0, y = Math.random()*BOARD_HEIGHT|0;
+    } while (!clickhandle({target: gameTb.rows[y].cells[x]})) ;
+    stupidAIActivated = requestAnimationFrame(stupidAI);
+}
+
+function stopAI() {
+    cancelAnimationFrame(stupidAIActivated);
 }
 </script>
 </body>
