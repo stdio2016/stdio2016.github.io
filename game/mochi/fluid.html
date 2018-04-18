@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html class="fullscreen">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <meta charset='utf-8'>
+  <title>液體擴散</title>
+  <link rel="stylesheet" type="text/css" href="../../shapeclear-html/css/fullscreen.css">
+</head>
+<body style="overflow:hidden;">
+<div id=做人 class="game-div">
+<canvas id=canvas style="margin:8px;border:1px solid; height:400%; width:400%; image-rendering: optimizespeed;">你做人實在太失敗，連瀏覽器都不想理你</canvas>
+</div>
+<button onclick="mode = 'wall';">wall</button><button onclick="mode = 'liquid';">liquid</button>
+<button onclick="mode = 'clearwall';">cleal wall</button>
+<script>
+onerror = function () {
+  做人.innerHTML = "你做人實在太失敗，連瀏覽器都不想理你";
+};
+</script>
+<script>
+var canvas = window.canvas || document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+const MAXWIDTH = 96, MAXHEIGHT = 63, GRIDSIZE = 5;
+var precomposed = new Int32Array(MAXWIDTH * MAXHEIGHT);
+var force = new Int32Array(MAXWIDTH * MAXHEIGHT);
+var wall = new Int32Array(MAXWIDTH * MAXHEIGHT);
+var mode = 'liquid';
+let evaporated = 0;
+let supplied = 0;
+onload = function () {
+  onresize();
+};
+onresize = function () {
+  var rect = document.body.getClientRects()[0];
+  var width = Math.min(Math.floor(rect.width), innerWidth, MAXWIDTH * GRIDSIZE + 25) - 25;
+  var height = Math.min(Math.floor(rect.height), innerHeight, MAXHEIGHT * GRIDSIZE + 25) - 25;
+  canvas.width = width / GRIDSIZE;
+  canvas.height = height / GRIDSIZE;
+  canvas.style.width = width + "px";
+  canvas.style.height = height + "px";
+};
+
+var lastTapTime = -123, lastX = 0, lastY = 0;
+const DOUBLE_TAP_TIME = 0.4, DOUBLE_TAP_RADIUS = 16;
+function getMousePos(e) {
+  return [e.clientX - e.target.offsetLeft, e.clientY - e.target.offsetTop];
+};
+/*canvas.ontouchstart = function (e) {
+  var pos = getMousePos(e.targetTouches[0]);
+  if (e.timeStamp < lastTapTime + DOUBLE_TAP_TIME * 1000
+  && Math.abs(pos[0]-lastX) + Math.abs(pos[1]-lastY) < DOUBLE_TAP_RADIUS) {
+    console.log("double tap");
+    putMochiAt(pos);
+    lastTapTime = 0;
+  } 
+  else {
+    lastTapTime = e.timeStamp;
+  }
+  lastX = pos[0]; lastY = pos[1];
+};*/
+canvas.onmousemove = function (e) {
+  var pos = getMousePos(e);
+  if (e.buttons) putMochiAt(pos);
+};
+canvas.ontouchmove = function (e) {
+  var pos = getMousePos(e.targetTouches[0]);
+  putMochiAt(pos);
+};
+canvas.onclick = function (e) {
+  var pos = getMousePos(e);
+  putMochiAt(pos);
+};
+
+const FORCE_STRENGTH = 50000;
+
+function putMochiAt(pos) {
+  let x = Math.floor(pos[0]/GRIDSIZE);
+  let y = Math.floor(pos[1]/GRIDSIZE);
+  if (mode == 'wall') {
+    wall[y * MAXWIDTH + x] = 1;
+  } 
+  else if (mode == 'clearwall'){
+    wall[y * MAXWIDTH + x] = 0;
+  }
+  else {
+    supplied += FORCE_STRENGTH;
+    precomposed[y * MAXWIDTH + x] += FORCE_STRENGTH;
+  }
+}
+
+function eachFrame() {
+  force.fill(0);
+  for (let j = 0; j < MAXHEIGHT; j++) {
+    for (let i = 0; i < MAXWIDTH; i++) {
+      const idx = j * MAXWIDTH + i;
+      var part = Math.trunc(precomposed[idx]/5);
+      var rem = part * 5;
+      evaporated += precomposed[idx] - rem;
+      if (i > 0 && wall[idx-1] == 0) {
+        rem -= part;
+        force[idx-1] += part;
+      }
+      if (i < MAXWIDTH-1 && wall[idx+1] == 0) {
+        rem -= part;
+        force[idx+1] += part;
+      }
+      if (j > 0 && part > 500 && wall[idx-MAXWIDTH] == 0) {
+        rem -= part-500;
+        force[idx-MAXWIDTH] += part-500;
+      }
+      if (j < MAXHEIGHT-1 && wall[idx+MAXWIDTH] == 0) {
+        rem -= part;
+        force[idx+MAXWIDTH] += part;
+      }
+      force[idx] += rem;
+    }
+  }
+  const w = Math.ceil(canvas.width), h = Math.ceil(canvas.height);
+  let img = ctx.getImageData(0,0,w,h), d = img.data;
+  for (let j = 0; j < h ; j++) {
+    for (let i = 0; i < w; i++) {
+      const p = (j * w + i) * 4, f = force[j * MAXWIDTH + i];
+      if (f > 64000) {
+        d[p+0] = 0, d[p+1] = 0, d[p+2] = 255;
+      }
+      else if (f > 16000) {
+        d[p+0] = 17*3, d[p+1] = 17*3, d[p+2] = 255;
+      }
+      else if (f > 4000) {
+        d[p+0] = 17*6, d[p+1] = 17*6, d[p+2] = 255;
+      }
+      else if (f > 1000) {
+        d[p+0] = 17*9, d[p+1] = 17*9; d[p+2] = 255;
+      }
+      else if (f > 1) {
+        d[p+0] = 17*12; d[p+1] = 17*12; d[p+2] = 255;
+      }
+      else if (f < 0) {
+        d[p+0] = d[p+1] = d[p+2] = 17*12;
+      }
+      else {
+        d[p+0] = d[p+1] = d[p+2] = 255;
+      }
+      if (wall[j * MAXWIDTH + i] == 1) {
+        d[p+0] = d[p+1] = d[p+2] = 0;
+      }
+      d[p+3] = 255;
+    }
+  }
+  ctx.putImageData(img,0,0);
+  var tmp = precomposed;
+  precomposed = force;
+  force = tmp;
+  requestAnimationFrame(eachFrame);
+}
+
+eachFrame();
+</script>  
+</body>
+</html>
