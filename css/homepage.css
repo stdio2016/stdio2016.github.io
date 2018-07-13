@@ -1,6 +1,6 @@
 html {
   background-color: rgb(144, 255, 144);
-  background-image: url("/image/background.png")
+  background-image: url("../image/background.png")
 }
 footer {
   text-align: center;
