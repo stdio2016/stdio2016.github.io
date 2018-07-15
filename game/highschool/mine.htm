@@ -1,0 +1,333 @@
+﻿<html>
+<head>
+<title>liquid adventure</title>
+</head>
+<script>
+//<!--
+var num;
+num=0;
+function ind(n)
+{
+  num=num*10+n;
+  if(num>=1000){num=1000; alert("Max: 1000");}
+  else alert(num);
+}
+function cl(){ num=0; alert(num); }
+
+var ani,jew,dia,liq,sal,bed,obs;
+var tool;
+function choose(t)
+{
+ tool=t;
+ switch(t)
+ {
+  case 1:
+   ani=0.5;
+   jew=0;
+   dia=0;
+   liq=7;
+   sal=7.5;
+   bed=0;
+   obs=0;
+   break;
+  case 2:
+   ani=0.5;
+   jew=1;
+   dia=0.2;
+   liq=6;
+   sal=7.3;
+   bed=0;
+   obs=0;
+   break;
+  case 3:
+   ani=0.5;
+   jew=2;
+   dia=0.2;
+   liq=5.3;
+   sal=5;
+   bed=0;
+   obs=2;
+   break;
+  case 4:
+  case 5:
+   ani=0.5;
+   jew=4;
+   dia=0.5;
+   liq=4;
+   sal=2.5;
+   bed=1.5;
+   obs=2;
+   break;
+ }
+ jew+=ani;
+ dia+=jew;
+ liq+=dia;
+ sal+=liq;
+ bed+=sal;
+ obs+=bed;
+}
+choose(1);
+var inv1,inv2;
+// 0煤 1鐵 2銅 3銀 4金 5鉈鏘 6鉈鍆 7鉈鑀 8鉈銻 9鍶鎳 10鍶鋅 11鍶鎵 12鍶銫
+// 13錫 14鈾 15鉛 16鉑 17銥 18鈳錏 19鈳鉭 20鹽
+// 21紅角 22黃方 23白晶 24綠球 25青體 26鑽石
+inv1=new Array(30*6);
+
+var name1,name2;
+name1=['煤','鐵','銅','銀','金','鉈鏘','鉈鍆','鉈鑀','鉈銻','鍶鎳','鍶鋅','鍶鎵','鍶銫'
+ ,'錫','鈾','鉛','鉑','銥','鈳錏','鈳鉭','鹽'
+ ,'紅角','黃方','白晶','綠球','青體','鑽石'];
+
+// 0石 1能 2組 3合 4成 5功 6大石頭 7巨石 8鵝卵石 9礫石 10岩床
+// 11沙 12土
+// 13魚 14史萊姆 15化石 16史萊姆化石 17草
+// 18黑曜石
+// 20~29 石英 30~39 水晶
+// 40水 41海水 42石油 43岩漿
+// liq. 44m 45x 46a 47i 48c 49u 50n 51b
+// 52苦力怕 53反苦力怕 54蘇打水 55雙氧水
+// 56王水 57稀硫酸
+inv2=new Array(60);
+name2=['石','能組','組合','合成','成功','功能','大石頭','巨石','鵝卵石','礫石','岩床'
+ ,'沙','土'
+ ,'魚','史萊姆','化石','史萊姆化石','草'
+ ,'黑曜石',''
+ ,'石英1','石英2','石英3','石英4','石英5','石英6','石英7','石英8','石英9','石英10'
+ ,'水晶1','水晶2','水晶3','水晶4','水晶5','水晶6','水晶7','水晶8','水晶9','水晶10'
+ ,'水','海水','石油','岩漿'
+ ,'liq.m','liq.x','liq.a','liq.i','liq.c','liq.u','liq.n','liq.b'
+ ,'苦力怕','反苦力怕','蘇打水','雙氧水'
+ ,'王水','稀硫酸'];
+
+var Sname=["粉","碎","小","","大","巨"];
+function getR()
+{
+ return Math.random();
+}
+
+function getS(id)
+{
+ var q; q=getR()*100;
+ var s;
+ if(q<15) s=0; // 1/8
+ else if(q<35) s=1; // 1/4
+ else if(q<55) s=2; // 1/2
+ else if(q<70) s=3; // 1
+ else if(q<80) s=4; // 2
+ else if(q<90) s=5; // 4
+ else if(q<95) s=14; // lots of 2
+ else s=15; // lots of 4
+ if(s<10)
+  inv1[id*6+s]++;
+ else
+  inv1[id*6+s-10]+=3;
+}
+
+
+function getSD()
+{
+ var q; q=getR()*100;
+ var s;
+ if(q<50) s=0; // 1/8
+ else if(q<75) s=1; // 1/4
+ else if(q<88) s=2; // 1/2
+ else if(q<95) s=3; // 1
+ else if(q<98) s=4; // 2
+ else if(q<99) s=5; // 4
+ else if(q<99.5) s=14; // lots of 2
+ else s=15; // lots of 4
+ if(s<10)
+  inv1[26*6+s]++;
+ else
+  inv1[26*6+s-10]+=3;
+}
+
+function getM()
+{
+ var q,s; q=getR()*100;
+ if(q<18) s=1;
+ else if(q<23.5) s=2;
+ else if(q<25.5) s=3;
+ else if(q<26.5) s=4;
+ else if(q<36.5) s=5;
+ else if(q<46.5) s=6;
+ else if(q<56.5) s=7;
+ else if(q<66.5) s=8;
+ else if(q<71.5) s=9;
+ else if(q<76.5) s=10;
+ else if(q<81.5) s=11;
+ else if(q<86.5) s=12;
+ else if(q<93) s=13;
+ else if(q<94) s=14;
+ else if(q<98) s=15;
+ else if(q<98.5) s=16;
+ else if(q<99) s=17;
+ else if(q<99.5) s=18;
+ else s=19;
+ return s;
+}
+
+
+function getRK()
+{
+ var q,s; q=getR()*100;
+ if(q<30) s=0;
+ else if(q<45) s=1;
+ else if(q<53) s=2;
+ else if(q<58) s=3;
+ else if(q<61) s=4;
+ else if(q<65) s=5;
+ else if(q<77) s=6;
+ else if(q<85) s=7;
+ else s=8;
+ return s;
+}
+
+function getJ()
+{
+ var q,s,t; q=getR()*100;
+ if(q<20) s=1;
+ else if(q<38) s=2;
+ else if(q<54) s=3;
+ else if(q<68) s=4;
+ else if(q<80) s=5;
+ else if(q<92) s=Math.floor((q-80)/1.2)+20;
+ else s=Math.floor((q-92)/0.8)+30;
+ if(s<10)
+ {
+  s+=20;
+  q=getR()*100;
+  if(q<40) t=0; // 1/8
+  else if(q<62) t=1; // 1/4
+  else if(q<78) t=2; // 1/2
+  else if(q<88) t=3; // 1
+  else if(q<94) t=4; // 2
+  else if(q<97) t=5; // 4
+  else if(q<99) t=14; // lots of 2
+  else t=15; // lots of 4
+  if(t<10)
+   inv1[s*6+t]++;
+  else
+   inv1[s*6+t-10]+=3;
+ }
+ else
+  inv2[s]++;
+}
+
+function getA()
+{
+ var q; q=getR()*100;
+ inv2[Math.floor(q/20)+13]++;
+}
+
+function getL()
+{
+ var q,s; q=getR()*100;
+ if(q<50) s=40;
+ else if(q<67) s=41;
+ else if(q<81.5) s=42;
+ else if(q<83) s=43;
+ else if(q<85) s=44;
+ else if(q<87) s=45;
+ else if(q<89) s=46;
+ else if(q<91) s=47;
+ else if(q<92) s=48;
+ else if(q<93) s=49;
+ else if(q<94) s=50;
+ else if(q<95) s=51;
+ else if(q<96) s=52;
+ else if(q<96.5) s=53;
+ else if(q<97.5) s=54;
+ else if(q<98.5) s=55;
+ else if(q<99.5) s=56;
+ else s=57;
+ return s;
+}
+
+function mine1()
+{
+ var p; p=getR()*100;
+ if(p<50) inv2[getRK()]++; //石
+ else if(p<55) inv2[11]++; //沙
+ else if(p<65) inv2[9]++; //礫石
+ else if(p<75) inv2[12]++; //土
+ else if(p<80) getS(0); //煤
+ else if(p<85) getS(getM());//金屬
+ else {//其他
+  p-=85;
+  if(p<ani) getA();
+  else if(p<jew) getJ();
+  else if(p<dia) getSD();
+  else if(p<liq) inv2[getL()]++;
+  else if(p<sal) getS(20);
+  else if(p<bed) inv2[10]++;
+  else inv2[12]++; //obs
+ }
+ if(tool==5 && (p=getR()*100) >85)
+ {
+  p-=85;
+  if(p<ani) getA();
+  else if(p<jew) getJ();
+  else if(p<dia) getSD();
+  else if(p<liq) inv2[getL()]++;
+  else if(p<sal) getS(20);
+  else if(p<bed) inv2[10]++;
+  else inv2[12]++; //obs
+ }
+}
+
+
+function mine()
+{
+ var i;
+ for(i=0;i<30*6;i++) inv1[i]=0;
+ for(i=0;i<60;i++) inv2[i]=0;
+ for(i=0;i<num;i++) mine1();
+ var tex;
+ tex="";
+ for(i=0;i<30*6;i++)
+ {
+  if(inv1[i]>0)
+  {
+   if(tex!='') tex+=', ';
+   tex+=name1[Math.floor(i/6)]+Sname[i%6]+'x'+inv1[i];
+  }
+ }
+ for(i=0;i<60;i++)
+ {
+  if(inv2[i]>0)
+  {
+   if(tex!='') tex+=', ';
+   tex+=name2[i]+'x'+inv2[i];
+  }
+ }
+ if(tex=='') alert("一無所獲");
+ else alert(tex);
+}
+//-->
+</script>
+<body>
+<p>mine</p>
+<p>
+<a href='javascript: choose(1)'>石</a>
+<a href='javascript: choose(2)'>鐵</a>
+<a href='javascript: choose(3)'>紅角</a>
+<a href='javascript: choose(4)'>鑚</a>
+<a href='javascript: choose(5)'>金</a>
+</p>
+<p>
+<a href='javascript: ind(1)'>1</a>
+<a href='javascript: ind(2)'>2</a>
+<a href='javascript: ind(3)'>3</a>
+<a href='javascript: ind(4)'>4</a>
+<a href='javascript: ind(5)'>5</a><br/>
+<a href='javascript: ind(6)'>6</a>
+<a href='javascript: ind(7)'>7</a>
+<a href='javascript: ind(8)'>8</a>
+<a href='javascript: ind(9)'>9</a>
+<a href='javascript: ind(0)'>0</a>
+<a href='javascript: cl()'>C</a>
+</p>
+<p><input type='button' value='OK' onclick='mine()'/></p>
+</body>
+</html>

@@ -1,0 +1,185 @@
+﻿<html>
+<head>
+<title>點數計算機 V7.0</title>
+</head>
+<script>//<![CDATA[
+var InA,InB,InC,InD,InE,modd=12;
+var pts,R;
+var slim;
+var noA;
+noA=0;
+function ran()
+{
+ InA=document.getElementById('aa').value*1;
+ InB=document.getElementById('bb').value*1;
+ InC=document.getElementById('cc').value*1;
+ InD=document.getElementById('dd').value*1;
+ InE=document.getElementById('ee').value*1;
+ if(InC>200 || InB>200 || InE>36) return;
+ slim=0;
+ if(noA==1){ slim=cnr(InA,2); InB+=cnr(InA,2); }
+ switch(modd)
+ {
+  case 12: pts=ea2b(InA,InB,1); R=InB+1;break;
+  case 34: pts=st4l(InA,InB,InC,InD); break;
+  case 56:
+   pts=ea2b(InA,InB*(InC*InD+2)+InC*InD*3-3,3); R=Math.floor(InB*(InC*InD+2)/3)+InC*InD-1; break;
+  case 78: slim=InA; cs8s(InA,InB); break;
+  case 111: pts=abc(InA,InB,InC,1); break;
+  case 1111: pts=abcd(InA,InB,InC,InD,InE); break;
+  case 20: slim=cnr(InA,2); pts=ea2b(InA,InB+cnr(InA,2),1); R=InB+cnr(InA,2)+1;break;
+  default: pts=0; R=0;
+ }
+ var i,str="<table><td>次數</td><td>∫</td><td>$</td>";
+ for(i=1;R>=i;i++)
+ {
+  //str+="<tr><td>"+i+"</td><td>"+sco(i)+"</td><td>"+coco(i)+"</td></tr>";
+ }
+// str+="<tr><td>X</td><td>"+sco(i)+"</td><td>0</td></tr></table>";
+// document.getElementById('oneout').innerHTML="可猜"+R+"次";
+ alert("可猜"+R+"次");
+// document.getElementById('out').innerHTML=str;
+}
+
+function ranone()
+{
+ var i=document.getElementById('nn').value*1;
+ alert("可得"+sco(i)+"∫和"+coco(i)+'$');
+}
+
+function cnr(a,b)
+{
+ var i,x=1;
+ for(i=1;b>=i;i++){
+  x*=a-i+1;
+  x/=i;
+ }
+ return x;
+}
+
+function ea2b(a,b,m)
+{
+ if(a>b){R=0; return 0;}
+ R=b+1;
+ if(b/m>a*a+slim)
+  return ea2b(a,a*a,1)+Math.round(
+   (b-a*a*m)*(a-1)*10/m);
+ return Math.round((5*a*a-10*a+10)*b/m)
+  -(35-25*a+30*cnr(a,2)+10*cnr(a,3));
+}
+
+function st4l(a,b,c,d)
+{
+ if(a>(b+d)||a>c){R=0; return 0;}
+ pts=ea2b(a,b+c+d-a,1)+3*ea2b(a,((b+d>c)?c:(b+d)),1)-2*ea2b(a,a,1);
+ R=b+c+d+((b+d>c)?c:(b+d));
+ return pts;
+}
+
+
+function cs8s(a,b)
+{
+ var f,e,rr;
+ f=0; e=1;
+ while(e<b)
+ {
+   e=e*2;
+   f=f+1;
+ }
+ rr=(2+(a-1)*3) * (b*2+(f-2)*e);
+ rr=Math.floor(rr/(2*e))+2;
+ rr=rr-Math.floor( (2*a-2) / (b-a+1) );
+
+// f(b/a)
+ f=0; e=1;
+ while(e*a<b)
+ {
+   e=e*2;
+   f=f+1;
+ }
+//a+a*f(b/a)+a*f(b/a)^2
+ var newb;
+ newb = a*(e*a*e)+(b*2+(f-2)*e*a)*(a*e);
+ if(f>a)
+ newb += (b*2+(f-2)*e*a)*(a*(2<<f)+(a-2)*e*a);
+ else
+ newb += (b*2+(f-2)*e*a)*(b*2+(f-2)*e*a);
+ pts=ea2b(a,newb,e*a*e);
+ R=rr;
+}
+
+function abc(a,b,c,m)
+{
+ if(b>c/m)
+  pts=ea2b(a,b,1)+2*ea2b(a,c,m)-2*ea2b(a,a,1);
+ else
+  pts=ea2b(a,c,m)+2*ea2b(a,b,1)-2*ea2b(a,a,1);
+ R=b+c-a+1;
+ return pts;
+}
+
+function abcd(a,b,c,d,e)
+{
+ pts=abc(a,b,c*c+2*d*e*c-(e+1)*d*d,c);
+ if(d==c)
+  R=b+d*e-a+1;
+ else if(d==0)
+  R=b+c-a+1;
+ else if(0>d || d>c || a>c+d*(e-1) || a>b)
+  {R=0; pts=0;}
+ else
+  R=b+c+d*e-a+e+1;
+ return pts;
+}
+
+function sco(n)
+{
+ if(n>R) return Math.round(pts/5);
+ if(n>R/2)
+  return Math.round(pts*(3*R-2*n-1)/(4*(R-1)));
+ else
+  return Math.round(pts*(R-n)/(R-1));
+}
+
+function coco(n)
+{
+if(R-n>InA*InA+slim)
+ return Math.round(pts*(R-n+1)/(R*InA))+cnr(InA-1,2)*(cnr(InA*InA+2,2)+(InA*InA+1)*(R-n-InA*InA));
+  return Math.round(pts*(R-n+1)/(R*InA))+cnr(InA-1,2)*cnr(R-n+2,2);
+}
+
+function setm(b)
+{
+modd=b;
+}
+
+function setnoA()
+{
+noA=1-noA;
+alert(noA);
+}
+// ]]>
+</script>
+<body>
+<p><a href="javascript: setm(12);">1A2B</a>
+<a href="javascript: setm(34);">3通4流</a><br/>
+<a href="javascript: setm(56);">5顏6色</a>
+<a href="javascript: setm(78);">7上8下</a><br/>
+<a href="javascript: setm(111);">ABC</a>
+<a href="javascript: setm(1111);">ABCD</a><br/>
+<a href="javascript: setm(20);">前序後序</a><br/>
+<a href="javascript: setnoA();">no A</a>
+</p>
+<p>A: <input type='text' id='aa'/><br/>
+B: <input type='text' id='bb'/><br/>
+C: <input type='text' id='cc'/><br/>
+D: <input type='text' id='dd'/><br/>
+E: <input type='text' id='ee'/><br/>
+<input type='button' value='ok' onclick='ran()'/><br/>
+n: <input type='text' id='nn'/><br/>
+<input type='button' value='ok' onclick='ranone()'/>
+</p>
+<div id="oneout"> --- </div>
+<div id="out"> --- </div>
+</body>
+</html>
