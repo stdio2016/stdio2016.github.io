@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html class="fullscreen">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <meta charset='utf-8'>
+  <title>麻糬</title>
+  <link rel="stylesheet" type="text/css" href="../../shapeclear-html/css/fullscreen.css">
+</head>
+<body style="overflow:hidden;">
+<div id=做人 class="game-div">
+<canvas id=canvas style="margin:8px;border:1px solid; height:400%; width:400%;">你做人實在太失敗，連瀏覽器都不想理你</canvas>
+</div>
+<script>
+onerror = function () {
+  做人.innerHTML = "你做人實在太失敗，連瀏覽器都不想理你";
+};
+</script>
+<script>
+var canvas = window.canvas || document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+const MAXWIDTH = 80, MAXHEIGHT = 45, GRIDSIZE = 10;
+const FORCE_STRENGTH = 1/20;
+var particles = [];
+var particleList = [];
+var gravity = {x:0, y:1};
+var maxx = 0, maxy = 0;
+
+for (let i = 0; i < MAXHEIGHT; i++) {
+  const p = [];
+  for (let j = 0; j < MAXWIDTH; j++) {
+    p.push(null);
+  }
+  particles.push(p);
+}
+
+class Particle {
+  constructor(x,y,next) {
+    this.x = x;
+    this.y = y;
+    this.vx = 0;
+    this.vy = 0;
+    this.next = next;
+  }
+  move() {
+    var inv = 1/FORCE_STRENGTH;
+    var vx = this.vx;
+    var vy = this.vy;
+    if (vx > inv) vx = inv;
+    if (vx < -inv) vx = -inv;
+    if (vy > inv) vy = inv;
+    if (vy < -inv) vy = -inv;
+    this.x = this.x + vx * FORCE_STRENGTH;
+    this.y = this.y + vy * FORCE_STRENGTH;
+    if (this.x > maxx - 0.5) {
+      this.x = maxx - 0.5;
+      this.vx = -this.vx;
+    }
+    else if (this.x < 0.5) {
+      this.x = 0.5;
+      this.vx = -this.vx;
+    }
+    if (this.y > maxy - 0.5) {
+      this.y = maxy - 0.5;
+      this.vy = -this.vy;
+    }
+    else if (this.y < 0.5) {
+      this.y = 0.5;
+      this.vy = -this.vy;
+    }
+  }
+  interact(other) {
+    var dx = this.x - other.x;
+    var dy = this.y - other.y;
+    var dist = Math.sqrt(dx*dx + dy*dy);
+    if (dist < 1) {
+      var pow = Math.min(1 / dist, 100);
+      dx = dx * pow;
+      dy = dy * pow;
+      var p = dx*(other.vx-this.vx) + dy*(other.vy-this.vy);
+      if (p > 0) {
+        this.vx += p * dx;
+        this.vy += p * dy;
+        other.vx -= p * dx;
+        other.vy -= p * dy;
+      }
+      this.x += (1-dist)/2 * dx;
+      this.y += (1-dist)/2 * dy;
+      other.x -= (1-dist)/2 * dx;
+      other.y -= (1-dist)/2 * dy;
+    }
+  }
+  interactAll(others) {
+    while (others !== null) {
+      this.interact(others);
+      others = others.next;
+    }
+  }
+};
+onload = function () {
+  onresize();
+};
+onresize = function () {
+  var rect = document.body.getClientRects()[0];
+  var width = Math.min(Math.floor(rect.width), innerWidth, MAXWIDTH * GRIDSIZE + 25) - 25;
+  var height = Math.min(Math.floor(rect.height), innerHeight, MAXHEIGHT * GRIDSIZE + 25) - 25;
+  canvas.width = width;
+  canvas.height = height;
+  canvas.style.width = width + "px";
+  canvas.style.height = height + "px";
+  maxx = width / GRIDSIZE;
+  maxy = height / GRIDSIZE;
+};
+
+var lastTapTime = -123, lastX = 0, lastY = 0;
+const DOUBLE_TAP_TIME = 0.4, DOUBLE_TAP_RADIUS = 16;
+function getMousePos(e) {
+  return [e.clientX - e.target.offsetLeft, e.clientY - e.target.offsetTop];
+};
+/*canvas.ontouchstart = function (e) {
+  var pos = getMousePos(e.targetTouches[0]);
+  if (e.timeStamp < lastTapTime + DOUBLE_TAP_TIME * 1000
+  && Math.abs(pos[0]-lastX) + Math.abs(pos[1]-lastY) < DOUBLE_TAP_RADIUS) {
+    console.log("double tap");
+    putMochiAt(pos);
+    lastTapTime = 0;
+  } 
+  else {
+    lastTapTime = e.timeStamp;
+  }
+  lastX = pos[0]; lastY = pos[1];
+};*/
+canvas.onmousemove = function (e) {
+  var pos = getMousePos(e);
+};
+canvas.ontouchmove = function (e) {
+  var pos = getMousePos(e.targetTouches[0]);
+};
+canvas.onclick = function (e) {
+  var pos = getMousePos(e);
+  putMochiAt(pos);
+};
+canvas.onmouseleave = function () {
+};
+
+function putMochiAt(pos) {
+  let x = pos[0]/GRIDSIZE + Math.random() * 0.1;
+  let y = pos[1]/GRIDSIZE + Math.random() * 0.1;
+  var xn = Math.min(x|0, MAXWIDTH-1);
+  var yn = Math.min(y|0, MAXHEIGHT-1);
+  var t = particles[yn][xn];
+  if (t) return;
+  var p = new Particle(x,y,t);
+  particles[yn][xn] = p;
+  particleList.push(p);
+}
+
+function drawParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.beginPath();
+  for (var i = 0; i < MAXHEIGHT; i++) {
+    for (var j = 0; j < MAXWIDTH; j++) {
+      var p = particles[i][j];
+      while (p !== null) {
+        ctx.moveTo(p.x * GRIDSIZE, p.y * GRIDSIZE);
+        ctx.arc(p.x * GRIDSIZE, p.y * GRIDSIZE, GRIDSIZE/2, 0, Math.PI*2);
+        p.vx += gravity.x/10;
+        p.vy += gravity.y/10;
+        p = p.next;
+      }
+      particles[i][j] = null;
+    }
+  }
+  ctx.fill();
+  
+  // move particles
+  for (var i = 0; i < particleList.length; i++) {
+    var p = particleList[i];
+    p.move();
+    var xn = Math.min(p.x|0, MAXWIDTH-1);
+    var yn = Math.min(p.y|0, MAXHEIGHT-1);
+    p.next = particles[yn][xn];
+    particles[yn][xn] = p;
+  }
+  
+  // compute force
+  for (var i = 0; i < MAXHEIGHT; i++) {
+    for (var j = 0; j < MAXWIDTH; j++) {
+      var p = particles[i][j];
+      while (p !== null) {
+        if (i > 0 && j > 0) p.interactAll(particles[i-1][j-1]);
+        if (i > 0) p.interactAll(particles[i-1][j]);
+        if (i > 0 && j < MAXWIDTH-1) p.interactAll(particles[i-1][j+1]);
+        if (j > 0) p.interactAll(particles[i][j-1]);
+        p.interactAll(p.next);
+        p = p.next;
+      }
+    }
+  }
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+onkeydown = function (e) {
+  if (e.key === "ArrowUp") gravity = {x: 0, y: -1};
+  if (e.key === "ArrowDown") gravity = {x: 0, y: 1};
+  if (e.key === "ArrowLeft") gravity = {x: -1, y: 0};
+  if (e.key === "ArrowRight") gravity = {x: 1, y: 0};
+}
+</script>  
+</body>
+</html>
