@@ -15,15 +15,36 @@ else{
 }
 var master = audioctx.createGain();
 var masterGain = audioctx.createGain();
-var echoNode = audioctx.createDelay();
-var feedbackNode = audioctx.createGain();
+var echoNode1 = audioctx.createDelay();
+var echoNode2 = audioctx.createDelay();
+var feedbackNode1 = audioctx.createGain();
+var feedbackNode2 = audioctx.createGain();
+var pan1 = audioctx.createStereoPanner();
+var pan2 = audioctx.createStereoPanner();
+var lowpass = audioctx.createBiquadFilter();
+// make stereo effect
 master.connect(masterGain);
-master.connect(echoNode);
-masterGain.gain.value = 0.5;
-echoNode.delayTime.value = 0.25;
-echoNode.connect(feedbackNode);
-feedbackNode.gain.value = 0.7;
-// feedbackNode.connect(master);
+master.connect(lowpass);
+lowpass.frequency.value = 500;
+lowpass.type = 'bandpass';
+lowpass.Q.value = 0.2;
+lowpass.connect(pan1);
+lowpass.connect(pan2);
+pan1.connect(echoNode1);
+pan2.connect(echoNode2);
+pan1.pan.value = 0.5;
+pan2.pan.value = -0.5;
+masterGain.gain.value = 0.3;
+echoNode1.delayTime.value = 0.3;
+echoNode1.connect(feedbackNode1);
+echoNode2.delayTime.value = 0.4;
+echoNode2.connect(feedbackNode2);
+feedbackNode1.gain.value = Math.exp(-0.9);
+feedbackNode1.connect(echoNode1);
+feedbackNode2.gain.value = Math.exp(-1.2);
+feedbackNode2.connect(echoNode2);
+feedbackNode1.connect(masterGain);
+feedbackNode2.connect(masterGain);
 masterGain.connect(audioctx.destination);
 var players = new Set();
 
