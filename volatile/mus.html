@@ -15,6 +15,8 @@ else{
 }
 var master = audioctx.createGain();
 var masterGain = audioctx.createGain();
+masterGain.gain.value = 0.3;
+if (audioctx.createStereoPanner) {
 var echoNode1 = audioctx.createDelay();
 var echoNode2 = audioctx.createDelay();
 var feedbackNode1 = audioctx.createGain();
@@ -23,7 +25,6 @@ var pan1 = audioctx.createStereoPanner();
 var pan2 = audioctx.createStereoPanner();
 var lowpass = audioctx.createBiquadFilter();
 // make stereo effect
-master.connect(masterGain);
 master.connect(lowpass);
 lowpass.frequency.value = 500;
 lowpass.type = 'bandpass';
@@ -34,7 +35,6 @@ pan1.connect(echoNode1);
 pan2.connect(echoNode2);
 pan1.pan.value = 0.5;
 pan2.pan.value = -0.5;
-masterGain.gain.value = 0.3;
 echoNode1.delayTime.value = 0.3;
 echoNode1.connect(feedbackNode1);
 echoNode2.delayTime.value = 0.4;
@@ -45,6 +45,8 @@ feedbackNode2.gain.value = Math.exp(-1.2);
 feedbackNode2.connect(echoNode2);
 feedbackNode1.connect(masterGain);
 feedbackNode2.connect(masterGain);
+}
+master.connect(masterGain);
 masterGain.connect(audioctx.destination);
 var players = new Set();
 
