@@ -976,6 +976,11 @@ addEventListener('load',function(){
   changeSong();
   decodePermalink();
 });
+addEventListener("storage", function (e) {
+  if (e.key === "volatileMus_play") {
+    setTimeout(play, 50);
+  }
+});
 </script>
 </body>
 </html>
