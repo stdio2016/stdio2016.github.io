@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <p>Input English</p>
+  <textarea id=txtIn name="name" rows="4" cols="20"></textarea>
+  <p><button type="button" name="button" onclick="convert()">Convert</button>
+    <button type="button" name="button" onclick="convert2()">Convert2</button></p>
+  <p>Use strange letter:</p>
+  <textarea id=txtOut name="name" rows="4" cols="20"></textarea>
+<script>
+function convert() {
+  var alphabet = "ᎪᏴᏟᎠᎬFᏩᎻᏆJᏦᏞᎷNᎾᏢQᎡᏚᎢᏌᏙᏔXᎩᏃ";
+  var txt = txtIn.value.toUpperCase();
+  var out = "";
+  for (var i = 0; i < txt.length; i++) {
+    if (txt[i] >= 'A' && txt[i] <= 'Z') {
+      out += alphabet[txt.charCodeAt(i) - 65];
+    }
+    else out += txt[i];
+  }
+  txtOut.value = out;
+}
+function convert2() {
+  var txt = txtIn.value;
+  var out = "";
+  for (var i = 0; i < txt.length; i++) {
+    var ch;
+    var op = txt.charCodeAt(i);
+    if (txt[i] >= 'A' && txt[i] <= 'Z') {
+      ch = '𝐴';
+      out += ch[0] + String.fromCharCode(ch.charCodeAt(1) + op - 65);
+    }
+    else if (txt[i] == 'h') {
+      out += 'ℎ';
+    }
+    else if (txt[i] >= 'a' && txt[i] <= 'z') {
+      ch = '𝑎';
+      out += ch[0] + String.fromCharCode(ch.charCodeAt(1) + op - 97);
+    }
+    else out += txt[i];
+  }
+  txtOut.value = out;
+}
+</script>
+</body>
+</html>
