@@ -860,15 +860,12 @@ function save(){
   var name = songSelect.value;
   var newName = "";
   if (name.charAt(0) == 'c'){
-    newName = prompt('Input the song name or empty to override');
-    if(newName === ""){
-      newName = name.substr(1);
-    }
+    newName = prompt('Input the song name', name.substring(1));
   }
   else {
     newName = prompt('Input the song name');
   }
-  if(newName === null) return;
+  if(!newName) return;
   encodePermalink(newName ? 'c' + newName : name);
   if(newName == '') return;
   if(!songs[newName]){
@@ -889,7 +886,7 @@ function del(){
     alert('You cannot delete a builtin song');
     return;
   }
-  if(!window.confirm('Do you really want to delete this song?')){
+  if(!window.confirm('Do you really want to delete "' + name.substring(1) + '"?')){
     return;
   }
   var so = songSelect.children[1];
