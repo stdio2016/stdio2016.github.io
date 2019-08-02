@@ -9,7 +9,12 @@
   <script src='js/localStorage.js'></script>
 </head>
 <body>
-<h1>stdio2016 的網站</h1>
+<h1>stdio2016 的<span id="beiYong" style="display:none;">備用</span>網站</h1>
+<script type="text/javascript">
+if (location.hostname != 'stdio2016.github.io') {
+  beiYong.style.display = 'inline';
+}
+</script>
 <hr>
 <h2>可以教我怎麼做一個網站嗎？</h2>
 <p>「不行，因為我很忙。」你一定很想這樣講。</p>
