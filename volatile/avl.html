@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html class='volatile-bg'>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset='utf8'>
+  <link rel="stylesheet" href="../css/homepage.css">
+  <script src='../js/perlin.js'></script>
+  <title>AVL tree</title>
+  <style>
+  .tree {padding-left:20px; border-left: gray solid 5px;}
+  </style>
+</head>
+<body>
+<h1>AVL tree</h1>
+<hr>
+<form action="javascript:void(ins(),txtIn.value='')">
+input data: 
+<input id="txtIn"></input>
+<button type="submit">Insert</button>
+<button type="button" onclick="del()">Delete</button>
+</form>
+<div id='output'>null</div>
+<a href='../'>回首頁</a>
+<hr>
+<footer id=di>&copy; 2016~2019 stdio2016 版權ㄙㄨㄛˇ 有</footer>
+<script>
+var nil = {key: 0, value: void 0, depth: 0, left: null, right: null};
+nil.left = nil.right = nil;
+var tree = nil;
+
+// persistent avl tree
+function avl(key, value, left, right) {
+  var d = 1;
+  if (left) d = Math.max(d, left.depth + 1);
+  if (right) d = Math.max(d, right.depth + 1);
+  return {
+    key: key,
+    value: value,
+    depth: d,
+    left: left || nil,
+    right: right || nil
+  };
+}
+
+function balance(t) {
+  var L = t.left, R = t.right;
+  if (L.depth == R.depth + 2) {
+    if (L.left.depth >= L.right.depth) {
+      return avl(L.key, L.value, L.left, avl(t.key, t.value, L.right, R));
+    }
+    return avl(L.right.key, L.right.value,
+      avl(L.key, L.value, L.left, L.right.left),
+      avl(t.key, t.value, L.right.right, R)
+    );
+  }
+  else if (L.depth + 2 == R.depth) {
+    if (R.left.depth <= R.right.depth) {
+      return avl(R.key, R.value, avl(t.key, t.value, L, R.left), R.right);
+    }
+    return avl(R.left.key, R.left.value,
+      avl(t.key, t.value, L, R.left.left),
+      avl(R.key, R.value, R.left.right, R.right)
+    );
+  }
+  return t;
+}
+
+function avl_ins(r, key, value) {
+  if (r == nil) return avl(key, value);
+  if (key < r.key) {
+    return balance(avl(r.key, r.value, avl_ins(r.left, key, value), r.right));
+  }
+  else {
+    return balance(avl(r.key, r.value, r.left, avl_ins(r.right, key, value)));
+  }
+}
+
+function avl_max(r) {
+  if (r == nil) return null;
+  if (r.right == nil) return r;
+  var a = avl_max(r.right);
+  if (a.key < r.key) return r;
+  return a;
+}
+
+function avl_del(r, key) {
+  if (r == nil) return r; // no such item
+  if (key == r.key) {
+    if (r.left == nil) return r.right;
+    var d = avl_max(r.left);
+    return balance(avl(d.key, d.value, avl_del(r.left, d.key), r.right));
+  }
+  if (key < r.key) {
+    return balance(avl(r.key, r.value, avl_del(r.left, key), r.right));
+  }
+  else {
+    return balance(avl(r.key, r.value, r.left, avl_del(r.right, key)));
+  }
+}
+
+function avl_get(r, key) {
+  if (r == nil) return nil; // no such item
+  if (key == r.key) {
+    return r;
+  }
+  if (key < r.key) {
+    return avl_get(r.left, key);
+  }
+  else {
+    return avl_get(r.right, key);
+  }
+}
+
+function tree2html(t) {
+  var d = document.createElement("div");
+  d.className = 'tree';
+  if (t == nil || !t) {
+    d.innerText = "nil";
+    return d;
+  }
+  if (t.left && t.left != nil) d.appendChild(tree2html(t.left));
+  var r = document.createElement('div');
+  r.innerText = t.key + ' * ' + t.value;
+  d.appendChild(r);
+  if (t.right && t.right != nil) d.appendChild(tree2html(t.right));
+  return d;
+}
+
+function drawTree() {
+  output.innerHTML = "";
+  output.appendChild(tree2html(tree));
+}
+drawTree();
+
+function ins() {
+  var n = txtIn.value;
+  if (n === '') return ;
+  var t = avl_get(tree, n);
+  if (t != nil) t.value += 1;
+  else tree = avl_ins(tree, n, 1);
+  drawTree();
+}
+
+function del() {
+  var n = txtIn.value;
+  var t = avl_get(tree, n);
+  if (t != nil) {
+    t.value -= 1;
+    if (t.value == 0) tree = avl_del(tree, n);
+  }
+  drawTree();
+}
+</script>
+</body>
+</html>
