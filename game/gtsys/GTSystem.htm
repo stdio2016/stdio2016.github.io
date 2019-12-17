@@ -1,0 +1,340 @@
+<html>
+<head>
+<title>GTSystem reader V1.0</title>
+<meta charset="utf8">
+</head>
+<body>
+<!-- 104/9/14  -->
+<script>
+var gtcount=0;
+function GTsys()
+{
+ gtcount++;
+ if(gtcount>5000) throw errlv=200;
+ this.len=0;
+ this.angle=0;
+ this.pos=0;
+ this.children=new Array();
+ return this;
+}
+GTsys.prototype.toString=function(){
+ var st="";
+ var d,i;
+ d=0;
+ for(i=0;i<this.children.length;i++)
+ {
+  var g=this.children[i];
+  st+='F'+(g.pos-d);
+  d=g.pos;
+  if(g.angle>0)
+   st+='('+g.angle+')R';
+  else
+   st+='('+(-g.angle)+')L';
+  st+='['+g.toString()+']';
+ }
+ if(this.len!=d)
+ st+='F'+(this.len-d);
+ return st;
+}
+var errmsg={
+ 1:"",
+ 100:"多了]",
+ 101:"少了)",
+ 102:"少了]",
+ 103:'「%」 不是方向代碼',
+ 104:"無效字元 「%」",
+ 105:"「%」 不是數字",
+ 106:"少了數字",
+ 107:"少了方向代碼",
+ 120:"樹枝長度必須大於0",
+ 121:"空節點",
+ 122:"請輸入內容",
+ 200:"太多節點"
+};
+var data;
+var chpos;
+var errlv;
+
+function readN()
+{
+ var n=0;
+ if(data.length<=chpos)
+ {errlv=106;return null;}
+ if( data[chpos]>='0' && data[chpos]<='9'  )
+ {
+  while( data[chpos]>='0' && data[chpos]<='9')
+  {
+   n=n*10+1*data[chpos];
+   chpos++;
+  }
+  return n;
+ }
+ errlv=105;
+ return null;
+}
+
+function readgt()
+{
+ var pos=0;
+ var ang=0;
+ var emp=true;
+ var gt=new GTsys();
+ var sgt=null;
+ while(errlv==0)
+ {
+  if(chpos>=data.length)
+  {
+   errlv=1;
+   break;
+  }
+  switch(data[chpos++])
+  {
+   case 'F': case 'f':
+    emp=false;
+    pos+=readN();
+    if(errlv>=100)
+     return null;
+    ang=0;
+    break;
+   case '(':
+    emp=false;
+    ang=readN();
+    if(errlv>=100)
+     return null;
+    if(data[chpos++] !=')')
+    {
+     errlv=101;
+     return null;
+    }
+    switch( data[chpos++])
+    {
+     case 'L': 
+     case 'l': 
+      ang*=-1;
+     case 'R': 
+     case 'r': 
+      break;
+     default: 
+       if(chpos>data.length)
+        errlv=107;
+       else
+        errlv=103; 
+       chpos--;
+       return null;
+    }
+    break;
+   case '[':
+    emp=false;
+    sgt=readgt();
+    if(errlv>100 || errlv==1)
+    {
+     if(errlv==1)
+      errlv=102;
+     return null;
+    }
+    sgt.angle=ang;
+    sgt.pos=pos;
+    gt.children.push(sgt);
+    errlv=0;
+    break;
+   case ']':
+    errlv=100;
+    break;
+   case ' ': case '\n': case '\t': case '\r':
+    break;
+   default:
+    errlv=104;
+    chpos--;
+    return null;
+  }
+ }
+ gt.len=pos;
+ if(!pos && errlv==100)
+ {
+  if(emp) errlv=121;
+  else errlv=120;
+ }
+ return gt;
+}
+
+function parsegt()
+{
+ errlv=0;
+ chpos=0;
+ data=document.getElementById('code').value;
+ if(data.match(/^[ \n\t\r]*$/))
+ {
+  errlv=122;
+  return null;
+ }
+ var g=readgt();
+ if(g&&g.len==0) errlv=120;
+ return g;
+// alert(JSON.stringify(readgt()));
+}
+var lb,rb,ub,db;
+var lines;
+var scale;
+function drawline(x1,y1,x2,y2)
+{
+ if(x1<lb) lb=x1;
+ if(x2<lb) lb=x2;
+ if(y1<ub) ub=y1;
+ if(y2<ub) ub=y2;
+ if(x1>rb) rb=x1;
+ if(x2>rb) rb=x2;
+ if(y1>db) db=y1;
+ if(y2>db) db=y2;
+ lines.push([x1,y1,x2,y2]);
+}
+function drawgt(gt,x,y,ang)
+{
+ var th=(gt.angle+ang);
+ var co=Math.cos(th *Math.PI/180 );
+ var si=Math.sin(th *Math.PI/180 );
+ var i,d;
+ var sgt;
+ for(i=0;i<gt.children.length;i++)
+ {
+  sgt=gt.children[i];
+  d=scale*sgt.pos;
+  drawgt(sgt,x+d*co,y+d*si,th);
+ }
+ d=scale*gt.len;
+ drawline(x,y,x+d*co,y+d*si);
+}
+function readcode()
+{
+ gtcount=0;
+ var gt=parsegt();
+ if(errlv>=100)
+ {
+  alert("錯誤 "+errlv+": "+errmsg[errlv].replace("%",data[chpos]));
+  return;
+ }
+ gt2svg(gt);
+}
+function gt2svg(gt)
+{
+ lb=0;
+ rb=196;
+ ub=0;
+ db=246;
+ lines=new Array();
+ scale=100/gt.len;
+ drawgt(gt,98,198,270);
+ var i;
+ lb-=2;
+ ub-=2;
+ rb+=2;
+ db+=2;
+ var st='<svg id="svg" height="'+(db-ub)+'" width="'+(rb-lb)+'" style="stroke-width:1px;stroke:black;">';
+ for(i=0;i<lines.length;i++)
+ {
+  st+='<line x1="'+(lines[i][0]-lb)+'" y1="'+(lines[i][1]-ub)+'" x2="'+(lines[i][2]-lb)+'" y2="'+(lines[i][3]-ub)+'"/>';
+ }
+ st+='</svg>';
+ document.getElementById('svg').outerHTML=st;
+
+document.getElementById('ans').value=gt.toString();
+}
+
+function copyresize(gt,r)
+{
+ var t,i,g;
+ t=new GTsys();
+ t.angle=gt.angle;
+ t.len=gt.len*r;
+ t.pos=gt.pos*r;
+ for(i=0;i<gt.children.length;i++)
+ {
+  g=copyresize(gt.children[i],r);
+  t.children.push(g);
+ }
+ return t;
+}
+
+function gtmul(g1,g2)
+{
+ var gt=copyresize(g2,g1.len);
+ var c1=gt.children;
+ var c2=[];
+ var c3=[];
+ var i,j,g;
+ for(i=0;i<g1.children.length;i++)
+ {
+  g=gtmul(g1.children[i],g2);
+  g.pos=g2.len*g1.children[i].pos;
+  g.angle= g1.children[i].angle;
+  c2.push(g);
+ }
+ for(i=j=0;i+j<c1.length+c2.length;)
+ {
+  if(i<c1.length && (j==c2.length || c1[i].pos<c2[j].pos)
+)
+  {
+   c3.push(c1[i]);
+   i++;
+  }
+  else
+  {
+   c3.push(c2[j]);
+   j++;
+  }
+ }
+ gt.children=c3;
+ return gt;
+}
+function selfmul(g1,g2)
+{
+ var gt=new GTsys();
+ var i,g;
+ gt.len=g1.len*g2.len;
+ for(i=0;i<g1.children.length;i++)
+ {
+  g=g1.children[i];
+  g=gtmul(g,g2);
+  g.pos=g1.children[i].pos*g2.len;
+  g.angle=g1.children[i].angle;
+  gt.children.push(g);
+ }
+ return gt;
+}
+function iterate(){
+ gtcount=0;
+ var gt=parsegt();
+ if(errlv>=100)
+ {
+  alert("錯誤 "+errlv+": "+errmsg[errlv].replace("%",data[chpos]));
+  return;
+ }
+ var g=gt;
+ var n=1*document.getElementById('itern').value;
+ var i;
+ try
+ {
+  for(i=1;i<n;i++) gt=selfmul(g,gt);
+ }
+ catch(err)
+ {
+  alert("錯誤 200: 太多節點");
+  return;
+ }
+ gt2svg(gt);
+}
+</script>
+輸入GT系統代碼:
+<br>
+<textarea id='code' style="width:200px;height:70px;">F3(30)R[F2]F3(45)R[F2(30)R[F1]F1]</textarea>
+<br>
+<!--input type='button' value='讀取' onclick='readcode()'>
+<br-->
+疊代次數：<input id='itern' type='number' max="99" min="1" value="1">
+<input type='button' value='疊代' onclick='iterate()'>
+<br>
+疊代後代碼：<br>
+<textarea id='ans' style="width:200px;height:100px;"></textarea>
+<br>
+<svg id='svg' height="250" width="200"></svg>
+</body>
+</html>
