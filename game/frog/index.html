@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<title>Frog solitaire</title>
+<style>
+</style>
+</head>
+<body>
+<canvas id=canvas width=200 height=200>Your browser is too old!!!</canvas>
+<script>
+function getPos(x, y) {
+	return {x:x*36+28, y:y*36+28};
+}
+var all = [];
+for (var x=0; x<5; x++) {
+	for (var y=0; y<5; y++) {
+		if ((x+y)%2==0) {
+			all.push(getPos(x, y));
+		}
+	}
+}
+var lines = [
+	[0,1,2], [5,6,7], [10,11,12],
+	[0,5,10], [1,6,11], [2,7,12],
+	[0,3,6,9,12], [5,8,11], [1,4,7],
+	[2,4,6,8,10], [1,3,5], [7,9,11]];
+var ctx=canvas.getContext('2d');
+var pi=3.14;
+var board = [1,1,0,0,0,0,0,1,0,1,0,0,0];
+var can = [];
+for (var i = 0; i < all.length; i++) can[i] = -1;
+var selection = null;
+var editMode = false;
+function redraw() {
+	// board
+	ctx.strokeStyle='black';
+	ctx.lineWidth=2;
+	ctx.fillStyle='silver';
+	ctx.beginPath();
+	ctx.arc(10,10,8, pi, pi*1.5);
+	ctx.arc(190,10,8, pi*1.5, 0);
+	ctx.arc(190,190,8, 0, pi*0.5);
+	ctx.arc(10,190,8, pi*0.5, pi);
+	ctx.lineTo(2,10);
+	ctx.fill();
+	ctx.stroke();
+
+	// connection
+	ctx.beginPath();
+	for (var i=0; i<lines.length; i++) {
+		var line=lines[i];
+		for (var j=1; j<line.length; j++) {
+			var pos = all[line[j-1]], pos2 = all[line[j]];
+			ctx.moveTo(pos.x, pos.y);
+			ctx.lineTo(pos2.x, pos2.y);
+		}
+	}
+	ctx.strokeStyle='#555';
+	ctx.lineWidth=4;
+	ctx.stroke();
+	ctx.strokeStyle='gray';
+	ctx.lineWidth=2;
+	ctx.stroke();
+
+	// grid point
+	ctx.beginPath();
+	ctx.fillStyle= 'black';
+	for (var i=0; i<13; i++) {
+		var pos = all[i];
+		ctx.moveTo(pos.x, pos.y);
+		ctx.arc(pos.x, pos.y, 6, 0, pi*2);
+	}
+	ctx.fill();
+
+	// chess
+	ctx.beginPath();
+	ctx.fillStyle= 'lime';
+	for (var i=0; i<13; i++) {
+		if (board[i] == 1) {
+			var pos = all[i];
+			ctx.moveTo(pos.x, pos.y);
+			ctx.arc(pos.x, pos.y, 14, 0, pi*2);
+		}
+	}
+	ctx.fill();
+
+	// selection
+	if (selection != null) {
+		ctx.strokeStyle = 'black';
+		ctx.beginPath();
+		ctx.arc(all[selection].x, all[selection].y, 10, 0, pi*2);
+		for (var i=0; i<13; i++) {
+			if (can[i] > -1) {
+				var pos = all[i];
+				ctx.moveTo(pos.x, pos.y);
+				ctx.arc(pos.x, pos.y, 14, 0, pi*2);
+			}
+		}
+		ctx.stroke();
+	}
+}
+redraw();
+canvas.onclick = function onclick(event) {
+	var x = event.clientX - canvas.offsetLeft, y = event.clientY - canvas.offsetTop;
+	var oldSel = selection;
+	selection = null;
+	for (var i = 0; i < all.length; i++) {
+		var dx = x - all[i].x, dy = y - all[i].y;
+		if (dx*dx+dy*dy < 196) {
+			if (editMode) {
+				board[i] = 1 - board[i];
+			}
+			else if (board[i] == 1) selection = i;
+			else if (oldSel != null && can[i] > -1) {
+				board[oldSel] = 0;
+				board[can[i]] = 0;
+				board[i] = 1;
+			}
+		}
+	}
+	for (var i = 0; i < all.length; i++) can[i] = -1;
+	if (selection != null) {
+		for (var i = 0; i < lines.length; i++) {
+			var line = lines[i];
+			var j = line.indexOf(selection);
+			if (j == -1) continue;
+			if (j > 1 && board[line[j-1]] == 1 && board[line[j-2]] == 0) {
+				can[line[j-2]] = line[j-1];
+			}
+			if (j < line.length-2 && board[line[j+1]] == 1 && board[line[j+2]] == 0) {
+				can[line[j+2]] = line[j+1];
+			}
+		}
+	}
+	redraw();
+};
+function editplay(event) {
+	editMode = !editMode;
+	selection = null;
+	redraw();
+	event.target.value = editMode ? 'Play' : 'Edit';
+}
+</script>
+<div>
+<input type=button value=Edit onclick=editplay(event)>
+</div>
+<script>
+</script>
+</body>
+</html>
