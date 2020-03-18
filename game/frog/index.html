@@ -33,6 +33,7 @@ var can = [];
 for (var i = 0; i < all.length; i++) can[i] = -1;
 var selection = null;
 var editMode = false;
+var solution = 0;
 function redraw() {
 	// board
 	ctx.strokeStyle='black';
@@ -86,6 +87,18 @@ function redraw() {
 	}
 	ctx.fill();
 
+	// solution
+	ctx.beginPath();
+	ctx.fillStyle= 'red';
+	for (var i=0; i<13; i++) {
+		if (solution>>i & 1) {
+			var pos = all[i];
+			ctx.moveTo(pos.x, pos.y);
+			ctx.arc(pos.x, pos.y, 7, 0, pi*2);
+		}
+	}
+	ctx.fill();
+
 	// selection
 	if (selection != null) {
 		ctx.strokeStyle = 'black';
@@ -117,6 +130,7 @@ canvas.onclick = function onclick(event) {
 				board[oldSel] = 0;
 				board[can[i]] = 0;
 				board[i] = 1;
+				solution = 0;
 			}
 		}
 	}
@@ -139,12 +153,51 @@ canvas.onclick = function onclick(event) {
 function editplay(event) {
 	editMode = !editMode;
 	selection = null;
+	solution = 0;
 	redraw();
 	event.target.value = editMode ? 'Play' : 'Edit';
+}
+var mask1=[], mask2=[];
+for (var i = 0; i < lines.length; i++) {
+	var line = lines[i];
+	for (var j = 2; j < line.length; j++) {
+		var a = line[j-2], b = line[j-1], c = line[j];
+		mask1.push(1<<a|1<<b|1<<c);
+		mask2.push(1<<a|1<<b);
+		mask1.push(1<<a|1<<b|1<<c);
+		mask2.push(1<<b|1<<c);
+	}
+}
+var dp = [];
+for (var i = 0; i < 8192; i++) {
+	dp[i] = (i&i-1) ? -3 : -1;
+}
+function solver(bo) {
+	if (dp[bo] > -3) return dp[bo];
+	for (var j = 0; j < mask1.length; j++) {
+		if ((bo&mask1[j])==mask2[j]) {
+			var sol = solver(bo^mask1[j]);
+			if (sol > -2) {
+				dp[bo] = j;
+				return j;
+			}
+		}
+	}
+	dp[bo] = -2;
+	return -2;
+}
+function solve() {
+	var bo = 0;
+	for (var i = 0; i < 13; i++) {
+		if (board[i]) bo |= 1<<i;
+	}
+	solution = mask2[solver(bo)];
+	redraw();
 }
 </script>
 <div>
 <input type=button value=Edit onclick=editplay(event)>
+<input type=button value=Solve onclick=solve(event)>
 </div>
 <script>
 </script>
