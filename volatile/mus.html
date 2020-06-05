@@ -16,37 +16,69 @@ else{
 var master = audioctx.createGain();
 var masterGain = audioctx.createGain();
 masterGain.gain.value = 0.3;
-if (audioctx.createStereoPanner) {
-var echoNode1 = audioctx.createDelay();
-var echoNode2 = audioctx.createDelay();
-var feedbackNode1 = audioctx.createGain();
-var feedbackNode2 = audioctx.createGain();
-var pan1 = audioctx.createStereoPanner();
-var pan2 = audioctx.createStereoPanner();
-var lowpass = audioctx.createBiquadFilter();
-// make stereo effect
-master.connect(lowpass);
-lowpass.frequency.value = 500;
-lowpass.type = 'bandpass';
-lowpass.Q.value = 0.2;
-lowpass.connect(pan1);
-lowpass.connect(pan2);
-pan1.connect(echoNode1);
-pan2.connect(echoNode2);
-pan1.pan.value = 0.5;
-pan2.pan.value = -0.5;
-echoNode1.delayTime.value = 0.3;
-echoNode1.connect(feedbackNode1);
-echoNode2.delayTime.value = 0.4;
-echoNode2.connect(feedbackNode2);
-feedbackNode1.gain.value = Math.exp(-0.9);
-feedbackNode1.connect(echoNode1);
-feedbackNode2.gain.value = Math.exp(-1.2);
-feedbackNode2.connect(echoNode2);
-feedbackNode1.connect(masterGain);
-feedbackNode2.connect(masterGain);
-}
 master.connect(masterGain);
+// freeverb
+function makeCombFilter(ctx, t, f, d) {
+  var input = ctx.createDelay(1);
+  input.delayTime.value = t;
+  var feed = ctx.createGain();
+  feed.gain.value = f;
+  var damp = ctx.createBiquadFilter();
+  damp.type = 'lowpass';
+  damp.Q.value = -3.0102;
+  damp.frequency.value = d;
+  input.connect(damp);
+  damp.connect(feed);
+  feed.connect(input);
+  return {input: input, output: damp, feed: feed};
+}
+function makeAllpassComb(ctx, t, f) {
+  var input = ctx.createGain();
+  input.gain.value = f;
+  var delay = ctx.createDelay(1);
+  delay.delayTime.value = t;
+  var feed = ctx.createGain();
+  feed.gain.value = -1;
+  var out = ctx.createGain();
+  input.connect(delay);
+  delay.connect(input);
+  input.connect(feed);
+  feed.connect(out);
+  delay.connect(out);
+  return {input: input, output: out, delay: delay};
+}
+var preDelay = audioctx.createDelay();
+preDelay.delayTime.value = 0.15;
+var preDelayFeedback = audioctx.createGain();
+preDelayFeedback.gain.value = 0.4;
+master.connect(preDelayFeedback);
+preDelay.connect(preDelayFeedback);
+preDelayFeedback.connect(preDelay);
+
+var delayT = [1557/44100, 1617/44100, 1491/44100, 1422/44100, 1277/44100, 1356/44100, 1188/44100, 1116/44100];
+var filterFreq = [225, 556, 441, 341];
+var allpassL = [], allpassR = [];
+for (var i = 0; i < 4; i++) {
+  allpassL[i] = makeAllpassComb(audioctx, filterFreq[i]/44100, 0.7);
+  allpassR[i] = makeAllpassComb(audioctx, (filterFreq[i]-23)/44100, 0.7);
+  if (i > 0) {
+    allpassL[i-1].output.connect(allpassL[i].input);
+    allpassR[i-1].output.connect(allpassR[i].input);
+  }
+}
+for (var i = 0; i < 8; i++) {
+  var a = makeCombFilter(audioctx, delayT[i], 0.7 + 0.28*0.8, 0.75*0.75*10000);
+  preDelayFeedback.connect(a.input);
+  a.output.connect(allpassL[0].input);
+  a.output.connect(allpassR[0].input);
+}
+var merger = audioctx.createChannelMerger(2);
+allpassL[3].output.connect(merger, 0, 0);
+allpassR[3].output.connect(merger, 0, 1);
+var revOut = audioctx.createGain();
+revOut.gain.value = 0.5 * 0.6;
+revOut.connect(masterGain);
+merger.connect(revOut);
 masterGain.connect(audioctx.destination);
 var players = new Set();
 
@@ -61,14 +93,14 @@ function genFakePiano(){
   for(var t = 0; t < len; t++){
     var sum = 0;
     for(var n = 1; n < 20; n++){
-      sum += Math.sin(k * n * t + s[n]) * Math.exp(-(n - 1) * 0.25);
+      sum += Math.sin(k * n * t + s[n]) * Math.exp(-(n - 1) * 0.25 - t*n/len);
     }
     dat[t] = sum * Math.exp(-t / (44100 * 0.5)) * 0.25;
   }
   for (var t = 0; t < 44100 * 110 / 440; t++){
     var sum = 0;
     for(var n = 1; n < 20; n++){
-      sum += Math.sin(k * n * t + s[n]) * Math.exp(-(n - 1) * 0.25);
+      sum += Math.sin(k * n * t + s[n]) * Math.exp(-(n - 1) * 0.25 - n);
     }
     dat[len + t] = sum * Math.exp(-len / (44100 * 0.5)) * 0.25;
   }
@@ -88,22 +120,22 @@ function genFakePipe(){
     for(var n = 1; n < 20; n++){
       sum += Math.sin(k * n * t + s[n]) * Math.exp(-(n - 1) * 0.25);
     }
-    dat[t] = sum * (1 - Math.exp(-t/44100 * 10)) * Math.exp(-t / (44100 * 0.5)) * 0.25;
+    dat[t] = sum * 0.25;
   }
   for (var t = 0; t < 44100 * 110 / 440; t++){
     var sum = 0;
     for(var n = 1; n < 20; n++){
       sum += Math.sin(k * n * t + s[n]) * Math.exp(-(n - 1) * 0.25);
     }
-    dat[len + t] = sum * Math.exp(-len / (44100 * 0.5)) * 0.25;
+    dat[len + t] = sum * 0.25;
   }
   return buff;
 }
 
 var soundBank =
   {
-    fakePno: {sample: genFakePiano(), center: 69, loopStart: 2, loopEnd: 2.25},
-    fakePipe:{sample: genFakePipe(), center: 69, loopStart: 2, loopEnd: 2.25}
+    fakePno: {sample: genFakePiano(), center: 69, loopStart: 2, loopEnd: 2.25, attack: 0, release: 0.05, release2: 0},
+    fakePipe:{sample: genFakePipe(), center: 69, loopStart: 2, loopEnd: 2.25, attack: 0.1, release: 0.1, release2: 0.1}
   };
 var fakePno = soundBank.fakePno;
 
@@ -133,13 +165,15 @@ Player.prototype.playNote = function(pitch,start,end){
 */
   var src = audioctx.createBufferSource();
   var env = audioctx.createGain();
+  var env2 = audioctx.createGain();
   src.buffer = fakePno.sample;
   src.playbackRate.value = Math.pow(2, (pitch - fakePno.center) / 12);
   src.loop = true;
   src.loopStart = fakePno.loopStart;
   src.loopEnd = fakePno.loopEnd;
   src.connect(env);
-  env.connect(master);
+  env.connect(env2);
+  env2.connect(master);
   var startTime = this.startTime + start;
   if(src.start)
     src.start(startTime);
@@ -149,12 +183,14 @@ Player.prototype.playNote = function(pitch,start,end){
   }
 
   var endtime = this.startTime + end;
-  env.gain.setValueAtTime(1, endtime - 0.05);
-  env.gain.linearRampToValueAtTime(0, endtime);
+  env.gain.setValueAtTime(0, startTime - 0.01);
+  env.gain.linearRampToValueAtTime(1, Math.min(startTime + fakePno.attack, endtime));
+  env2.gain.setValueAtTime(1, Math.max(startTime, endtime - fakePno.release2));
+  env2.gain.linearRampToValueAtTime(0, endtime + fakePno.release);
   if(src.stop)
-    src.stop(endtime);
+    src.stop(endtime + fakePno.release);
   else {
-    src.noteOff(endTime);
+    src.noteOff(endtime + fakePno.release);
   }
   this.nodes.add(src);
   // onended doesn't work on Safari
@@ -243,8 +279,10 @@ function play(){
   result = result.parts;
   var player = new Player(result);
   players.add(player);
-  player.start();
-  document.getElementById('warn').innerText = JSON.stringify(support);
+  setTimeout(function () {
+    player.start();
+    document.getElementById('warn').innerText = JSON.stringify(support);
+  }, 0);
 }
 
 function stop(){
@@ -964,10 +1002,7 @@ Select a song: <select name="song" onchange="changeSong()">
 <!-- end of alert box -->
 <script>
 addEventListener('load',function(){
-  if(!Reader.prototype.atEnd){
-    throw new Error("Reader got replaced by " + Reader.toString());
-  }
-  loadSmp('sound/scream.wav', 'scream', {center: 72, loopStart: 0, loopEnd: 12462/44100});
+  loadSmp('sound/scream.wav', 'scream', {center: 72, loopStart: 0, loopEnd: 12462/44100, attack: 0, release: 0, release2: 0.05});
   showUnlockMessage();
   initSongList();
   changeSong();
