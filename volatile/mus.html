@@ -93,7 +93,7 @@ var merger = audioctx.createChannelMerger(2);
 allpassL[3].output.connect(merger, 0, 0);
 allpassR[3].output.connect(merger, 0, 1);
 var revOut = audioctx.createGain();
-revOut.gain.value = 0.5 * 0.2;
+revOut.gain.value = 0.03;
 revOut.connect(masterGain);
 merger.connect(revOut);
 masterGain.connect(audioctx.destination);
