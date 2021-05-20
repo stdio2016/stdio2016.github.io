@@ -22,9 +22,47 @@ master.connect(masterGain);
 var chromeProblem = 0;
 if (support.isChrome) chromeProblem = 128/audioctx.sampleRate;
 function makeOrderOneFilter(ctx, d) {
+  // hacking biquad coefficients
   var rate = 1 - 1/(2*Math.PI*d/ctx.sampleRate + 1);
-  var input = ctx.createIIRFilter([rate], [1, rate-1]);
-  return {input: input, output: input};
+  var sin = (1 - rate*rate) / (1 + rate*rate);
+  var f0 = Math.asin(sin) * 0.5 / Math.PI * ctx.sampleRate;
+
+  var omega0 = 2 * Math.PI * f0 / ctx.sampleRate;
+  var alphaQ = Math.sin(omega0);
+  var cosomega = Math.cos(omega0);
+
+  var input = ctx.createGain();
+  var g1 = ctx.createGain();
+  g1.gain.value = 1;
+  var g2 = ctx.createGain();
+  g2.gain.value = -(cosomega*cosomega / (1+alphaQ) - 1) / (1 + cosomega);
+  var g3 = ctx.createGain();
+  g3.gain.value = (1 + alphaQ - cosomega) / alphaQ * 0.5;
+
+  var biquad1 = ctx.createBiquadFilter();
+  biquad1.type = 'lowpass';
+  biquad1.frequency.value = f0;
+  biquad1.Q.value = 20 * Math.log10(0.5);
+  var biquad2 = ctx.createBiquadFilter();
+  biquad2.type = 'highpass';
+  biquad2.frequency.value = f0;
+  biquad2.Q.value = 20 * Math.log10(0.5);
+  var biquad3 = ctx.createBiquadFilter();
+  biquad3.type = 'bandpass';
+  biquad3.frequency.value = f0;
+  biquad3.Q.value = 0.5;
+
+  var output = ctx.createGain();
+  input.connect(biquad1);
+  input.connect(biquad2);
+  input.connect(biquad3);
+  biquad1.connect(g1);
+  biquad2.connect(g2);
+  biquad3.connect(g3);
+  g1.connect(output);
+  g2.connect(output);
+  g3.connect(output);
+  return {input: input, output: output};
 }
 function makeCombFilter(ctx, t, f, d) {
   var input = ctx.createDelay();
