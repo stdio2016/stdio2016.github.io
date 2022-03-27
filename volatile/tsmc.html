@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>tsmc</title>
+</head>
+<body>
+<canvas id="tsmcLogo" style="position:absolute; top:0; left:0;height:100%; width:100%;"></canvas>
+<p style="position:absolute; bottom:0; left:0; width:100%; text-align: center;">Warning! This is my personal project and is not endorsed by TSMC.</p>
+<script>
+/**
+ * It is said that the black rectangles of tsmc logo means broken chips.
+ * So the black rectangles corresponds to yield.
+ */
+var yield = 213 / 224;
+var marks = [];
+function genSilicon() {
+    marks.length = 0;
+    for (var i = 0; i < 14; i++) {
+        marks.push([]);
+        for (var j = 0; j < 20; j++) {
+            marks[i].push(Math.random());
+        }
+    }
+    setTimeout(genSilicon, 1000);
+    requestAnimationFrame(redraw);
+}
+function redraw() {
+    /** @type {HTMLCanvasElement} tsmcLogo
+     */
+    var tsmcLogo = document.getElementById("tsmcLogo");
+    var rect = tsmcLogo.getBoundingClientRect();
+    tsmcLogo.width = rect.width * devicePixelRatio;
+    tsmcLogo.height = rect.height * devicePixelRatio;
+    var ratio = Math.min(tsmcLogo.height / 300, tsmcLogo.width / 400);
+    var ctx = tsmcLogo.getContext("2d");
+    ctx.save();
+    var cw = 13 * ratio;
+    var ch = 20 * ratio;
+    var mh = tsmcLogo.height / 2 - ch;
+    var mw = tsmcLogo.width / 2;
+    // draw wafer
+    ctx.translate(mw, mh);
+    ctx.lineWidth = ratio;
+    ctx.beginPath();
+    //ctx.scale(1, 13.1/13);
+    var ang = Math.atan2(Math.sqrt((cw * 10)**2 - (cw * 4)**2), cw * 4);
+    ctx.arc(0, 0.55 * ch, cw * 10, Math.PI - ang, ang);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.clip();
+    //ctx.scale(1, 13/13.1);
+    // draw chips
+    for (var y = 0; y < 14; y++) {
+        for (var x = 0; x < 20; x++) {
+            var ry = y - 6.5;
+            var rx = x - 10;
+            ctx.beginPath();
+            ctx.moveTo(rx * cw, ry * ch);
+            ctx.lineTo((rx+1) * cw, ry * ch);
+            ctx.lineTo((rx+1) * cw, (ry+1) * ch);
+            ctx.lineTo(rx * cw, (ry+1) * ch);
+            ctx.closePath();
+            ctx.fillStyle = marks[y][x] > yield ? "black" : "rgba(0,0,0,0)";
+            ctx.fill();
+            ctx.stroke();
+        }
+    }
+    ctx.restore(); // remove clip effect
+    ctx.save();
+    // draw text
+    ctx.translate(mw, mh);
+    ctx.scale(1, 0.8);
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "red";
+    ctx.font = "100 " + Math.round(cw * 15.2) + "px Serif";
+    ctx.fillText("t", cw * -11.5, 0);
+    ctx.fillText("s", cw * -6.7, 0);
+    ctx.fillText("m", cw * 1.3, 0);
+    ctx.fillText("c", cw * 9.9, 0);
+    // draw under line
+    ctx.fillRect(cw * -10, ch * 9, cw * 20, ch * 0.5);
+    //ctx.scale(1, 1/0.8);
+    //ctx.rotate(5.7);
+    //ctx.font = Math.round(cw * 5.2) + "px Serif ";
+    //ctx.fillStyle = "rgba(128,128,128,50%)";
+    //ctx.fillText("something!", 0, 0);
+    ctx.restore();
+}
+genSilicon();
+redraw();
+addEventListener('resize', function () {
+    requestAnimationFrame(redraw);
+});
+</script>
+</body>
+</html>
