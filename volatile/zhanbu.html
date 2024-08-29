@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset='utf-8'>
+<title>占卜</title>
+</head>
+<body>
+<form action="javascript:void'INTP'">
+<p>請輸入你的英文名稱</p>
+<input type="text" id="inName">
+<button onclick="zhanbu()">占卜</button>
+<p id="outZhanbu"></p>
+</form>
+<script>
+function zhanbu() {
+    var name = inName.value.toUpperCase();
+    var cnt = {};
+    var intp = 'EISNFTJP';
+    for (var i = 0; i < 8; i++) {
+        cnt[intp[i]] = 0;
+    }
+    for (var i = 0; i < name.length; i++) {
+        var ch = name[i];
+        if (ch in cnt) {
+            cnt[ch]++;
+        }
+    }
+    var result = '';
+    for (var i = 0; i < 4; i++) {
+        var w = intp[i*2];
+        var revw = intp[i*2+1];
+        var c1 = cnt[w];
+        var c2 = cnt[revw];
+        if (c1 === c2) {
+            result += 'x';
+        } else if (c1 > c2) {
+            result += w;
+        } else {
+            result += revw;
+        }
+    }
+    if (result === 'xxxx') {
+        result = '我的能力不足，無法算出你的占卜結果';
+    }
+    outZhanbu.textContent = '占卜結果：' + result;
+}
+</script>
+</body>
+</html>
