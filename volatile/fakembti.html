@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset='utf-8'>
+  <link rel="stylesheet" href="css/homepage.css">
+  <script src='../js/perlin.js'></script>
+  <title>捏造 MBTI 測試結果</title>
+<script>
+const score_ = "分數：";
+function changeLabel() {
+    const mbtiType = document.forms[0].mbtiType.value;
+    const atType = document.forms[0].atType.value;
+    ei.textContent = (mbtiType[0] === 'e' ? '外向' : '內向') + score_;
+    ns.textContent = (mbtiType[1] === 'n' ? '遠見' : '現實') + score_;
+    tf.textContent = (mbtiType[2] === 't' ? '理性' : '感受') + score_;
+    jp.textContent = (mbtiType[3] === 'j' ? '評判' : '展望') + score_;
+    ta.textContent = (atType === '-t' ? '起伏不定' : '堅決') + score_;
+}
+function genLink() {
+    const mbtiType = document.forms[0].mbtiType.value;
+    const atType = document.forms[0].atType.value;
+    const gender = document.forms[0].gender.value;
+    const names = ['ei', 'ns', 'tf', 'jp', 'ta'];
+    let code = 0;
+    for (var i = 0; i < 5; i++) {
+        const score = document.forms[0][names[i]].value;
+        code = code * 1000 + (score * 2 - 100);
+    }
+    const encoded = code.toString(36);
+    const tw = `https://www.16personalities.com/tw/%E7%B5%90%E6%9E%9C/${mbtiType}${atType}/${gender}/${encoded}`;
+    twLink.textContent = tw;
+    twLink.href = tw;
+    const en = `https://www.16personalities.com/profiles/${mbtiType}${atType}/${gender}/${encoded}`;
+    enLink.textContent = en;
+    enLink.href = en;
+}
+</script>
+</head>
+<body>
+<h1>捏造 MBTI 測試結果！</h1>
+<hr>
+<form action="javascript:genLink()"">
+<p>請選擇人格類型：<select name="mbtiType" oninput="changeLabel()">
+    <optgroup label=紫色人種>
+        <option value="intj" selected>INTJ 建築師</option>
+        <option value="intp">INTP 邏輯學家</option>
+        <option value="entj">ENTJ 指揮官</option>
+        <option value="entp">ENTP 辯論家</option>
+    </optgroup>
+    <optgroup label=綠色人種>
+        <option value="infj">INFJ 提倡者</option>
+        <option value="infp">INFP 調停者</option>
+        <option value="enfj">ENFJ 主人公</option>
+        <option value="enfp">ENFP 競選者</option>
+    </optgroup>
+    <optgroup label=藍色人種>
+        <option value="istj">ISTJ 物流師</option>
+        <option value="isfj">ISFJ 守衛者</option>
+        <option value="estj">ESTJ 總經理</option>
+        <option value="esfj">ESFJ 執政官</option>
+    </optgroup>
+    <optgroup label=黃色人種>
+        <option value="istp">ISTP 鑒賞家</option>
+        <option value="isfp">ISFP 探險家</option>
+        <option value="estp">ESTP 企業家</option>
+        <option value="esfp">ESFP 表演者</option>
+    </optgroup>
+</select>
+<select name="atType" oninput="changeLabel()">
+    <option value="-t" selected>T 起伏不定</option>
+    <option value="-a">A 堅決</option>
+</select>
+<select name="gender">
+    <option value="m">男</option>
+    <option value="f">女</option>
+    <option value="o">非二元</option>
+</select>
+</p>
+    <p><span id="ei">內向分數：</span><input type="number" name="ei" max="100" min="50" required></p>
+    <p><span id="ns">遠見分數：</span><input type="number" name="ns"  max="100" min="50" required></p>
+    <p><span id="tf">理性分數：</span><input type="number" name="tf" max="100" min="50" required></p>
+    <p><span id="jp">評判分數：</span><input type="number" name="jp" max="100" min="50" required></p>
+    <p><span id="ta">起伏不定分數：</span><input type="number" name="ta" max="100" min="50" required></p>
+<p>
+<button>捏造網址</button>
+<p>中文版連結：<a id="twLink" target="_blank"></a></p>
+<p>英文版連結：<a id="enLink" target="_blank"></a></p>
+</p>
+</form>
+<hr>
+<footer id=di>&copy; 2016~2025 stdio2016 版權ㄙㄨㄛˇ有</footer>
+</body>
+</html>
