@@ -11,7 +11,7 @@
 <canvas id=canvas style="margin:8px;border:1px solid; height:400%; width:400%; image-rendering: optimizespeed;">你做人實在太失敗，連瀏覽器都不想理你</canvas>
 </div>
 <button onclick="mode = 'wall';">wall</button><button onclick="mode = 'liquid';">liquid</button>
-<button onclick="mode = 'clearwall';">cleal wall</button>
+<button onclick="mode = 'clearwall';">cleal wall</button><button onclick="mode = 'clearliquid';">cleal liquid</button>
 <script>
 onerror = function () {
   做人.innerHTML = "你做人實在太失敗，連瀏覽器都不想理你";
@@ -27,6 +27,7 @@ var wall = new Int32Array(MAXWIDTH * MAXHEIGHT);
 var mode = 'liquid';
 let evaporated = 0;
 let supplied = 0;
+let removed = 0;
 onload = function () {
   onresize();
 };
@@ -82,6 +83,10 @@ function putMochiAt(pos) {
   else if (mode == 'clearwall'){
     wall[y * MAXWIDTH + x] = 0;
   }
+  else if (mode == 'clearliquid'){
+    removed += precomposed[y * MAXWIDTH + x];
+    precomposed[y * MAXWIDTH + x] = 0;
+  }
   else {
     supplied += FORCE_STRENGTH;
     precomposed[y * MAXWIDTH + x] += FORCE_STRENGTH;
@@ -89,30 +94,30 @@ function putMochiAt(pos) {
 }
 
 function eachFrame() {
-  force.fill(0);
+  for (let i = 0; i < MAXHEIGHT * MAXWIDTH; i++) {
+    force[i] = precomposed[i];
+  }
   for (let j = 0; j < MAXHEIGHT; j++) {
     for (let i = 0; i < MAXWIDTH; i++) {
       const idx = j * MAXWIDTH + i;
-      var part = Math.trunc(precomposed[idx]/5);
-      var rem = part * 5;
-      evaporated += precomposed[idx] - rem;
-      if (i > 0 && wall[idx-1] == 0) {
-        rem -= part;
+      if (i > 0 && wall[idx-1] == 0 && wall[idx] == 0) {
+        var diff = precomposed[idx] - precomposed[idx-1];
+        var part = Math.trunc(diff / 5);
         force[idx-1] += part;
+        force[idx] -= part;
       }
-      if (i < MAXWIDTH-1 && wall[idx+1] == 0) {
-        rem -= part;
-        force[idx+1] += part;
+      if (j > 0 && wall[idx-MAXWIDTH] == 0 && wall[idx] == 0) {
+        var diff = Math.max(precomposed[idx] - 2500, 0) - precomposed[idx-MAXWIDTH];
+        var part = Math.trunc(diff / 5);
+        force[idx-MAXWIDTH] += part;
+        force[idx] -= part;
       }
-      if (j > 0 && part > 500 && wall[idx-MAXWIDTH] == 0) {
-        rem -= part-500;
-        force[idx-MAXWIDTH] += part-500;
-      }
-      if (j < MAXHEIGHT-1 && wall[idx+MAXWIDTH] == 0) {
-        rem -= part;
-        force[idx+MAXWIDTH] += part;
-      }
-      force[idx] += rem;
+    }
+  }
+  for (let i = 0; i < MAXHEIGHT * MAXWIDTH; i++) {
+    if (force[i] > 0 && force[i] < 10) {
+      evaporated++;
+      force[i]--;
     }
   }
   const w = Math.ceil(canvas.width), h = Math.ceil(canvas.height);
