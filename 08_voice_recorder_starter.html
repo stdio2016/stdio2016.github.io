@@ -17,6 +17,7 @@
   <button id="startBtn">Start Recording</button>
   <button id="stopBtn" disabled>Stop Recording</button>
   <button id="uploadBtn" disabled>Upload to n8n</button>
+  <button id="goTestBtn">Go Testing</button>
 
   <audio id="player" controls></audio>
 
@@ -24,7 +25,7 @@
   <div id="result"></div>
 
   <script>
-    const webhookUrl = "YOUR_WEBHOOK_URL";
+    let webhookUrl = "https://stdio2026.app.n8n.cloud/webhook/02334597-01bd-41dd-a7c9-f49b8889cf83";
 
     const startBtn = document.getElementById("startBtn");
     const stopBtn = document.getElementById("stopBtn");
@@ -142,6 +143,10 @@
         setStatus("Upload failed: " + error.message);
       }
     });
+
+    goTestBtn.onclick = function () {
+      webhookUrl = "https://stdio2026.app.n8n.cloud/webhook-test/02334597-01bd-41dd-a7c9-f49b8889cf83";
+    };
   </script>
 </body>
 </html>
