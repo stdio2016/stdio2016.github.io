@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Voice Recorder to n8n</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 16px; }
+    button { margin-right: 8px; margin-bottom: 12px; padding: 10px 16px; }
+    #status, #result { margin-top: 12px; white-space: pre-wrap; }
+    audio { display: block; margin-top: 12px; width: 100%; }
+  </style>
+</head>
+<body>
+  <h1>Voice Recorder → n8n Webhook</h1>
+
+  <button id="startBtn">Start Recording</button>
+  <button id="stopBtn" disabled>Stop Recording</button>
+  <button id="uploadBtn" disabled>Upload to n8n</button>
+
+  <audio id="player" controls></audio>
+
+  <div id="status"></div>
+  <div id="result"></div>
+
+  <script>
+    const webhookUrl = "YOUR_WEBHOOK_URL";
+
+    const startBtn = document.getElementById("startBtn");
+    const stopBtn = document.getElementById("stopBtn");
+    const uploadBtn = document.getElementById("uploadBtn");
+    const player = document.getElementById("player");
+    const statusEl = document.getElementById("status");
+    const resultEl = document.getElementById("result");
+
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let audioBlob = null;
+    let stream = null;
+
+    function setStatus(text) {
+      statusEl.textContent = text;
+    }
+
+    startBtn.addEventListener("click", async () => {
+      try {
+        resultEl.textContent = "";
+        audioChunks = [];
+        audioBlob = null;
+
+        stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+        let mimeType = "";
+        if (MediaRecorder.isTypeSupported("audio/webm")) {
+          mimeType = "audio/webm";
+        } else if (MediaRecorder.isTypeSupported("audio/mp4")) {
+          mimeType = "audio/mp4";
+        }
+
+        mediaRecorder = mimeType
+          ? new MediaRecorder(stream, { mimeType })
+          : new MediaRecorder(stream);
+
+        mediaRecorder.ondataavailable = (event) => {
+          if (event.data && event.data.size > 0) {
+            audioChunks.push(event.data);
+          }
+        };
+
+        mediaRecorder.onstop = () => {
+          const finalType = mimeType || audioChunks[0]?.type || "audio/webm";
+          const extension = finalType.includes("mp4") ? "m4a" : "webm";
+
+          audioBlob = new Blob(audioChunks, { type: finalType });
+          const audioUrl = URL.createObjectURL(audioBlob);
+          player.src = audioUrl;
+          uploadBtn.disabled = false;
+          setStatus(`Recording stopped. File ready: recording.${extension}`);
+        };
+
+        mediaRecorder.start();
+        setStatus("Recording...");
+        startBtn.disabled = true;
+        stopBtn.disabled = false;
+        uploadBtn.disabled = true;
+      } catch (error) {
+        console.error(error);
+        setStatus("Cannot access microphone: " + error.message);
+      }
+    });
+
+    stopBtn.addEventListener("click", () => {
+      if (mediaRecorder && mediaRecorder.state !== "inactive") {
+        mediaRecorder.stop();
+      }
+
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+    });
+
+    uploadBtn.addEventListener("click", async () => {
+      if (!audioBlob) {
+        setStatus("No audio to upload.");
+        return;
+      }
+
+      try {
+        setStatus("Uploading to n8n...");
+
+        const mimeType = audioBlob.type || "audio/webm";
+        const extension = mimeType.includes("mp4") ? "m4a" : "webm";
+        const file = new File([audioBlob], `recording.${extension}`, { type: mimeType });
+
+        const formData = new FormData();
+        formData.append("audio", file);
+        formData.append("userId", "demo-user");
+        formData.append("note", "Recorded from browser");
+
+        const response = await fetch(webhookUrl, {
+          method: "POST",
+          body: formData
+        });
+
+        const contentType = response.headers.get("content-type") || "";
+        let data;
+
+        if (contentType.includes("application/json")) {
+          data = await response.json();
+          resultEl.textContent = JSON.stringify(data, null, 2);
+        } else {
+          data = await response.text();
+          resultEl.textContent = data;
+        }
+
+        setStatus(`Upload complete. HTTP ${response.status}`);
+      } catch (error) {
+        console.error(error);
+        setStatus("Upload failed: " + error.message);
+      }
+    });
+  </script>
+</body>
+</html>
